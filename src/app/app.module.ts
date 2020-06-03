@@ -19,13 +19,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
 import { AmazingTimePickerModule } from 'amazing-time-picker'; // this line you need
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import { ProfilesComponent } from './pages/profiles/profiles.component';
+
 import { SelectDropDownModule } from 'ngx-select-dropdown'
 
 
 @NgModule({
   declarations: [AppComponent,
-    LoginComponent,LogoutComponent,ProfilesComponent],
+    LoginComponent,LogoutComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

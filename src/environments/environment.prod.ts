@@ -1,18 +1,10 @@
+
 export const environment = {
   production: true,
-  baseUrl: 'http://34.232.2.249:4000/',
-  imagesUrl: 'http://34.232.2.249:4000/images/',
+  baseUrl: 'http://localhost:4100/',
+  imagesUrl: 'http://localhost:4100/images/',
   googleMapKey: '',
 };
-
-
-// export const environment = {
-//   production: true,
-//   baseUrl: 'http://localhost:4000/',
-//   imagesUrl: 'http://localhost:4000/images/',
-//   googleMapKey: '',
-// };
-
 
 
 

@@ -42,10 +42,10 @@ const routes: Routes = [{
 loadChildren: './feeds/root.module#RootModule',
 },
 
-{
-  path: 'profiles',
-  loadChildren: './pages/profiles.module#ProfilesModule',
-}, 
+// {
+//   path: 'profiles',
+//   loadChildren: './pages/profiles.module#ProfilesModule',
+// }, 
 
 
 ],

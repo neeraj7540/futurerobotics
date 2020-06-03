@@ -10,7 +10,7 @@ import {
 } from '@nebular/auth';
 import { LoginComponent } from './pages/login/login.component';
 import { LogoutComponent } from './pages/logout/logout.component';
-import { ProfilesComponent } from './pages/profiles/profiles.component';
+// import { ProfilesComponent } from './pages/profiles/profiles.component';
 
 
 import { AuthGuard } from './auth.guard';
@@ -36,10 +36,10 @@ const routes: Routes = [
         component: LogoutComponent,
       },
       
-      {
-        path: 'profiles',
-        component: ProfilesComponent,
-      },
+      // {
+      //   path: 'profiles',
+      //   component: ProfilesComponent,
+      // },
       
     ],
   },
