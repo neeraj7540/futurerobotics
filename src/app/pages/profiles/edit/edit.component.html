@@ -1,0 +1,85 @@
+<!-- <h1 id="title" class="title">Profile</h1>
+<p class="sub-title">View And Update Your Details</p> -->
+<div class="row">
+  <div class="col-lg-7">
+    <nb-card>
+      <nb-card-header>View And Update Your Details </nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="eventForm" #form [formGroup]="eventForm" (ngSubmit)="updateprofile()">
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label">User Name </label>
+            <div class="col-sm-9">
+              <input type="text" formControlName="name" class="form-control" placeholder="Username"
+                [ngClass]="{ 'is-invalid': submitted && f.name.errors, 'form-control-danger':submitted && f.name.errors }" />
+              <ng-container *ngIf="submitted && f.name.errors">
+                <p class="error-message" *ngIf=" f.name.errors.required">
+                  User name is required!
+                </p>
+                <p class="error-message" *ngIf="f.name.errors.minlength">
+                  User Name must be at least 4 characters!
+                </p>
+              </ng-container>
+             
+            </div>
+          </div>
+          <div class="form-group row">
+              <label for="inputEmail1" class="col-sm-3 col-form-label">Email</label>
+              <div class="col-sm-9">
+                <input type="email" class="form-control"
+                  formControlName="email" disabled placeholder="Email"  autocomplete="off"/>
+                 </div>
+            </div>
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label"> Photo</label>
+            <div class="col-sm-9">
+              <input type="file" nbInput fullWidth #file accept='image/*' (change)="preview(file.files)" />
+              <input type="hidden" formControlName="image" class="form-control" />
+              <ng-container *ngIf="submitted && f.image.errors">
+
+                <p class="error-message" *ngIf="message">
+                  {{message}}
+                </p>
+              </ng-container>
+            </div>
+          </div>
+        
+         
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Password</label>
+            <div class="col-sm-9">
+              <input type="password" formControlName="password" class="form-control"
+                placeholder="********" autocomplete="off"/>
+                <ng-container *ngIf="submitted && f.password.errors">
+                  <!-- {{f.pwd.errors | json}} -->
+                    <p class="error-message" *ngIf=" f.password.errors.required">
+                      Password  is required!
+                    </p>
+                    <p class="error-message" *ngIf="f.password.errors.minlength">
+                      Minimum Password length should 8 characters
+                    </p>
+                  </ng-container>
+            </div>
+          </div>     
+        
+          <div class="form-group row">
+            <div class="offset-sm-3 col-sm-9">
+              <p class="error-message">{{formError}}</p>
+              <button type="submit" [nbSpinner]="spinner" nbSpinnerStatus="success"
+                class="btn  btn-success" >Update</button>
+            </div>
+          </div>
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+<!-- </div> -->
+
+<div class="col-lg-5">
+  <nb-card>
+    <nb-card-header>User Image</nb-card-header>
+    <nb-card-body>
+      <img [src]="imgURL" width="auto" height="170">
+    </nb-card-body>
+  </nb-card>
+  </div>
+  </div>

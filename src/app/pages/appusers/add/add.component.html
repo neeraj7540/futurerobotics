@@ -1,0 +1,148 @@
+<div class="row">
+  <div class="col-lg-7">
+    <nb-card>
+      <nb-card-header>App User</nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="eventForm" #form [formGroup]="eventForm" (ngSubmit)="addEvent()">
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Name </label>
+            <div class="col-sm-9">
+              <input type="text"   autofocus formControlName="name" class="form-control" placeholder="Username"
+                [ngClass]="{ 'is-invalid': submitted && f.name.errors, 'form-control-danger':submitted && f.name.errors }" />
+              <ng-container *ngIf="submitted && f.name.errors">
+                <p class="error-message"> 
+                  Name is required & must be at least 4 characters!
+                </p>
+              </ng-container>
+            
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+              <label for="inputEmail1" class="col-sm-3 col-form-label">Email</label>
+              <div class="col-sm-9">
+                <input type="email"  [ngClass]="{'form-control-danger':submitted && f.email.errors}" class="form-control"
+                  formControlName="email" placeholder="Email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" autocomplete="off"/>
+                <ng-container *ngIf="submitted && f.email.errors">
+                  <p class="error-message">
+                    Email is required and must be a valid email address!
+                  </p>
+                
+                </ng-container>
+              </div>
+            </div>
+
+
+            <div class="form-group row">
+              <label for="inputEmail1" class="col-sm-3 col-form-label">Date of Birth</label>
+              <div class="col-sm-9">
+                <input [nbDatepicker]="datepicker"  [ngClass]="{'form-control-danger':submitted && f.dob.errors}" class="form-control"
+                  formControlName="dob" placeholder="date of birth"  [ngClass]="{ 'is-invalid': submitted && f.dob.errors }" autocomplete="off"/>
+                  <nb-datepicker #datepicker [min]="endMinDate"></nb-datepicker>
+                  <ng-container *ngIf="submitted && f.dob.errors">
+                    <p class="error-message">
+                    Date of birth is required!
+                  </p>
+                
+                </ng-container>
+         
+              </div>
+            </div>
+
+
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label">About </label>
+              <div class="col-sm-9">
+                <input type="text"   autofocus formControlName="about" class="form-control" placeholder="about"
+               />
+       
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label">Location</label>
+              <div class="col-sm-9">
+                <input type="text"   autofocus formControlName="location" class="form-control" placeholder="Location"
+               />
+               </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label">Country</label>
+              <div class="col-sm-9">
+                   <select name="country" formControlName="country" class="form-control">
+                    <option *ngFor="let item of citiesList" 
+                      [value]="item.name" 
+                    >
+                    {{item.name}}
+                  </option>
+                  </select>
+
+               </div>
+            </div>
+          <div class="form-group row">
+            <label for="inputEmail1" class="col-sm-3 col-form-label">Work</label>
+            <div class="col-sm-9">
+              <textarea type="number"   class="form-control"
+                formControlName="work" placeholder="Work details" autocomplete="off"></textarea>
+           </div>
+        </div> 
+
+        <div class="form-group row">
+          <label for="inputEmail1" class="col-sm-3 col-form-label">Additional</label>
+          <div class="col-sm-9">
+            <textarea type="number"   class="form-control"
+              formControlName="additional" placeholder="Additional details"
+               autocomplete="off"></textarea>
+        </div>
+      </div>
+
+            <div class="form-group row">
+            <label class="col-sm-3 col-form-label"> Image</label>
+            <div class="col-sm-9">
+              <input type="file" nbInput fullWidth #file accept='image/*' (change)="preview(file.files)" />
+              <input type="hidden" formControlName="image" class="form-control" />
+              <ng-container *ngIf="submitted && fileData==null">
+                <p class="error-message">
+                  Image is required
+                </p>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Password</label>
+            <div class="col-sm-9">
+              <input type="password" formControlName="password" class="form-control"
+                placeholder="********" autocomplete="off" [ngClass]="{'form-control-danger':submitted && f.password.errors}"/>
+                <ng-container *ngIf="submitted && f.password.errors">
+                    <p class="error-message">
+                      Password  is required & must be at least 8 characters!
+                    </p>
+                  </ng-container>
+            </div>
+          </div>
+  
+          <div class="form-group row">
+            <div class="offset-sm-3 col-sm-9">
+              <p class="error-message">{{formError}}</p>
+              <button type="submit" [nbSpinner]="spinner" nbSpinnerStatus="success"
+                class="btn  btn-success ">Add</button>
+            </div>
+          </div>
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+  <div class="col-lg-5">
+    <nb-card>
+      <nb-card-header>Main Photo</nb-card-header>
+      <nb-card-body>
+        <img [src]="imgURL" width="auto" height="170" alt="">
+      </nb-card-body>
+    </nb-card>
+
+  </div>
+</div>

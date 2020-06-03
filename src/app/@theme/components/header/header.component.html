@@ -1,0 +1,19 @@
+<div class="header-container" [class.left]="position === 'normal'" [class.right]="position === 'inverse'">
+  <div class="logo-containter">
+    <a (click)="toggleSidebar()" href="#" class="navigation"><i class="nb-menu"></i></a>
+    <div class="logo" translate="no" (click)="goToHome()"><span translate="no"></span></div>
+  </div>
+  <!-- <ngx-theme-switcher></ngx-theme-switcher> -->
+</div>
+
+<div class="header-container">
+    <div id="google_translate_element"></div>
+
+  <!-- <ngx-layout-direction-switcher></ngx-layout-direction-switcher> -->
+  <nb-actions size="medium" [class.right]="position === 'normal'" [class.left]="position === 'inverse'">
+    <nb-action *nbIsGranted="['view', 'user']">
+      <nb-user [nbContextMenu]="userMenu" [name]="user?.name" [picture]="user?.picture"></nb-user>
+    </nb-action>
+  
+  </nb-actions>
+</div>

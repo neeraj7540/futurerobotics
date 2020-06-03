@@ -1,0 +1,21 @@
+@import '../../../@theme/styles/themes';
+
+
+@include nb-install-component() {
+
+  nb-card-body {
+    overflow: visible;
+  }
+
+  .input-group {
+    margin-bottom: 1rem;
+  }
+
+  .error-message {
+    color: #ff4c6a
+  }
+
+  .btn {
+    cursor: pointer;
+  }
+}

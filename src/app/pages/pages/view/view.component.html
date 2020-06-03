@@ -1,0 +1,63 @@
+<nb-card>
+  <nb-card-header>
+   CRM Pages
+  </nb-card-header>
+  <nb-card-body>
+    <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEdit($event,groupsModel)"
+      (delete)="onDelete($event)">
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>
+
+<ng-template #groupsModel let-c="close" let-d="dismiss">
+ <div class="modal-header">
+    <h4 class="modal-title">Page</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div> 
+  <div class="modal-body">
+
+    <form [formGroup]="eventForm" #form [formGroup]="eventForm" (ngSubmit)="updatePage()">
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Title </label>
+        <div class="col-sm-9">
+          <input type="text"    formControlName="title" class="form-control" placeholder="Page Title"
+          [ngClass]="{'form-control-danger':submitted && f.title.errors}" />
+          <ng-container *ngIf="submitted && f.title.errors">
+            <p  style="color: red;" class="error-message" *ngIf="f.title.errors">
+              Title is required & must be at least 5 characters!
+            </p>
+          </ng-container>
+        </div>
+      </div>
+    
+
+      <div class="form-group row">
+        <label for="duration" class="col-sm-3 col-form-label">Content</label>
+        <div class="col-sm-9">
+          <textarea type="text" rows="10"  [ngClass]="{'form-control-danger':submitted && f.content.errors}" class="form-control"
+            formControlName="content" placeholder="Content($)" [ngClass]="{ 'is-invalid': submitted && f.content.errors }" autocomplete="off"></textarea>
+          <ng-container *ngIf="submitted && f.content.errors">
+            <p  style="color: red;" class="error-message" *ngIf="f.content.errors">
+              Content is required & length should be geater then 15
+            </p>
+          </ng-container>
+
+        
+        </div>
+      </div>
+
+        <div class="form-group row">
+        <div class="offset-sm-3 col-sm-9">
+          <p class="error-message">{{formError}}</p>
+          <button type="submit" [nbSpinner]="spinner" nbSpinnerStatus="success"
+            class="btn  btn-success ">Update</button>
+        </div>
+      </div>
+    </form>
+    
+  </div>
+
+</ng-template>
+
