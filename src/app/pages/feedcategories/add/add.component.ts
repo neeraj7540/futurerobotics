@@ -97,35 +97,35 @@ export class AddComponent implements OnInit {
 
     // --------------------------------------------------------------          
     this.spinner = true;
-    const formData = new FormData();
-    formData.append('name', this.f.name.value);
-    formData.append('description', this.f.description.value);
+    // const formData = new FormData();
+    // formData.append('name', this.f.name.value);
+    // formData.append('description', this.f.description.value);
+
+   let  formData = {
+    name:this.f.name.value,
+    description:this.f.description.value
+    
+   }
 
 
-    alert("no error");
+  
     this.spinner = false;
-    //  this.http.post(this.baseUrl + 'admin/user/create', formData).subscribe(
-    //   (response: any) => {
+     this.http.post(this.baseUrl + 'api/addfeedscategory', formData).subscribe(
+      (response: any) => {
 
-    //     console.log(response);
-    //      this.spinner = false;
-    //     if (response.message === 'Exists' || response.message === 'Error') {
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', response.body);
-    //     } else if (response.message === 'User created successfully!') {
-    //       this.toast.showToast(NbToastStatus.SUCCESS, 'User',response.message);
-    //       this.form.nativeElement.reset();
+        console.log(response);
+         this.spinner = false;
+        if (response.message === 'Feeds Category Added Successfully!') {
+          this.toast.showToast(NbToastStatus.SUCCESS, 'Feeds Category',response.message);
+          this.form.nativeElement.reset();
+          this.submitted = false;
           
-    //     }
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //     this.spinner = false;
-    //     if( error.error.body.email){
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error.error.body.email.message);
-    //     }else if(error.error.body.username){
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error.error.body.username.message);
-    //     }       
-    //   });
+        }
+      },
+      (error) => {
+          this.toast.showToast(NbToastStatus.DANGER, 'Error', error.error.message);
+          
+      });
   }
 
 

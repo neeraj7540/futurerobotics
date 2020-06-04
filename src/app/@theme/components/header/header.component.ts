@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   userId: any;
   baseUrl = environment.baseUrl;
   imagesUrl = environment.imagesUrl;
-  userMenu = [{ title: 'Profile' ,link: 'profiles/edit'}, { title: 'Log out' ,link: '/auth/logout'}];
+  userMenu = [{ title: 'Profile' ,link: 'pages/profiles/edit'}, { title: 'Log out' ,link: '/auth/logout'}];
   user: any;
 
   constructor(private sidebarService: NbSidebarService,

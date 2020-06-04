@@ -11,6 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { element } from '@angular/core/src/render3';
 import { UiSwitchModule } from 'ngx-ui-switch';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 
 @Component({
@@ -29,7 +30,10 @@ export class ViewComponent implements OnInit {
   allGroups:any = [];
   userGroups = [];
   dropdownList = [];
-  selectedItems:any;
+  selectedItem:any;
+  eventForm: FormGroup;
+  submitted = false;
+  spinner = false;
 
   selectedUserId:any;
   selectedUserName="";
@@ -38,7 +42,7 @@ export class ViewComponent implements OnInit {
     actions: {
       columnTitle:"",
       position: 'right', // left|right
-      edit:false
+      add:false
     },
 
     add: {
@@ -63,44 +67,22 @@ export class ViewComponent implements OnInit {
     }]
     ,   
     columns: {
-
-      id:{
-        title: 'Id',
-        type: 'string'
-      },
-
-      email:{
-        title: 'Email',
-        type: 'string'
-      },
-      name: {
+    name:{
         title: 'Name',
+        type: 'string'
+      },
+      platform: {
+        title: 'platform',
         type: 'string',
       },
 
-      city: {
-        title: 'City',
+      url: {
+        title: 'url',
         type: 'string',
       },
 
-      phone: {
-        title: 'Phone',
-        type: 'string',
-      },
 
-      user_group:{
-        title: 'User group',
-        type: 'string',
 
-      },
-
-       profile_image: {
-        title: 'Image',
-        type: 'html',
-        filter: false,
-        valuePrepareFunction: (profile_image: string) => `<img width="30px" src="${this.imagesUrl}${profile_image}" />`,
-      }
-     
     },
 
 
@@ -113,43 +95,32 @@ export class ViewComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private toast: ToastrMessages,
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
     private datePipe:DatePipe,private _NgbModal: NgbModal) { 
     
   }
   ngOnInit() {
   //  this.getAllGroups();
-  this.getAllUsers();
+  const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
+
+  this.eventForm = this.formBuilder.group({
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      platform:['IOS', [Validators.required]],
+      url:['', [Validators.required, Validators.pattern(urlRegex)]],
+      status:['0']
+
+   });
+  this.getAllItems();
    
   }
 
 
-  getAllUsers(){
+  getAllItems(){
 
-    this.http.get(this.baseUrl + 'admin/users').subscribe(
+    this.http.get(this.baseUrl + 'api/applist').subscribe(
       (response: any) => {
-          
-        response.body.forEach(element => {
-          if(element['user_group']=="1"){
-
-            element['user_group']="Free user";
-
-          }else if(element['user_group']=="2"){
-            element['user_group']="Active Premium user";
-          }
-          else if(element['user_group']=="3"){
-            element['user_group']="Previous premium user";
-          }
-
-          element['id'] = parseInt(element._id.substring(0, 8), 16)
-          
-        });
-
-
-
-        let userList =  response.body.filter(item=>item.user_type=="User");
-        this.source.load(userList);
-      
-     
+        this.source.load(response.body);
       },
       (error) => {
   });    
@@ -160,103 +131,70 @@ export class ViewComponent implements OnInit {
 
 
   onDelete(event): void {
-    if (confirm('Are you sure to delete this user?')) {
-      this.http.delete(this.baseUrl + 'admin/user/' + event.data._id+"/delete")
+    if (confirm('Are you sure to delete this feeds app?')) {
+      this.http.delete(this.baseUrl + 'api/app/' + event.data.id)
         .subscribe(
           (response: any) => {
-            if (response.message == 'User deleted successfully') {
-                 this.toast.showToast(NbToastStatus.SUCCESS, 'Users', response.message);
-                 this.getAllUsers();
+            if (response.message == 'App Successfully Deleted!') {
+                 this.toast.showToast(NbToastStatus.SUCCESS, 'App', response.message);
+                 this.getAllItems();
             }
         });
     }
   }
+  
+
   onEdit(item, modelId){
-       
-  //      this.selectedUserId =item.data.id;
-  //      this.selectedUserName = item.data.name;
 
-  //      this.http.get(this.baseUrl + 'userGoupsList/'+item.data.id).subscribe(
-  //       (userGroups: any) => {
-  //       //  this.getAllGroups()
-  //       this.allGroups.map(item=>{
-  //         item.status=false;
-  //       })
-  //         console.log(userGroups);
-  //        if(userGroups.body.length>0){
-  //          userGroups.body.forEach(element => {
-  //          let index = this.allGroups.findIndex(item=>item.id==element.groupId)
-  //           if(index!=-1){
-  //             //console.log("found")
-  //             this.allGroups[index].status=true;
-  //            }else{
-  //             //console.log(" not found")
-  //             this.allGroups[index].status=false;
-  //            }
-  //         });
-
-  //        }
-          
-
-  //       },
-  //       (error) => {
-  //      });
-       
-  //   // this.selectedItems=item.data.groups;
-  //    this._NgbModal.open(modelId, {
-  //     windowClass: 'modal-job-scrollable'
-  //  });
+    this.selectedItem = item.data;
+     this.eventForm.setValue({  
+      name: item.data.name,
+      url:item.data.url,
+      platform:item.data.platform,
+      status:item.data.status
    
-
-
-
+  });  
+    
+    this.modalService.open(modelId);  
+  
   }
 
 
-  getAllGroups(){
-      this.http.get(this.baseUrl + 'categories').subscribe(
+
+  updateItem(){
+
+
+    this.submitted = true;
+    if (this.eventForm.invalid) {
+      return;
+    }
+
+    let  Data = {
+      name:this.f.name.value,
+      platform:this.f.platform.value,
+      status:this.f.status.value,
+      url:this.f.url.value,
+     }
+
+    this.http.put(this.baseUrl + 'api/appedit/'+ this.selectedItem.id, Data).subscribe(
       (response: any) => {
-       
-      response.body.map(item=> {
-        item.id = item.id;
-        item.name = item.name;
-        item.image = item.image;
-
-        item['status']=false;
-      }) 
-
-      this.allGroups = response.body;
-     // console.log(this.getAllGroups);
-       
+        this.modalService.dismissAll();
+        if (response.message === 'App updated Successfully!') {
+          this.modalService.dismissAll();
+           this.spinner = false;
+           this.toast.showToast(NbToastStatus.SUCCESS, 'App',response.message);
+           this.getAllItems();
+        }
       },
       (error) => {
+        this.spinner = false;
+        this.modalService.dismissAll();
+        this.toast.showToast(NbToastStatus.DANGER, 'App',error.error.message);
+       
       });
+
+
   }
-
-
-  modifyGroupAccess(item,event){
- 
-    let status='0';
-    if(event){
-      status='2'
-    }
-    
-   let data= {
-     groupId:item.id,
-     userId:this.selectedUserId,
-     status:status
-   }
-
-   this.http.put(this.baseUrl + 'updateUserGroupAccess',data).subscribe(
-    (response: any) => {
-      console.log(response);
-    },
-    (error) => {
-    });
-  }
-
-  getGroupStatus(){
-    return true;
-  }
+  get f() { return this.eventForm.controls; }
 
 }

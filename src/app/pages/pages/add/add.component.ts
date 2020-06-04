@@ -80,35 +80,31 @@ export class AddComponent implements OnInit {
     // --------------------------------------------------------------          
     this.spinner = true;
    // this.formError=""
-    const formData = new FormData();
-    formData.append('title', this.f.title.value);
-    formData.append('content', this.f.content.value);
-
-    console.log(this.f.title.value,this.f.content.value );
    
-    // this.http.post(this.baseUrl + 'admin/contents/add', formData).subscribe(
-    //   (response: any) => {
+    let data={
+      title: this.f.title.value,
+      content:this.f.content.value,
+    }
 
-    //    console.log(response);
-    //     this.spinner = false;
-    //     if (response.message === 'Exists' || response.message === 'Error') {
-    //     //  this.toast.showToast(NbToastStatus.DANGER, 'Error', response.body);
-    //     } else if (response.message === 'Page created successfully!') {
-    //       this.toast.showToast(NbToastStatus.SUCCESS, 'Page',response.message);
-    //       this.form.nativeElement.reset();
-    //       for (const i in this.eventForm.controls) {
-    //         this.eventForm.controls[i].setErrors(null);
-    //       }
-    //     }
-    //  },
-    //   (error) => {
-    //     console.log(error);
-    //     this.spinner = false;
-    //     if( error.error.body.email){
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error );
-    //     }else if(error.error.body.username){
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error);
-    //     }       
-    //   });
+
+   
+    this.http.post(this.baseUrl + 'api/addpage', data).subscribe(
+      (response: any) => {
+
+      
+        this.spinner = false;
+        if (response.message === 'Page Added Successfully!') {
+          this.toast.showToast(NbToastStatus.SUCCESS, 'Page',response.message);
+          this.f['title'].setValue('');
+          this.f['content'].setValue('');
+          this.submitted = false;
+         
+        }
+     },
+      (error) => {
+         this.spinner = false;
+          this.toast.showToast(NbToastStatus.DANGER, 'Error', error.error.message);
+            
+      });
   }
 }

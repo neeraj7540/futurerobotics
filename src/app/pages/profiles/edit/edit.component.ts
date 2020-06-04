@@ -34,17 +34,16 @@ export class EditComponent implements OnInit {
     private toast: ToastrMessages,
     private route: ActivatedRoute,
   ) {
-// feting user details
-    this.userId = JSON.parse(localStorage.getItem('userData'))._id;
-   // 5ec68e79a293ba4d8d5e9394
-    this.http.get(this.baseUrl + 'admin/user/' + this.userId+"/view").subscribe(
+
+    this.http.get(this.baseUrl + 'api/user').subscribe(
       (response: any) => {
         console.log(response);
-         this.f['name'].setValue(response.body.username);
+         this.f['name'].setValue(response.body.name);
          this.f['email'].setValue(response.body.email);
          this.f['image'].setValue('');
-         this.imgURL = environment.imagesUrl + response.body.profile_image;
-         this.currentImage = response.body.profile_image;
+         this.imgURL = environment.imagesUrl + response.body.image;
+         this.currentImage = environment.imagesUrl + response.body.image;
+         this.userId = response.body.id;
       }, (error) => {
         this.toast.showToast(NbToastStatus.DANGER, 'Invalid User!', 'Please Check User Id');
       },
@@ -107,22 +106,18 @@ export class EditComponent implements OnInit {
   this.spinner = true;
   const formData = new FormData();
   formData.append('name', this.f.name.value);
-  formData.append('username', this.f.name.value);
-
-
-  if (this.f.password.value != ''){
+   if (this.f.password.value != ''){
     formData.append('password', this.f.password.value);
   }
   formData.append('email', this.f.email.value);
   formData.append('image', this.fileData);
-  formData.append('profile_image', this.currentImage);
     if (this.fileData){
     formData.append('imagechnaged', 'yes');
   } else{
     formData.append('imagechnaged', 'no');
   }
   //alert("process it");
-  this.http.put(this.baseUrl + 'admin/user/'+ this.userId+"/edit", formData).subscribe(
+  this.http.put(this.baseUrl + 'api/user/'+  this.userId, formData).subscribe(
     (response: any) => {
       this.spinner = false;
       if (response.message === 'User updated successfully') {

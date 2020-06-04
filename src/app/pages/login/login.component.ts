@@ -51,8 +51,8 @@ export class LoginComponent implements OnInit {
           this.toast.showToast(NbToastStatus.DANGER, 'Credentials', 'Invalid Password!');
         } else if (response.message == 'Login successfully') {
 
-          localStorage.setItem('authToken', response.token);
-          localStorage.setItem('userImage', response.body.profile_image);
+          localStorage.setItem('authToken', response.body.token);
+          localStorage.setItem('userImage', response.body.image);
           localStorage.setItem('userName', response.body.name);
         
 

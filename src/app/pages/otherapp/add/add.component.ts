@@ -71,8 +71,8 @@ export class AddComponent implements OnInit {
     this.menu=data;
     const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
     this.eventForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(4)]],
-      platform:['IOS', [Validators.required, Validators.minLength(4)]],
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      platform:['IOS', [Validators.required]],
       url:['', [Validators.required, Validators.pattern(urlRegex)]],
      });
    
@@ -90,35 +90,31 @@ export class AddComponent implements OnInit {
 
     // --------------------------------------------------------------          
     this.spinner = true;
-    const formData = new FormData();
-    formData.append('name', this.f.name.value);
-    formData.append('description', this.f.description.value);
 
 
-    alert("no error");
+    let data={
+      name:this.f.name.value,
+      platform:this.f.platform.value,
+      url:this.f.url.value,
+    }
+
     this.spinner = false;
-    //  this.http.post(this.baseUrl + 'admin/user/create', formData).subscribe(
-    //   (response: any) => {
+     this.http.post(this.baseUrl + 'api/addapp', data).subscribe(
+      (response: any) => {
 
-    //     console.log(response);
-    //      this.spinner = false;
-    //     if (response.message === 'Exists' || response.message === 'Error') {
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', response.body);
-    //     } else if (response.message === 'User created successfully!') {
-    //       this.toast.showToast(NbToastStatus.SUCCESS, 'User',response.message);
-    //       this.form.nativeElement.reset();
-          
-    //     }
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //     this.spinner = false;
-    //     if( error.error.body.email){
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error.error.body.email.message);
-    //     }else if(error.error.body.username){
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error.error.body.username.message);
-    //     }       
-    //   });
+         this.spinner = false;
+         this.submitted = false;
+        if (response.message === 'App Added Successfully!') {
+          this.toast.showToast(NbToastStatus.SUCCESS, 'App',response.message);
+          this.f['name'].setValue('');
+          this.f['url'].setValue('');
+        }
+      },
+      (error) => {
+       
+          this.toast.showToast(NbToastStatus.DANGER, 'Error', error.error.message);
+        
+      });
   }
 
 

@@ -1,5 +1,5 @@
 import { map } from 'rxjs/operators';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
@@ -11,7 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { element } from '@angular/core/src/render3';
 import { UiSwitchModule } from 'ngx-ui-switch';
-
+import { ViewCell } from 'ng2-smart-table';
 
 @Component({
   selector: 'ngx-sponsersview',
@@ -38,7 +38,8 @@ export class ViewComponent implements OnInit {
     actions: {
       columnTitle:"",
       position: 'right', // left|right
-      edit:false
+      edit:false,
+      add:false
     },
 
     add: {
@@ -64,41 +65,65 @@ export class ViewComponent implements OnInit {
     ,   
     columns: {
 
-      id:{
-        title: 'Id',
-        type: 'string'
+      name: {
+        title: 'Name',
+        type: 'string',
       },
 
       email:{
         title: 'Email',
         type: 'string'
       },
-      name: {
-        title: 'Name',
-        type: 'string',
-      },
 
-      city: {
-        title: 'City',
-        type: 'string',
-      },
+      dob:{
 
-      phone: {
-        title: 'Phone',
-        type: 'string',
-      },
-
-      user_group:{
-        title: 'User group',
-        type: 'string',
+        title: 'Date of birth',
+        type: 'string'
 
       },
 
-       profile_image: {
+
+      about:{
+        title: 'About',
+        type: 'string'
+
+      }
+      ,
+
+      work:{
+        title: 'Work',
+        type: 'string'
+
+      },
+
+      additional:{
+        title: 'Additional',
+        type: 'string'
+
+      },
+
+      country:{
+        title: 'Country',
+        type: 'string'
+
+      },
+
+      status: {
+        title: 'status',
+        type: 'custom',
+        renderComponent: ButtonViewComponent,
+        onComponentInitFunction(instance) {
+          instance.save.subscribe(row => {
+          });
+        }
+      },
+      
+  
+       image: {
         title: 'Image',
         type: 'html',
         filter: false,
-        valuePrepareFunction: (profile_image: string) => `<img width="30px" src="${this.imagesUrl}${profile_image}" />`,
+        valuePrepareFunction: (image: string) => `<img width="30px" src="${this.imagesUrl}${image}" />`,
       }
      
     },
@@ -125,28 +150,17 @@ export class ViewComponent implements OnInit {
 
   getAllUsers(){
 
-    this.http.get(this.baseUrl + 'admin/users').subscribe(
+    this.http.get(this.baseUrl + 'api/appusers').subscribe(
       (response: any) => {
           
+        console.log(response);
+
         response.body.forEach(element => {
-          if(element['user_group']=="1"){
-
-            element['user_group']="Free user";
-
-          }else if(element['user_group']=="2"){
-            element['user_group']="Active Premium user";
-          }
-          else if(element['user_group']=="3"){
-            element['user_group']="Previous premium user";
-          }
-
-          element['id'] = parseInt(element._id.substring(0, 8), 16)
-          
+          element['dob'] = new Date(element.dob).toDateString();
+      
         });
-
-
-
-        let userList =  response.body.filter(item=>item.user_type=="User");
+        
+        let userList =  response.body;
         this.source.load(userList);
       
      
@@ -161,58 +175,17 @@ export class ViewComponent implements OnInit {
 
   onDelete(event): void {
     if (confirm('Are you sure to delete this user?')) {
-      this.http.delete(this.baseUrl + 'admin/user/' + event.data._id+"/delete")
+      this.http.delete(this.baseUrl + 'api/appusers/' + event.data.id)
         .subscribe(
           (response: any) => {
-            if (response.message == 'User deleted successfully') {
+            if (response.message == 'Users Successfully Deleted!') {
                  this.toast.showToast(NbToastStatus.SUCCESS, 'Users', response.message);
                  this.getAllUsers();
             }
         });
     }
   }
-  onEdit(item, modelId){
-       
-  //      this.selectedUserId =item.data.id;
-  //      this.selectedUserName = item.data.name;
-
-  //      this.http.get(this.baseUrl + 'userGoupsList/'+item.data.id).subscribe(
-  //       (userGroups: any) => {
-  //       //  this.getAllGroups()
-  //       this.allGroups.map(item=>{
-  //         item.status=false;
-  //       })
-  //         console.log(userGroups);
-  //        if(userGroups.body.length>0){
-  //          userGroups.body.forEach(element => {
-  //          let index = this.allGroups.findIndex(item=>item.id==element.groupId)
-  //           if(index!=-1){
-  //             //console.log("found")
-  //             this.allGroups[index].status=true;
-  //            }else{
-  //             //console.log(" not found")
-  //             this.allGroups[index].status=false;
-  //            }
-  //         });
-
-  //        }
-          
-
-  //       },
-  //       (error) => {
-  //      });
-       
-  //   // this.selectedItems=item.data.groups;
-  //    this._NgbModal.open(modelId, {
-  //     windowClass: 'modal-job-scrollable'
-  //  });
-   
-
-
-
-  }
-
-
+  
   getAllGroups(){
       this.http.get(this.baseUrl + 'categories').subscribe(
       (response: any) => {
@@ -259,4 +232,63 @@ export class ViewComponent implements OnInit {
     return true;
   }
 
+  statusChange(data){
+    console.log(data);
+    let itemStatus = 0;
+    let itemId = data.id;
+    if(data.status==0){
+      itemStatus = 1;
+    }else{
+       itemStatus = 0;
+    }
+
+    data = {
+      "status":itemStatus,
+      "userId":itemId
+    }
+         this.http.put(this.baseUrl + 'api/statusupdate',data).subscribe(
+        (response: any) => {
+
+          if (response.message == 'Status updated Successfully!') {
+            this.toast.showToast(NbToastStatus.SUCCESS, 'Users', response.message);
+            this.getAllUsers();
+          }
+        },
+        (error) => {
+       });
+
+  }
+
+}
+
+
+
+@Component({
+  selector: 'button-view',
+  template: `
+    <button (click)="onClick()" *ngIf="renderValue==0">Activate</button>
+    <button (click)="onClick()" *ngIf="renderValue==1">Deactivate</button>
+
+  `,
+})
+export class ButtonViewComponent implements ViewCell, OnInit {
+  renderValue: string;
+
+  @Input() value: string | number;
+  @Input() rowData: any;
+
+  @Output() save: EventEmitter<any> = new EventEmitter();
+
+  constructor(private vewcomp:ViewComponent){
+
+  }
+
+  ngOnInit() {
+
+      this.renderValue = this.value.toString().toUpperCase();
+  }
+
+  onClick() {
+   this.vewcomp.statusChange(this.rowData);
+  }
 }

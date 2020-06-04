@@ -11,6 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { element } from '@angular/core/src/render3';
 import { UiSwitchModule } from 'ngx-ui-switch';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 
 @Component({
@@ -29,7 +30,15 @@ export class ViewComponent implements OnInit {
   allGroups:any = [];
   userGroups = [];
   dropdownList = [];
-  selectedItems:any;
+  selectedItem:any;
+  imagePath;
+  eventForm: FormGroup;
+  submitted = false;
+  imgURL: any;
+  spinner = false;
+  fileData = null;
+  message="";
+
 
   selectedUserId:any;
   selectedUserName="";
@@ -38,7 +47,7 @@ export class ViewComponent implements OnInit {
     actions: {
       columnTitle:"",
       position: 'right', // left|right
-      edit:false
+      edit:true
     },
 
     add: {
@@ -64,41 +73,26 @@ export class ViewComponent implements OnInit {
     ,   
     columns: {
 
-      id:{
-        title: 'Id',
-        type: 'string'
-      },
-
-      email:{
-        title: 'Email',
-        type: 'string'
-      },
-      name: {
+     
+      name:{
         title: 'Name',
+        type: 'string'
+      },
+      category: {
+        title: 'Category',
         type: 'string',
       },
 
-      city: {
-        title: 'City',
+      description: {
+        title: 'description',
         type: 'string',
       },
 
-      phone: {
-        title: 'Phone',
-        type: 'string',
-      },
-
-      user_group:{
-        title: 'User group',
-        type: 'string',
-
-      },
-
-       profile_image: {
+       image: {
         title: 'Image',
         type: 'html',
         filter: false,
-        valuePrepareFunction: (profile_image: string) => `<img width="30px" src="${this.imagesUrl}${profile_image}" />`,
+        valuePrepareFunction: (image: string) => `<img width="30px" src="${this.imagesUrl}${image}" />`,
       }
      
     },
@@ -113,41 +107,32 @@ export class ViewComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private toast: ToastrMessages,
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
     private datePipe:DatePipe,private _NgbModal: NgbModal) { 
     
   }
   ngOnInit() {
   //  this.getAllGroups();
-  this.getAllUsers();
+  this.getAllItems();
+  this.eventForm = this.formBuilder.group({
+    name: ['', [Validators.required, Validators.minLength(4)]],
+    image: ['',[Validators.required]],
+    category:['GENERAL'],
+    description:['', [Validators.required, Validators.minLength(4)]],
+    status:['0']
+
+   });
    
   }
 
 
-  getAllUsers(){
+  getAllItems(){
 
-    this.http.get(this.baseUrl + 'admin/users').subscribe(
+    this.http.get(this.baseUrl + 'api/grouplist').subscribe(
       (response: any) => {
-          
-        response.body.forEach(element => {
-          if(element['user_group']=="1"){
-
-            element['user_group']="Free user";
-
-          }else if(element['user_group']=="2"){
-            element['user_group']="Active Premium user";
-          }
-          else if(element['user_group']=="3"){
-            element['user_group']="Previous premium user";
-          }
-
-          element['id'] = parseInt(element._id.substring(0, 8), 16)
-          
-        });
-
-
-
-        let userList =  response.body.filter(item=>item.user_type=="User");
-        this.source.load(userList);
+        
+        this.source.load(response.body);
       
      
       },
@@ -160,103 +145,101 @@ export class ViewComponent implements OnInit {
 
 
   onDelete(event): void {
-    if (confirm('Are you sure to delete this user?')) {
-      this.http.delete(this.baseUrl + 'admin/user/' + event.data._id+"/delete")
+    if (confirm('Are you sure to delete this group?')) {
+      this.http.delete(this.baseUrl + 'api/group/' + event.data.id)
         .subscribe(
           (response: any) => {
-            if (response.message == 'User deleted successfully') {
-                 this.toast.showToast(NbToastStatus.SUCCESS, 'Users', response.message);
-                 this.getAllUsers();
+            if (response.message == 'Group Successfully Deleted!') {
+                 this.toast.showToast(NbToastStatus.SUCCESS, 'Group', response.message);
+                 this.getAllItems();
             }
         });
     }
   }
   onEdit(item, modelId){
-       
-  //      this.selectedUserId =item.data.id;
-  //      this.selectedUserName = item.data.name;
+    console.log(item);
+    this.selectedItem =item.data;
 
-  //      this.http.get(this.baseUrl + 'userGoupsList/'+item.data.id).subscribe(
-  //       (userGroups: any) => {
-  //       //  this.getAllGroups()
-  //       this.allGroups.map(item=>{
-  //         item.status=false;
-  //       })
-  //         console.log(userGroups);
-  //        if(userGroups.body.length>0){
-  //          userGroups.body.forEach(element => {
-  //          let index = this.allGroups.findIndex(item=>item.id==element.groupId)
-  //           if(index!=-1){
-  //             //console.log("found")
-  //             this.allGroups[index].status=true;
-  //            }else{
-  //             //console.log(" not found")
-  //             this.allGroups[index].status=false;
-  //            }
-  //         });
-
-  //        }
-          
-
-  //       },
-  //       (error) => {
-  //      });
-       
-  //   // this.selectedItems=item.data.groups;
-  //    this._NgbModal.open(modelId, {
-  //     windowClass: 'modal-job-scrollable'
-  //  });
+   this.imgURL = this.imagesUrl+item.data.image;
+    this.eventForm.setValue({  
+      name: item.data.name,
+     image:item.data.image,
+      category :item.data.category, 
+      description:item.data.description,
+      status:item.data.status
    
-
-
-
+  });  
+    
+    this.modalService.open(modelId);  
+  
   }
 
+  updatItem(){
 
-  getAllGroups(){
-      this.http.get(this.baseUrl + 'categories').subscribe(
+
+    this.submitted = true;
+   
+    if (this.eventForm.invalid) {
+      return;
+    }
+      
+    this.spinner = true;
+    const formData = new FormData();
+    formData.append('name', this.f.name.value);
+    formData.append('description', this.f.description.value);
+    formData.append('category', this.f.category.value);
+    formData.append('status', this.f.status.value);
+
+    if(this.fileData!=null){
+      formData.append('image', this.fileData);
+      formData.append('isImage','true');
+    }else{
+      formData.append('image', this.selectedItem.image);
+      formData.append('isImage', 'false');
+    }
+   
+     this.http.put(this.baseUrl + 'api/groupedit/'+ this.selectedItem.id, formData).subscribe(
       (response: any) => {
-       
-      response.body.map(item=> {
-        item.id = item.id;
-        item.name = item.name;
-        item.image = item.image;
-
-        item['status']=false;
-      }) 
-
-      this.allGroups = response.body;
-     // console.log(this.getAllGroups);
-       
+        this.modalService.dismissAll();
+        if (response.message === 'Group Added Successfully!') {
+          this.modalService.dismissAll();
+           this.spinner = false;
+           this.toast.showToast(NbToastStatus.SUCCESS, 'Group',response.message);
+           this.getAllItems();
+        }
       },
       (error) => {
+        this.spinner = false;
+        this.modalService.dismissAll();
+        this.toast.showToast(NbToastStatus.DANGER, 'Group',error.error.message);
+       
       });
+
   }
 
+  get f() { return this.eventForm.controls; }
 
-  modifyGroupAccess(item,event){
- 
-    let status='0';
-    if(event){
-      status='2'
+
+  preview(files) {
+    if (files.length === 0) {
+      return;
     }
-    
-   let data= {
-     groupId:item.id,
-     userId:this.selectedUserId,
-     status:status
-   }
 
-   this.http.put(this.baseUrl + 'updateUserGroupAccess',data).subscribe(
-    (response: any) => {
-      console.log(response);
-    },
-    (error) => {
-    });
-  }
+    const mimeType = files[0].type;
+    if (mimeType.match(/image\/*/) == null) {
+      this.message = 'Only images are supported.';
+      return;
+    }
 
-  getGroupStatus(){
-    return true;
+    this.f['image'].setValue(files[0].name ? files[0].name : '');
+    const reader = new FileReader();
+    this.imagePath = files;
+    this.fileData = <File>files[0];
+  
+    reader.readAsDataURL(files[0]);
+    reader.onload = (_event) => {
+      this.imgURL = reader.result;
+    };
   }
 
 }

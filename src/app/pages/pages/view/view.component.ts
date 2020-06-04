@@ -38,6 +38,7 @@ export class ViewComponent implements OnInit {
     actions: {
       columnTitle:"",
       position: 'right', // left|right
+      add:false
     },
 
     add: {
@@ -92,7 +93,8 @@ export class ViewComponent implements OnInit {
   //  this.getAllGroups();
   this.eventForm = this.formBuilder.group({
     title: ['', [Validators.required, Validators.minLength(4)]],
-    content: ['', [Validators.required,Validators.minLength(15)]]
+    content: ['', [Validators.required,Validators.minLength(15)]],
+    status:['0']
    
   });
 
@@ -103,14 +105,8 @@ export class ViewComponent implements OnInit {
   get f() { return this.eventForm.controls; }
 
   getAllContents(){
-    this.http.get(this.baseUrl + 'admin/contents').subscribe(
+    this.http.get(this.baseUrl + 'api/pageslist').subscribe(
       (response: any) => {
-
-        response.body.forEach(element => {
-        
-          element['id'] = parseInt(element._id.substring(0, 8), 16)
-                    
-        });
        
         this.source.load(response.body);
        },
@@ -120,10 +116,10 @@ export class ViewComponent implements OnInit {
   }
   onDelete(event): void {
     if (confirm('Are you sure to delete this Page?')) {
-      this.http.delete(this.baseUrl + 'admin/contents/' + event.data._id+"/delete")
+      this.http.delete(this.baseUrl + 'api/page/' + event.data.id)
         .subscribe(
           (response: any) => {
-            if (response.message == 'Page deleted successfully') {
+            if (response.message == 'Page Successfully Deleted!') {
                  this.toast.showToast(NbToastStatus.SUCCESS, 'Page', response.message);
                  this.getAllContents();
             }
@@ -136,12 +132,12 @@ export class ViewComponent implements OnInit {
      
     this.eventForm.setValue({  
       title: item.data.title,
+      status:item.data.status,
       content:item.data.content,
-   
 
    });  
     
-    this.modalService.open(modelId);    
+    this.modalService.open(modelId, { size: 'lg'});    
   }
 
 
@@ -154,23 +150,25 @@ export class ViewComponent implements OnInit {
     //    // --------------------------------------------------------------          
      this.spinner = true;
  
-    const formData = new FormData();
-    formData.append('title', this.f.title.value);
-    formData.append('content', this.f.content.value);
+    // const formData = new FormData();
+    // formData.append('title', this.f.title.value);
+    // formData.append('content', this.f.content.value);
+
+    var data = {
+      title :  this.f.title.value,
+      content:this.f.content.value,
+      status:this.f.status.value
+
+    }
     
    
-        this.http.patch(this.baseUrl + "admin/contents/"+this.selectedItem.data._id+"/edit", formData).subscribe(
+        this.http.put(this.baseUrl + "api/pageedit/"+this.selectedItem.data.id, data).subscribe(
       (response: any) => {
         this.modalService.dismissAll();
         this.spinner = false;
-        if (response.message === 'Exists' || response.message === 'Error') {
-       
-        } else if (response.message === 'Page updated successfully') {
+        if (response.message === 'Page updated Successfully!') {
           this.toast.showToast(NbToastStatus.SUCCESS, 'Page',response.message);
        
-          for (const i in this.eventForm.controls) {
-            this.eventForm.controls[i].setErrors(null);
-          }
         }
         this.getAllContents();
      },

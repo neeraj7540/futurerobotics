@@ -129,30 +129,26 @@ export class AddComponent implements OnInit {
     formData.append('description', this.f.description.value);
     formData.append('image', this.fileData);
 
-    alert("no error");
     this.spinner = false;
-    //  this.http.post(this.baseUrl + 'admin/user/create', formData).subscribe(
-    //   (response: any) => {
+     this.http.post(this.baseUrl + 'api/addgroup', formData).subscribe(
+      (response: any) => {
 
-    //     console.log(response);
-    //      this.spinner = false;
-    //     if (response.message === 'Exists' || response.message === 'Error') {
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', response.body);
-    //     } else if (response.message === 'User created successfully!') {
-    //       this.toast.showToast(NbToastStatus.SUCCESS, 'User',response.message);
-    //       this.form.nativeElement.reset();
+        console.log(response);
+         this.spinner = false;
+         if (response.message === 'Group Added Successfully!') {
+          this.toast.showToast(NbToastStatus.SUCCESS, 'Group',response.message);
+          this.form.nativeElement.reset();
+          this.submitted = false;
+          this.imgURL="";
+          this.fileData=null;
           
-    //     }
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //     this.spinner = false;
-    //     if( error.error.body.email){
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error.error.body.email.message);
-    //     }else if(error.error.body.username){
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error.error.body.username.message);
-    //     }       
-    //   });
+        }
+      },
+      (error) => {
+        console.log(error);
+        this.toast.showToast(NbToastStatus.DANGER, 'Group',error.error.message);
+          
+      });
   }
 
 

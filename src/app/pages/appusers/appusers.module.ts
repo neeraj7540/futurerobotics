@@ -10,11 +10,12 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../../interceptor/auth.interceptor';
 // import{SearchComponent} from '../maps/search-map/search/search.component';
 import { AppUsersComponents } from './appusers.component';
-
 import { UiSwitchModule } from 'ngx-ui-switch';
+import {ButtonViewComponent} from './view/view.component';
  
 const components = [
   AppUsersComponents,
+  ButtonViewComponent,
   ViewComponent,
   AddComponent
  ];
@@ -36,7 +37,8 @@ const components = [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   
   
-   ],
-  
+   ]
+  ,
+   entryComponents:[ ButtonViewComponent ]
 })
 export class AppUsersModule { }

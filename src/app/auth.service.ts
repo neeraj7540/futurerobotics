@@ -12,7 +12,7 @@ export class AuthService {
   ) { }
   ////// ================================ Admin Login service ======================================== //////
   login(email: string, password: string) {
-    return this.http.post(this.baseUrl + 'admin/login', { email: email, password: password });
+    return this.http.post(this.baseUrl + 'api/login', { email: email, password: password });
   }
 
   ////// ================================ Admin Logout service ======================================== //////

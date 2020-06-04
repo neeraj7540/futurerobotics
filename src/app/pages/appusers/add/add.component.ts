@@ -152,34 +152,39 @@ export class AddComponent implements OnInit {
     formData.append('country', this.f.country.value);
     formData.append('location', this.f.location.value);
     formData.append('about', this.f.about.value);
+    formData.append('dob', this.f.dob.value);
     formData.append('work', this.f.work.value);
+    formData.append('image', this.fileData);
     formData.append('additional', this.f.additional.value);
     formData.append('password', this.f.password.value);
-    formData.append('image', this.fileData);
-    alert("no error");
+    formData.append('deviceType', '0');
+    formData.append('deviceToken', 'deviceToken');
+    
+   
+    
+   
     this.spinner = false;
-    //  this.http.post(this.baseUrl + 'admin/user/create', formData).subscribe(
-    //   (response: any) => {
+     this.http.post(this.baseUrl + 'api/adduser', formData).subscribe(
+      (response: any) => {
 
-    //     console.log(response);
-    //      this.spinner = false;
-    //     if (response.message === 'Exists' || response.message === 'Error') {
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', response.body);
-    //     } else if (response.message === 'User created successfully!') {
-    //       this.toast.showToast(NbToastStatus.SUCCESS, 'User',response.message);
-    //       this.form.nativeElement.reset();
+         this.spinner = false;
+         this.submitted = false;
+        if (response.message === 'Exists' || response.message === 'Error') {
+          this.toast.showToast(NbToastStatus.DANGER, 'Error', response.body);
+        } else if (response.message === 'Users Added Successfully!') {
+          this.toast.showToast(NbToastStatus.SUCCESS, 'User',response.message);
+          this.form.nativeElement.reset();
+          this.imgURL = "";
+          this.fileData=null;
           
-    //     }
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //     this.spinner = false;
-    //     if( error.error.body.email){
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error.error.body.email.message);
-    //     }else if(error.error.body.username){
-    //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error.error.body.username.message);
-    //     }       
-    //   });
+        }
+      },
+      (error) => {
+        console.log(error);
+       
+          this.toast.showToast(NbToastStatus.DANGER, 'Error', error.message);
+              
+      });
   }
 
 

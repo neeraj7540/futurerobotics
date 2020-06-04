@@ -1,6 +1,6 @@
 <nb-card>
   <nb-card-header>
-    App Users
+    Feeds Categories
   </nb-card-header>
   <nb-card-body>
     <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEdit($event,groupsModel)"
@@ -11,25 +11,62 @@
 
 <ng-template #groupsModel let-c="close" let-d="dismiss">
  <div class="modal-header">
-    <h4 class="modal-title">{{this.selectedUserName}}  groups</h4>
+    <h4 class="modal-title">Edit Feed Category</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div> 
-  <div class="modal-body" style="overflow-y: scroll;height: 450px">
-    <ul class="list-group" style="list-style-type:none;" *ngIf="allGroups.length>0">
-     <li *ngFor="let item of allGroups; let i = index">
-      <div class="list-group-item d-flex justify-content-between align-items-center">
-        <img src="{{imagesUrl+item.profile_image}}" width="30" height="30"  alt="">
-      {{item.name}}   
-        <div class="image-parent" >
-          <ui-switch [checked]="item.status" (valueChange)="modifyGroupAccess(item,$event)"></ui-switch>
-      </div>
-    </div>  
-      </li>
-    </ul>
+  <div class="modal-body" >
+        <form [formGroup]="eventForm" #form [formGroup]="eventForm" (ngSubmit)="updatItem()">
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Name </label>
+            <div class="col-sm-9">
+              <input type="text"   autofocus formControlName="name" class="form-control" placeholder="Group name"
+                [ngClass]="{ 'is-invalid': submitted && f.name.errors, 'form-control-danger':submitted && f.name.errors }" />
+              <ng-container *ngIf="submitted && f.name.errors">
+                <p class="error-message" class="text-danger"> 
+                  Name is required & must be at least 4 characters!
+                </p>
+              </ng-container>
+            
+            </div>
+          </div>
+          
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label">Description</label>
+              <div class="col-sm-9">
+                <textarea type="text"   class="form-control"
+                formControlName="description" placeholder="Description"
+                 autocomplete="off"  [ngClass]="{ 'is-invalid': submitted && f.description.errors, 'form-control-danger':submitted && f.description.errors }"></textarea>
+             
+               <ng-container *ngIf="submitted && f.description.errors">
+                <p class="error-message" class="text-danger">
+                  Description is required & must be at least 4 characters!
+                </p>
+              </ng-container>
+            </div>
+            </div>
+
+
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label">status</label>
+              <div class="col-sm-9">
+                   <select name="status" formControlName="status" class="form-control">
+                    <option value="1">Enable</option>
+                    <option value="0">Disable</option>
+                   
+                  </select>
+               </div>
+            </div>
+
+          <div class="form-group row">
+            <div class="offset-sm-3 col-sm-9">
+              <p class="error-message">{{formError}}</p>
+              <button type="submit" [nbSpinner]="spinner" nbSpinnerStatus="success"
+                class="btn  btn-success ">Update</button>
+            </div>
+          </div>
+        </form>
   </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-  </div>
+
 </ng-template>
