@@ -1,5 +1,5 @@
 import { map } from 'rxjs/operators';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter ,ViewChild,ElementRef} from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
@@ -11,6 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { element } from '@angular/core/src/render3';
 import { UiSwitchModule } from 'ngx-ui-switch';
+import { ViewCell } from 'ng2-smart-table';
 
 
 @Component({
@@ -30,16 +31,20 @@ export class ViewComponent implements OnInit {
   userGroups = [];
   dropdownList = [];
   selectedItems:any;
+  currentSelection="";
+  likeCommentList:any;
 
   selectedUserId:any;
+
   selectedUserName="";
   settings = {
     mode: 'external',
     actions: {
       columnTitle:"",
       position: 'right', // left|right
-      edit:false,
-      add:false
+      edit:true,
+      add:false,
+      delete:false,
     },
 
     add: {
@@ -49,12 +54,12 @@ export class ViewComponent implements OnInit {
     },
 
     edit: {
-      editButtonContent: '<i class="nb-edit"></i>',
+      editButtonContent: '<i class="nb-arrow-right"></i>',
       saveButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
     },
-    delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
+    delete: {     
+      deleteButtonContent: '<i class="nb-arrow-right"></i>',
       confirmDelete: true,
     },
 
@@ -82,19 +87,38 @@ export class ViewComponent implements OnInit {
         type: 'string'
       },
 
-      status:{
-        title: 'Feed Status',
-        type: 'string'
+      status: {
+        title: 'status',
+        type: 'string',
+       
       },
       
+      likes: {
+        title: 'Likes',
+        type: 'custom',
+        renderComponent: ButtonViewComponent,
+        onComponentInitFunction(instance) {
+          instance.save.subscribe(row => {
+          });
+        }
+      },
       
+      comments: {
+        title: 'Comments',
+        type: 'custom',
+        renderComponent: ButtonViewComponent,
+        onComponentInitFunction(instance) {
+          instance.save.subscribe(row => {
+          });
+        }
+      },
 
-     
     },
 
-
+  
   };
   source: LocalDataSource = new LocalDataSource();
+  @ViewChild('groupsModel') modalExample: ElementRef
 
 
 
@@ -102,12 +126,14 @@ export class ViewComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private toast: ToastrMessages,
+    private modalService: NgbModal,
     private datePipe:DatePipe,private _NgbModal: NgbModal) { 
     
   }
   ngOnInit() {
   //  this.getAllGroups();
   this.getAllItems();
+
    
   }
 
@@ -122,6 +148,9 @@ export class ViewComponent implements OnInit {
         response.body.forEach(element => {
           element['addedBy']=element.appuser.name;
 
+          element['likes']="Likes";
+          element['comments']="Comments";
+          
           if(element.status=='0'){
             element['status']="InActive";
           }else  if(element.status=='1'){
@@ -129,10 +158,6 @@ export class ViewComponent implements OnInit {
           }  
           
         });
-
-
-
-
 
 
        // let userList =  response.body.filter(item=>item.user_type=="User");
@@ -161,45 +186,87 @@ export class ViewComponent implements OnInit {
     }
   }
   onEdit(item, modelId){
-       
-  //      this.selectedUserId =item.data.id;
-  //      this.selectedUserName = item.data.name;
+    
+  }
 
-  //      this.http.get(this.baseUrl + 'userGoupsList/'+item.data.id).subscribe(
-  //       (userGroups: any) => {
-  //       //  this.getAllGroups()
-  //       this.allGroups.map(item=>{
-  //         item.status=false;
-  //       })
-  //         console.log(userGroups);
-  //        if(userGroups.body.length>0){
-  //          userGroups.body.forEach(element => {
-  //          let index = this.allGroups.findIndex(item=>item.id==element.groupId)
-  //           if(index!=-1){
-  //             //console.log("found")
-  //             this.allGroups[index].status=true;
-  //            }else{
-  //             //console.log(" not found")
-  //             this.allGroups[index].status=false;
-  //            }
-  //         });
-
-  //        }
-          
-
-  //       },
-  //       (error) => {
-  //      });
-       
-  //   // this.selectedItems=item.data.groups;
-  //    this._NgbModal.open(modelId, {
-  //     windowClass: 'modal-job-scrollable'
-  //  });
+  viewDetails(type,data){
+    console.log(type);
+ 
    
+    this.modalService.open(this.modalExample,{ size: 'lg', backdrop: 'static' });
+    if(type=="Likes"){
+      this.currentSelection = "Like/Deslike"
 
+      this.getAllLikes(data.id);
+
+    }else{
+
+      this.currentSelection = "Comments"
+
+      this.getAllComments(data.id);
+
+    }
+
+   
+  }
+
+  getAllLikes(id){
+
+    this.http.get(this.baseUrl +'api/allikes/'+id).subscribe(
+      (response: any) => {
+          
+       this.likeCommentList  = response.body;
+      },
+      (error) => {
+  });    
+  }
+
+
+  getAllComments(id){
+
+    this.http.get(this.baseUrl + 'api/allcomments/'+id).subscribe(
+      (response: any) => {
+       console.log(response);
+       this.likeCommentList  = response.body;
+     
+      },
+      (error) => {
+  });  
 
 
   }
 
 
+
+}
+
+
+
+
+@Component({
+  selector: 'button-view',
+  template: `
+  <button (click)="onClick()">{{value}}</button>
+  `,
+})
+export class ButtonViewComponent implements ViewCell, OnInit {
+  renderValue: string;
+
+  @Input() value: string | number;
+  @Input() rowData: any;
+
+  @Output() save: EventEmitter<any> = new EventEmitter();
+
+  constructor(private vewcomp:ViewComponent){
+
+  }
+
+  ngOnInit() {
+     
+      this.renderValue = this.value.toString()
+  }
+
+  onClick() {
+   this.vewcomp.viewDetails(this.renderValue,this.rowData);
+  }
 }

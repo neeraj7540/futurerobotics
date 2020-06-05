@@ -10,5 +10,31 @@
 </nb-card>
 
 <ng-template #groupsModel let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">{{currentSelection}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+
+    <div class="modal-body" style="overflow-y: scroll;height: 450px">
+      <ul class="list-group" style="list-style-type:none;">
+       <li *ngFor="let item of likeCommentList; let i = index">
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+         <span><img src="{{imagesUrl+item.appuser.image}}" width="30" height="30"  alt=""> {{item.appuser.name}}   </span>
+          
+           <span >{{item.comment}}</span> 
+           <span *ngIf="currentSelection!='comments' && item.likeDeslike==1"><i class="far fa-thumbs-up"></i></span> 
+           <span *ngIf="currentSelection!='comments' && item.likeDeslike==0"><i class="far fa-thumbs-down"></i></span>   
+          <div class="image-parent" >
+            <!-- <ui-switch [checked]="item.status" (valueChange)="modifyGroupAccess(item,$event)"></ui-switch> -->
+        </div>
+      </div>  
+        </li>
+      </ul>
+    </div>
+
+
+
  
 </ng-template>

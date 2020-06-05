@@ -289,8 +289,10 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 // import{SearchComponent} from '../maps/search-map/search/search.component';
 
 
+
 var components = [
     _root_component__WEBPACK_IMPORTED_MODULE_9__["RootComponents"],
+    _view_view_component__WEBPACK_IMPORTED_MODULE_4__["ButtonViewComponent"],
     _view_view_component__WEBPACK_IMPORTED_MODULE_4__["ViewComponent"],
     _add_add_component__WEBPACK_IMPORTED_MODULE_0__["AddComponent"]
 ];
@@ -310,6 +312,7 @@ var RootModule = /** @class */ (function () {
                 _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__["ToastrMessages"],
                 { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_7__["HTTP_INTERCEPTORS"], useClass: _interceptor_auth_interceptor__WEBPACK_IMPORTED_MODULE_8__["AuthInterceptor"], multi: true }
             ],
+            entryComponents: [_view_view_component__WEBPACK_IMPORTED_MODULE_4__["ButtonViewComponent"]]
         })
     ], RootModule);
     return RootModule;
@@ -326,7 +329,7 @@ var RootModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nb-card>\n  <nb-card-header>\n   Feeds list\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"onEdit($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n \n</ng-template>"
+module.exports = "<nb-card>\n  <nb-card-header>\n   Feeds list\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"onEdit($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n  <div class=\"modal-header\">\n    <h4 class=\"modal-title\">{{currentSelection}}</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n    </div>\n\n    <div class=\"modal-body\" style=\"overflow-y: scroll;height: 450px\">\n      <ul class=\"list-group\" style=\"list-style-type:none;\">\n       <li *ngFor=\"let item of likeCommentList; let i = index\">\n        <div class=\"list-group-item d-flex justify-content-between align-items-center\">\n         <span><img src=\"{{imagesUrl+item.appuser.image}}\" width=\"30\" height=\"30\"  alt=\"\"> {{item.appuser.name}}   </span>\n          \n           <span >{{item.comment}}</span> \n           <span *ngIf=\"currentSelection!='comments' && item.likeDeslike==1\"><i class=\"far fa-thumbs-up\"></i></span> \n           <span *ngIf=\"currentSelection!='comments' && item.likeDeslike==0\"><i class=\"far fa-thumbs-down\"></i></span>   \n          <div class=\"image-parent\" >\n            <!-- <ui-switch [checked]=\"item.status\" (valueChange)=\"modifyGroupAccess(item,$event)\"></ui-switch> -->\n        </div>\n      </div>  \n        </li>\n      </ul>\n    </div>\n\n\n\n \n</ng-template>"
 
 /***/ }),
 
@@ -334,12 +337,13 @@ module.exports = "<nb-card>\n  <nb-card-header>\n   Feeds list\n  </nb-card-head
 /*!****************************************************!*\
   !*** ./src/app/pages/feeds/view/view.component.ts ***!
   \****************************************************/
-/*! exports provided: ViewComponent */
+/*! exports provided: ViewComponent, ButtonViewComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewComponent", function() { return ViewComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonViewComponent", function() { return ButtonViewComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var ng2_smart_table__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ng2-smart-table */ "./node_modules/ng2-smart-table/index.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
@@ -366,11 +370,12 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var ViewComponent = /** @class */ (function () {
-    function ViewComponent(http, router, toast, datePipe, _NgbModal) {
+    function ViewComponent(http, router, toast, modalService, datePipe, _NgbModal) {
         var _this = this;
         this.http = http;
         this.router = router;
         this.toast = toast;
+        this.modalService = modalService;
         this.datePipe = datePipe;
         this._NgbModal = _NgbModal;
         this.baseUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].baseUrl;
@@ -378,14 +383,16 @@ var ViewComponent = /** @class */ (function () {
         this.allGroups = [];
         this.userGroups = [];
         this.dropdownList = [];
+        this.currentSelection = "";
         this.selectedUserName = "";
         this.settings = {
             mode: 'external',
             actions: {
                 columnTitle: "",
                 position: 'right',
-                edit: false,
-                add: false
+                edit: true,
+                add: false,
+                delete: false,
             },
             add: {
                 addButtonContent: '<i class="nb-plus"></i>',
@@ -393,12 +400,12 @@ var ViewComponent = /** @class */ (function () {
                 cancelButtonContent: '<i class="nb-close"></i>',
             },
             edit: {
-                editButtonContent: '<i class="nb-edit"></i>',
+                editButtonContent: '<i class="nb-arrow-right"></i>',
                 saveButtonContent: '<i class="nb-checkmark"></i>',
                 cancelButtonContent: '<i class="nb-close"></i>',
             },
             delete: {
-                deleteButtonContent: '<i class="nb-trash"></i>',
+                deleteButtonContent: '<i class="nb-arrow-right"></i>',
                 confirmDelete: true,
             },
             custom: [{
@@ -421,8 +428,26 @@ var ViewComponent = /** @class */ (function () {
                     type: 'string'
                 },
                 status: {
-                    title: 'Feed Status',
-                    type: 'string'
+                    title: 'status',
+                    type: 'string',
+                },
+                likes: {
+                    title: 'Likes',
+                    type: 'custom',
+                    renderComponent: ButtonViewComponent,
+                    onComponentInitFunction: function (instance) {
+                        instance.save.subscribe(function (row) {
+                        });
+                    }
+                },
+                comments: {
+                    title: 'Comments',
+                    type: 'custom',
+                    renderComponent: ButtonViewComponent,
+                    onComponentInitFunction: function (instance) {
+                        instance.save.subscribe(function (row) {
+                        });
+                    }
                 },
             },
         };
@@ -438,6 +463,8 @@ var ViewComponent = /** @class */ (function () {
             console.log(response);
             response.body.forEach(function (element) {
                 element['addedBy'] = element.appuser.name;
+                element['likes'] = "Likes";
+                element['comments'] = "Comments";
                 if (element.status == '0') {
                     element['status'] = "InActive";
                 }
@@ -463,35 +490,38 @@ var ViewComponent = /** @class */ (function () {
         }
     };
     ViewComponent.prototype.onEdit = function (item, modelId) {
-        //      this.selectedUserId =item.data.id;
-        //      this.selectedUserName = item.data.name;
-        //      this.http.get(this.baseUrl + 'userGoupsList/'+item.data.id).subscribe(
-        //       (userGroups: any) => {
-        //       //  this.getAllGroups()
-        //       this.allGroups.map(item=>{
-        //         item.status=false;
-        //       })
-        //         console.log(userGroups);
-        //        if(userGroups.body.length>0){
-        //          userGroups.body.forEach(element => {
-        //          let index = this.allGroups.findIndex(item=>item.id==element.groupId)
-        //           if(index!=-1){
-        //             //console.log("found")
-        //             this.allGroups[index].status=true;
-        //            }else{
-        //             //console.log(" not found")
-        //             this.allGroups[index].status=false;
-        //            }
-        //         });
-        //        }
-        //       },
-        //       (error) => {
-        //      });
-        //   // this.selectedItems=item.data.groups;
-        //    this._NgbModal.open(modelId, {
-        //     windowClass: 'modal-job-scrollable'
-        //  });
     };
+    ViewComponent.prototype.viewDetails = function (type, data) {
+        console.log(type);
+        this.modalService.open(this.modalExample, { size: 'lg', backdrop: 'static' });
+        if (type == "Likes") {
+            this.currentSelection = "Like/Deslike";
+            this.getAllLikes(data.id);
+        }
+        else {
+            this.currentSelection = "Comments";
+            this.getAllComments(data.id);
+        }
+    };
+    ViewComponent.prototype.getAllLikes = function (id) {
+        var _this = this;
+        this.http.get(this.baseUrl + 'api/allikes/' + id).subscribe(function (response) {
+            _this.likeCommentList = response.body;
+        }, function (error) {
+        });
+    };
+    ViewComponent.prototype.getAllComments = function (id) {
+        var _this = this;
+        this.http.get(this.baseUrl + 'api/allcomments/' + id).subscribe(function (response) {
+            console.log(response);
+            _this.likeCommentList = response.body;
+        }, function (error) {
+        });
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('groupsModel'),
+        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])
+    ], ViewComponent.prototype, "modalExample", void 0);
     ViewComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'ngx-sponsersview',
@@ -501,9 +531,43 @@ var ViewComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"],
             _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
             _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__["ToastrMessages"],
+            _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_7__["NgbModal"],
             _angular_common__WEBPACK_IMPORTED_MODULE_5__["DatePipe"], _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_7__["NgbModal"]])
     ], ViewComponent);
     return ViewComponent;
+}());
+
+var ButtonViewComponent = /** @class */ (function () {
+    function ButtonViewComponent(vewcomp) {
+        this.vewcomp = vewcomp;
+        this.save = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+    }
+    ButtonViewComponent.prototype.ngOnInit = function () {
+        this.renderValue = this.value.toString();
+    };
+    ButtonViewComponent.prototype.onClick = function () {
+        this.vewcomp.viewDetails(this.renderValue, this.rowData);
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], ButtonViewComponent.prototype, "value", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], ButtonViewComponent.prototype, "rowData", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"])
+    ], ButtonViewComponent.prototype, "save", void 0);
+    ButtonViewComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'button-view',
+            template: "\n  <button (click)=\"onClick()\">{{value}}</button>\n  ",
+        }),
+        __metadata("design:paramtypes", [ViewComponent])
+    ], ButtonViewComponent);
+    return ButtonViewComponent;
 }());
 
 
