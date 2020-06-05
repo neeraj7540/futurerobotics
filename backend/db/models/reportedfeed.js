@@ -21,6 +21,16 @@ module.exports = function(sequelize, DataTypes) {
     allowNull: false,
 
    }
+,
+
+   reason:{
+    type: DataTypes.TEXT(),
+    allowNull: false,
+    default: ''
+
+   }
+
+
     ,
     status : {
       type: DataTypes.INTEGER(11),

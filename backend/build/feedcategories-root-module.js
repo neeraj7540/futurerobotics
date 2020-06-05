@@ -37,8 +37,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/index.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../environments/environment */ "./src/environments/environment.ts");
-/* harmony import */ var _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../helpers/toaster.service */ "./src/app/helpers/toaster.service.ts");
-/* harmony import */ var _pages_menu__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../pages-menu */ "./src/app/pages/pages-menu.ts");
+/* harmony import */ var _nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @nebular/theme/components/toastr/model */ "./node_modules/@nebular/theme/components/toastr/model.js");
+/* harmony import */ var _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../helpers/toaster.service */ "./src/app/helpers/toaster.service.ts");
+/* harmony import */ var _pages_menu__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../pages-menu */ "./src/app/pages/pages-menu.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -50,6 +51,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 // import { Location } from '../../maps/search-map/entity/Location';
+
 
 
 
@@ -73,7 +75,7 @@ var AddComponent = /** @class */ (function () {
     AddComponent.prototype.ngOnInit = function () {
         this.emailError = '';
         var data = [];
-        for (var i = 0; i < _pages_menu__WEBPACK_IMPORTED_MODULE_6__["MENU_ITEMS"].length; i++) {
+        for (var i = 0; i < _pages_menu__WEBPACK_IMPORTED_MODULE_7__["MENU_ITEMS"].length; i++) {
             if (i == 0) {
             }
             else if (i == 1) {
@@ -81,7 +83,7 @@ var AddComponent = /** @class */ (function () {
             else if (i == 2) {
             }
             else {
-                data.push(_pages_menu__WEBPACK_IMPORTED_MODULE_6__["MENU_ITEMS"][i]);
+                data.push(_pages_menu__WEBPACK_IMPORTED_MODULE_7__["MENU_ITEMS"][i]);
             }
         }
         this.menu = data;
@@ -98,37 +100,32 @@ var AddComponent = /** @class */ (function () {
     });
     ////// ========================== super admin login function =========================== //////
     AddComponent.prototype.addEvent = function () {
+        var _this = this;
         this.submitted = true;
         if (this.eventForm.invalid) {
             return;
         }
         // --------------------------------------------------------------          
         this.spinner = true;
-        var formData = new FormData();
-        formData.append('name', this.f.name.value);
-        formData.append('description', this.f.description.value);
-        alert("no error");
+        // const formData = new FormData();
+        // formData.append('name', this.f.name.value);
+        // formData.append('description', this.f.description.value);
+        var formData = {
+            name: this.f.name.value,
+            description: this.f.description.value
+        };
         this.spinner = false;
-        //  this.http.post(this.baseUrl + 'admin/user/create', formData).subscribe(
-        //   (response: any) => {
-        //     console.log(response);
-        //      this.spinner = false;
-        //     if (response.message === 'Exists' || response.message === 'Error') {
-        //       this.toast.showToast(NbToastStatus.DANGER, 'Error', response.body);
-        //     } else if (response.message === 'User created successfully!') {
-        //       this.toast.showToast(NbToastStatus.SUCCESS, 'User',response.message);
-        //       this.form.nativeElement.reset();
-        //     }
-        //   },
-        //   (error) => {
-        //     console.log(error);
-        //     this.spinner = false;
-        //     if( error.error.body.email){
-        //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error.error.body.email.message);
-        //     }else if(error.error.body.username){
-        //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error.error.body.username.message);
-        //     }       
-        //   });
+        this.http.post(this.baseUrl + 'api/addfeedscategory', formData).subscribe(function (response) {
+            console.log(response);
+            _this.spinner = false;
+            if (response.message === 'Feeds Category Added Successfully!') {
+                _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_5__["NbToastStatus"].SUCCESS, 'Feeds Category', response.message);
+                _this.form.nativeElement.reset();
+                _this.submitted = false;
+            }
+        }, function (error) {
+            _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_5__["NbToastStatus"].DANGER, 'Error', error.error.message);
+        });
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
@@ -151,7 +148,7 @@ var AddComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"],
             _nebular_theme__WEBPACK_IMPORTED_MODULE_2__["NbDateService"],
             _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"],
-            _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_5__["ToastrMessages"]])
+            _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__["ToastrMessages"]])
     ], AddComponent);
     return AddComponent;
 }());
@@ -326,7 +323,7 @@ var RootModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nb-card>\n  <nb-card-header>\n    App Users\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"onEdit($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n <div class=\"modal-header\">\n    <h4 class=\"modal-title\">{{this.selectedUserName}}  groups</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div> \n  <div class=\"modal-body\" style=\"overflow-y: scroll;height: 450px\">\n    <ul class=\"list-group\" style=\"list-style-type:none;\" *ngIf=\"allGroups.length>0\">\n     <li *ngFor=\"let item of allGroups; let i = index\">\n      <div class=\"list-group-item d-flex justify-content-between align-items-center\">\n        <img src=\"{{imagesUrl+item.profile_image}}\" width=\"30\" height=\"30\"  alt=\"\">\n      {{item.name}}   \n        <div class=\"image-parent\" >\n          <ui-switch [checked]=\"item.status\" (valueChange)=\"modifyGroupAccess(item,$event)\"></ui-switch>\n      </div>\n    </div>  \n      </li>\n    </ul>\n  </div>\n  <div class=\"modal-footer\">\n    <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"c('Close click')\">Close</button>\n  </div>\n</ng-template>"
+module.exports = "<nb-card>\n  <nb-card-header>\n    Feeds Categories\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"onEdit($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n <div class=\"modal-header\">\n    <h4 class=\"modal-title\">Edit Feed Category</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div> \n  <div class=\"modal-body\" >\n        <form [formGroup]=\"eventForm\" #form [formGroup]=\"eventForm\" (ngSubmit)=\"updatItem()\">\n          <div class=\"form-group row\">\n            <label class=\"col-sm-3 col-form-label\">Name </label>\n            <div class=\"col-sm-9\">\n              <input type=\"text\"   autofocus formControlName=\"name\" class=\"form-control\" placeholder=\"Group name\"\n                [ngClass]=\"{ 'is-invalid': submitted && f.name.errors, 'form-control-danger':submitted && f.name.errors }\" />\n              <ng-container *ngIf=\"submitted && f.name.errors\">\n                <p class=\"error-message\" class=\"text-danger\"> \n                  Name is required & must be at least 4 characters!\n                </p>\n              </ng-container>\n            \n            </div>\n          </div>\n          \n            <div class=\"form-group row\">\n              <label class=\"col-sm-3 col-form-label\">Description</label>\n              <div class=\"col-sm-9\">\n                <textarea type=\"text\"   class=\"form-control\"\n                formControlName=\"description\" placeholder=\"Description\"\n                 autocomplete=\"off\"  [ngClass]=\"{ 'is-invalid': submitted && f.description.errors, 'form-control-danger':submitted && f.description.errors }\"></textarea>\n             \n               <ng-container *ngIf=\"submitted && f.description.errors\">\n                <p class=\"error-message\" class=\"text-danger\">\n                  Description is required & must be at least 4 characters!\n                </p>\n              </ng-container>\n            </div>\n            </div>\n\n\n            <div class=\"form-group row\">\n              <label class=\"col-sm-3 col-form-label\">status</label>\n              <div class=\"col-sm-9\">\n                   <select name=\"status\" formControlName=\"status\" class=\"form-control\">\n                    <option value=\"1\">Enable</option>\n                    <option value=\"0\">Disable</option>\n                   \n                  </select>\n               </div>\n            </div>\n\n          <div class=\"form-group row\">\n            <div class=\"offset-sm-3 col-sm-9\">\n              <p class=\"error-message\">{{formError}}</p>\n              <button type=\"submit\" [nbSpinner]=\"spinner\" nbSpinnerStatus=\"success\"\n                class=\"btn  btn-success \">Update</button>\n            </div>\n          </div>\n        </form>\n  </div>\n\n</ng-template>"
 
 /***/ }),
 
@@ -349,6 +346,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../helpers/toaster.service */ "./src/app/helpers/toaster.service.ts");
 /* harmony import */ var _nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @nebular/theme/components/toastr/model */ "./node_modules/@nebular/theme/components/toastr/model.js");
 /* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -367,12 +365,14 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var ViewComponent = /** @class */ (function () {
-    function ViewComponent(http, router, toast, datePipe, _NgbModal) {
-        var _this = this;
+    function ViewComponent(http, router, toast, modalService, formBuilder, datePipe, _NgbModal) {
         this.http = http;
         this.router = router;
         this.toast = toast;
+        this.modalService = modalService;
+        this.formBuilder = formBuilder;
         this.datePipe = datePipe;
         this._NgbModal = _NgbModal;
         this.baseUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].baseUrl;
@@ -380,13 +380,15 @@ var ViewComponent = /** @class */ (function () {
         this.allGroups = [];
         this.userGroups = [];
         this.dropdownList = [];
+        this.submitted = false;
+        this.spinner = false;
         this.selectedUserName = "";
         this.settings = {
             mode: 'external',
             actions: {
                 columnTitle: "",
                 position: 'right',
-                edit: false
+                add: false
             },
             add: {
                 addButtonContent: '<i class="nb-plus"></i>',
@@ -411,134 +413,85 @@ var ViewComponent = /** @class */ (function () {
                     title: 'Id',
                     type: 'string'
                 },
-                email: {
-                    title: 'Email',
-                    type: 'string'
-                },
                 name: {
                     title: 'Name',
+                    type: 'string'
+                },
+                description: {
+                    title: 'Description',
                     type: 'string',
                 },
-                city: {
-                    title: 'City',
-                    type: 'string',
-                },
-                phone: {
-                    title: 'Phone',
-                    type: 'string',
-                },
-                user_group: {
-                    title: 'User group',
-                    type: 'string',
-                },
-                profile_image: {
-                    title: 'Image',
-                    type: 'html',
-                    filter: false,
-                    valuePrepareFunction: function (profile_image) { return "<img width=\"30px\" src=\"" + _this.imagesUrl + profile_image + "\" />"; },
-                }
             },
         };
         this.source = new ng2_smart_table__WEBPACK_IMPORTED_MODULE_1__["LocalDataSource"]();
     }
     ViewComponent.prototype.ngOnInit = function () {
         //  this.getAllGroups();
-        this.getAllUsers();
+        this.eventForm = this.formBuilder.group({
+            name: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].minLength(4)]],
+            description: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].minLength(4)]],
+            status: ['0']
+        });
+        this.getAllItems();
     };
-    ViewComponent.prototype.getAllUsers = function () {
+    ViewComponent.prototype.getAllItems = function () {
         var _this = this;
-        this.http.get(this.baseUrl + 'admin/users').subscribe(function (response) {
-            response.body.forEach(function (element) {
-                if (element['user_group'] == "1") {
-                    element['user_group'] = "Free user";
-                }
-                else if (element['user_group'] == "2") {
-                    element['user_group'] = "Active Premium user";
-                }
-                else if (element['user_group'] == "3") {
-                    element['user_group'] = "Previous premium user";
-                }
-                element['id'] = parseInt(element._id.substring(0, 8), 16);
-            });
-            var userList = response.body.filter(function (item) { return item.user_type == "User"; });
-            _this.source.load(userList);
+        this.http.get(this.baseUrl + 'api/feedscategorylist').subscribe(function (response) {
+            _this.source.load(response.body);
         }, function (error) {
         });
     };
     ViewComponent.prototype.onDelete = function (event) {
         var _this = this;
-        if (confirm('Are you sure to delete this user?')) {
-            this.http.delete(this.baseUrl + 'admin/user/' + event.data._id + "/delete")
+        if (confirm('Are you sure to delete this feeds category?')) {
+            this.http.delete(this.baseUrl + 'api/feedscategory/' + event.data.id)
                 .subscribe(function (response) {
-                if (response.message == 'User deleted successfully') {
-                    _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__["NbToastStatus"].SUCCESS, 'Users', response.message);
-                    _this.getAllUsers();
+                if (response.message == 'Feeds Category Successfully Deleted!') {
+                    _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__["NbToastStatus"].SUCCESS, 'Feeds Category', response.message);
+                    _this.getAllItems();
                 }
             });
         }
     };
     ViewComponent.prototype.onEdit = function (item, modelId) {
-        //      this.selectedUserId =item.data.id;
-        //      this.selectedUserName = item.data.name;
-        //      this.http.get(this.baseUrl + 'userGoupsList/'+item.data.id).subscribe(
-        //       (userGroups: any) => {
-        //       //  this.getAllGroups()
-        //       this.allGroups.map(item=>{
-        //         item.status=false;
-        //       })
-        //         console.log(userGroups);
-        //        if(userGroups.body.length>0){
-        //          userGroups.body.forEach(element => {
-        //          let index = this.allGroups.findIndex(item=>item.id==element.groupId)
-        //           if(index!=-1){
-        //             //console.log("found")
-        //             this.allGroups[index].status=true;
-        //            }else{
-        //             //console.log(" not found")
-        //             this.allGroups[index].status=false;
-        //            }
-        //         });
-        //        }
-        //       },
-        //       (error) => {
-        //      });
-        //   // this.selectedItems=item.data.groups;
-        //    this._NgbModal.open(modelId, {
-        //     windowClass: 'modal-job-scrollable'
-        //  });
+        this.selectedItem = item.data;
+        this.eventForm.setValue({
+            name: item.data.name,
+            description: item.data.description,
+            status: item.data.status
+        });
+        this.modalService.open(modelId);
     };
-    ViewComponent.prototype.getAllGroups = function () {
+    ViewComponent.prototype.updatItem = function () {
         var _this = this;
-        this.http.get(this.baseUrl + 'categories').subscribe(function (response) {
-            response.body.map(function (item) {
-                item.id = item.id;
-                item.name = item.name;
-                item.image = item.image;
-                item['status'] = false;
-            });
-            _this.allGroups = response.body;
-            // console.log(this.getAllGroups);
-        }, function (error) {
-        });
-    };
-    ViewComponent.prototype.modifyGroupAccess = function (item, event) {
-        var status = '0';
-        if (event) {
-            status = '2';
+        this.submitted = true;
+        if (this.eventForm.invalid) {
+            return;
         }
-        var data = {
-            groupId: item.id,
-            userId: this.selectedUserId,
-            status: status
+        var Data = {
+            name: this.f.name.value,
+            description: this.f.description.value,
+            status: this.f.status.value,
         };
-        this.http.put(this.baseUrl + 'updateUserGroupAccess', data).subscribe(function (response) {
-            console.log(response);
+        this.http.put(this.baseUrl + 'api/feedscategoryedit/' + this.selectedItem.id, Data).subscribe(function (response) {
+            _this.modalService.dismissAll();
+            if (response.message === 'Feeds Category updated Successfully!') {
+                _this.modalService.dismissAll();
+                _this.spinner = false;
+                _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__["NbToastStatus"].SUCCESS, 'Feeds Category', response.message);
+                _this.getAllItems();
+            }
         }, function (error) {
+            _this.spinner = false;
+            _this.modalService.dismissAll();
+            _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__["NbToastStatus"].DANGER, 'Group', error.error.message);
         });
     };
-    ViewComponent.prototype.getGroupStatus = function () {
-        return true;
-    };
+    Object.defineProperty(ViewComponent.prototype, "f", {
+        get: function () { return this.eventForm.controls; },
+        enumerable: true,
+        configurable: true
+    });
     ViewComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'ngx-sponsersview',
@@ -548,6 +501,8 @@ var ViewComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"],
             _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
             _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__["ToastrMessages"],
+            _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__["NgbModal"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_9__["FormBuilder"],
             _angular_common__WEBPACK_IMPORTED_MODULE_5__["DatePipe"], _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__["NgbModal"]])
     ], ViewComponent);
     return ViewComponent;

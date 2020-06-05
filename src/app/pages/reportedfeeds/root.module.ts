@@ -1,4 +1,4 @@
-import { AddComponent } from './add/add.component';
+
 import { NgModule } from '@angular/core';
 import { ThemeModule } from '../../@theme/theme.module';
 import { RootRoutingModule } from './root-routing.module';
@@ -12,11 +12,13 @@ import { AuthInterceptor } from '../../interceptor/auth.interceptor';
 import { RootComponents } from './root.component';
 
 import { UiSwitchModule } from 'ngx-ui-switch';
+import {ButtonViewComponent} from './view/view.component';
  
 const components = [
   RootComponents,
   ViewComponent,
-  AddComponent
+  ButtonViewComponent
+
  ];
 
 @NgModule({
@@ -37,6 +39,7 @@ const components = [
   
   
    ],
-  
+   
+   entryComponents:[ ButtonViewComponent ]
 })
 export class RootModule { }

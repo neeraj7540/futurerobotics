@@ -6,9 +6,20 @@
 
 
 
+// export const environment = {
+//   production: false,
+//   baseUrl: 'http://localhost:4100/',
+//   imagesUrl: 'http://localhost:4100/',
+//   googleMapKey: '',
+// };
+
+
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:4100/',
-  imagesUrl: 'http://localhost:4100/',
+  baseUrl: 'http://34.232.2.249:4100/',
+  imagesUrl: 'http://34.232.2.249:4100/',
   googleMapKey: '',
 };
+
+
+

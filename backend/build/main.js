@@ -517,41 +517,62 @@ module.exports = function (css) {
 var map = {
 	"./appusers/appusers.module": [
 		"./src/app/pages/appusers/appusers.module.ts",
+		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
 		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"common",
 		"appusers-appusers-module"
 	],
 	"./feedcategories/root.module": [
 		"./src/app/pages/feedcategories/root.module.ts",
+		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
 		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"common",
 		"feedcategories-root-module"
 	],
 	"./feeds/root.module": [
 		"./src/app/pages/feeds/root.module.ts",
+		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
 		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"common",
 		"feeds-root-module"
 	],
 	"./groups/root.module": [
 		"./src/app/pages/groups/root.module.ts",
+		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
 		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"common",
 		"groups-root-module"
 	],
 	"./otherapp/root.module": [
 		"./src/app/pages/otherapp/root.module.ts",
+		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
 		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"common",
 		"otherapp-root-module"
 	],
 	"./pages/pages.module": [
 		"./src/app/pages/pages/pages.module.ts",
+		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
 		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"common",
 		"pages-pages-module"
+	],
+	"./profiles/profiles.module": [
+		"./src/app/pages/profiles/profiles.module.ts",
+		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
+		"common",
+		"profiles-profiles-module"
 	],
 	"./reportedfeeds/root.module": [
 		"./src/app/pages/reportedfeeds/root.module.ts",
+		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
 		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"common",
 		"reportedfeeds-root-module"
 	],
 	"app/pages/pages.module": [
 		"./src/app/pages/pages.module.ts",
+		"common",
 		"app-pages-pages-module"
 	]
 };
@@ -4010,7 +4031,7 @@ var HeaderComponent = /** @class */ (function () {
         this.position = 'normal';
         this.baseUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_7__["environment"].baseUrl;
         this.imagesUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_7__["environment"].imagesUrl;
-        this.userMenu = [{ title: 'Profile', link: 'profiles/edit' }, { title: 'Log out', link: '/auth/logout' }];
+        this.userMenu = [{ title: 'Profile', link: 'pages/profiles/edit' }, { title: 'Log out', link: '/auth/logout' }];
     }
     HeaderComponent.prototype.ngOnInit = function () {
         this.userId = jwt_decode__WEBPACK_IMPORTED_MODULE_5__(localStorage.getItem('authToken'));
@@ -6956,10 +6977,16 @@ __webpack_require__.r(__webpack_exports__);
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
+// export const environment = {
+//   production: false,
+//   baseUrl: 'http://localhost:4100/',
+//   imagesUrl: 'http://localhost:4100/',
+//   googleMapKey: '',
+// };
 var environment = {
     production: false,
-    baseUrl: 'http://localhost:4100/',
-    imagesUrl: 'http://localhost:4100/',
+    baseUrl: 'http://34.232.2.249:4100/',
+    imagesUrl: 'http://34.232.2.249:4100/',
     googleMapKey: '',
 };
 

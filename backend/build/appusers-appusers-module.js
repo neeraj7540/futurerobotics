@@ -152,6 +152,7 @@ var AddComponent = /** @class */ (function () {
         formData.append('country', this.f.country.value);
         formData.append('location', this.f.location.value);
         formData.append('about', this.f.about.value);
+        formData.append('dob', this.f.dob.value);
         formData.append('work', this.f.work.value);
         formData.append('image', this.fileData);
         formData.append('additional', this.f.additional.value);
@@ -338,8 +339,10 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 // import{SearchComponent} from '../maps/search-map/search/search.component';
 
 
+
 var components = [
     _appusers_component__WEBPACK_IMPORTED_MODULE_9__["AppUsersComponents"],
+    _view_view_component__WEBPACK_IMPORTED_MODULE_4__["ButtonViewComponent"],
     _view_view_component__WEBPACK_IMPORTED_MODULE_4__["ViewComponent"],
     _add_add_component__WEBPACK_IMPORTED_MODULE_0__["AddComponent"]
 ];
@@ -359,6 +362,7 @@ var AppUsersModule = /** @class */ (function () {
                 _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__["ToastrMessages"],
                 { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_7__["HTTP_INTERCEPTORS"], useClass: _interceptor_auth_interceptor__WEBPACK_IMPORTED_MODULE_8__["AuthInterceptor"], multi: true }
             ],
+            entryComponents: [_view_view_component__WEBPACK_IMPORTED_MODULE_4__["ButtonViewComponent"]]
         })
     ], AppUsersModule);
     return AppUsersModule;
@@ -383,12 +387,13 @@ module.exports = "<nb-card>\n  <nb-card-header>\n    App Users\n  </nb-card-head
 /*!*******************************************************!*\
   !*** ./src/app/pages/appusers/view/view.component.ts ***!
   \*******************************************************/
-/*! exports provided: ViewComponent */
+/*! exports provided: ViewComponent, ButtonViewComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewComponent", function() { return ViewComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ButtonViewComponent", function() { return ButtonViewComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var ng2_smart_table__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ng2-smart-table */ "./node_modules/ng2-smart-table/index.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
@@ -435,7 +440,8 @@ var ViewComponent = /** @class */ (function () {
             actions: {
                 columnTitle: "",
                 position: 'right',
-                edit: false
+                edit: false,
+                add: false
             },
             add: {
                 addButtonContent: '<i class="nb-plus"></i>',
@@ -464,6 +470,35 @@ var ViewComponent = /** @class */ (function () {
                     title: 'Email',
                     type: 'string'
                 },
+                dob: {
+                    title: 'Date of birth',
+                    type: 'string'
+                },
+                about: {
+                    title: 'About',
+                    type: 'string'
+                },
+                work: {
+                    title: 'Work',
+                    type: 'string'
+                },
+                additional: {
+                    title: 'Additional',
+                    type: 'string'
+                },
+                country: {
+                    title: 'Country',
+                    type: 'string'
+                },
+                status: {
+                    title: 'status',
+                    type: 'custom',
+                    renderComponent: ButtonViewComponent,
+                    onComponentInitFunction: function (instance) {
+                        instance.save.subscribe(function (row) {
+                        });
+                    }
+                },
                 image: {
                     title: 'Image',
                     type: 'html',
@@ -482,6 +517,9 @@ var ViewComponent = /** @class */ (function () {
         var _this = this;
         this.http.get(this.baseUrl + 'api/appusers').subscribe(function (response) {
             console.log(response);
+            response.body.forEach(function (element) {
+                element['dob'] = new Date(element.dob).toDateString();
+            });
             var userList = response.body;
             _this.source.load(userList);
         }, function (error) {
@@ -490,44 +528,14 @@ var ViewComponent = /** @class */ (function () {
     ViewComponent.prototype.onDelete = function (event) {
         var _this = this;
         if (confirm('Are you sure to delete this user?')) {
-            this.http.delete(this.baseUrl + 'api/user/' + event.data._id + "/delete")
+            this.http.delete(this.baseUrl + 'api/appusers/' + event.data.id)
                 .subscribe(function (response) {
-                if (response.message == 'User deleted successfully') {
+                if (response.message == 'Users Successfully Deleted!') {
                     _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__["NbToastStatus"].SUCCESS, 'Users', response.message);
                     _this.getAllUsers();
                 }
             });
         }
-    };
-    ViewComponent.prototype.onEdit = function (item, modelId) {
-        //      this.selectedUserId =item.data.id;
-        //      this.selectedUserName = item.data.name;
-        //      this.http.get(this.baseUrl + 'userGoupsList/'+item.data.id).subscribe(
-        //       (userGroups: any) => {
-        //       //  this.getAllGroups()
-        //       this.allGroups.map(item=>{
-        //         item.status=false;
-        //       })
-        //         console.log(userGroups);
-        //        if(userGroups.body.length>0){
-        //          userGroups.body.forEach(element => {
-        //          let index = this.allGroups.findIndex(item=>item.id==element.groupId)
-        //           if(index!=-1){
-        //             //console.log("found")
-        //             this.allGroups[index].status=true;
-        //            }else{
-        //             //console.log(" not found")
-        //             this.allGroups[index].status=false;
-        //            }
-        //         });
-        //        }
-        //       },
-        //       (error) => {
-        //      });
-        //   // this.selectedItems=item.data.groups;
-        //    this._NgbModal.open(modelId, {
-        //     windowClass: 'modal-job-scrollable'
-        //  });
     };
     ViewComponent.prototype.getAllGroups = function () {
         var _this = this;
@@ -561,6 +569,29 @@ var ViewComponent = /** @class */ (function () {
     ViewComponent.prototype.getGroupStatus = function () {
         return true;
     };
+    ViewComponent.prototype.statusChange = function (data) {
+        var _this = this;
+        console.log(data);
+        var itemStatus = 0;
+        var itemId = data.id;
+        if (data.status == 0) {
+            itemStatus = 1;
+        }
+        else {
+            itemStatus = 0;
+        }
+        data = {
+            "status": itemStatus,
+            "userId": itemId
+        };
+        this.http.put(this.baseUrl + 'api/statusupdate', data).subscribe(function (response) {
+            if (response.message == 'Status updated Successfully!') {
+                _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__["NbToastStatus"].SUCCESS, 'Users', response.message);
+                _this.getAllUsers();
+            }
+        }, function (error) {
+        });
+    };
     ViewComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'ngx-sponsersview',
@@ -573,6 +604,39 @@ var ViewComponent = /** @class */ (function () {
             _angular_common__WEBPACK_IMPORTED_MODULE_5__["DatePipe"], _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__["NgbModal"]])
     ], ViewComponent);
     return ViewComponent;
+}());
+
+var ButtonViewComponent = /** @class */ (function () {
+    function ButtonViewComponent(vewcomp) {
+        this.vewcomp = vewcomp;
+        this.save = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+    }
+    ButtonViewComponent.prototype.ngOnInit = function () {
+        this.renderValue = this.value.toString().toUpperCase();
+    };
+    ButtonViewComponent.prototype.onClick = function () {
+        this.vewcomp.statusChange(this.rowData);
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], ButtonViewComponent.prototype, "value", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], ButtonViewComponent.prototype, "rowData", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"])
+    ], ButtonViewComponent.prototype, "save", void 0);
+    ButtonViewComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'button-view',
+            template: "\n    <button (click)=\"onClick()\" *ngIf=\"renderValue==0\">Activate</button>\n    <button (click)=\"onClick()\" *ngIf=\"renderValue==1\">Deactivate</button>\n\n  ",
+        }),
+        __metadata("design:paramtypes", [ViewComponent])
+    ], ButtonViewComponent);
+    return ButtonViewComponent;
 }());
 
 

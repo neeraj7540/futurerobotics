@@ -445,7 +445,7 @@ var CKEditorModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n\n  <div class=\"col-lg-12\">\n    <nb-card>\n      <nb-card-header>Add Page</nb-card-header>\n      <nb-card-body>\n        <form [formGroup]=\"eventForm\" #form [formGroup]=\"eventForm\" (ngSubmit)=\"addEvent()\">\n          <div class=\"form-group row\">\n            <label class=\"col-sm-3 col-form-label\">Title </label>\n            <div class=\"col-sm-9\">\n              <input type=\"text\"   autofocus formControlName=\"title\" class=\"form-control\" placeholder=\"Title\"\n              [ngClass]=\"{'form-control-danger':submitted && f.title.errors}\" />\n              <ng-container *ngIf=\"submitted && f.title.errors\">\n                <p class=\"error-message\" *ngIf=\"f.title.errors\">\n                  Title is required & must be at least 5 characters!\n                </p>\n              </ng-container>\n            </div>\n          </div>\n          <div class=\"form-group row\">\n              <label for=\"inputEmail1\" class=\"col-sm-3 col-form-label\">Content</label>\n\n              <div class=\"col-sm-9\">\n              <ckeditor\n                formControlName=\"content\"  [ngClass]=\"{'form-control-danger':submitted && f.content.errors}\">\n              </ckeditor>\n          <ng-container *ngIf=\"submitted && f.content.errors\">\n            <p class=\"error-message\" *ngIf=\"f.content.errors\">\n              Content is required  & must be at least 15 characters!\n            </p>\n          </ng-container>\n\n          </div>\n\n        \n      </div> \n            <div class=\"form-group row\">\n            <div class=\"offset-sm-3 col-sm-9\">\n              <p class=\"error-message\"></p>\n              <button type=\"submit\" [nbSpinner]=\"spinner\" nbSpinnerStatus=\"success\"\n                class=\"btn  btn-success \">Add</button>\n            </div>\n          </div>\n        </form>\n      </nb-card-body>\n    </nb-card>\n  </div>\n\n</div>"
+module.exports = "<div class=\"row\">\n\n  <div class=\"col-lg-12\">\n    <nb-card>\n      <nb-card-header>Add Page</nb-card-header>\n      <nb-card-body>\n        <form [formGroup]=\"eventForm\" #form [formGroup]=\"eventForm\" (ngSubmit)=\"addEvent()\">\n          <div class=\"form-group row\">\n            <label class=\"col-sm-3 col-form-label\">Title </label>\n            <div class=\"col-sm-9\">\n              <input type=\"text\"   autofocus formControlName=\"title\" class=\"form-control\" placeholder=\"Title\"\n              [ngClass]=\"{'form-control-danger':submitted && f.title.errors}\" />\n              <ng-container *ngIf=\"submitted && f.title.errors\">\n                <p class=\"error-message\" *ngIf=\"f.title.errors\">\n                  Title is required & must be at least 5 characters!\n                </p>\n              </ng-container>\n            </div>\n          </div>\n          <div class=\"form-group row\">\n              <label for=\"content\" class=\"col-sm-3 col-form-label\">Content</label>\n              <div class=\"col-sm-9\">\n              <ckeditor\n                formControlName=\"content\"  [ngClass]=\"{'form-control-danger':submitted && f.content.errors}\">\n              </ckeditor>\n          <ng-container *ngIf=\"submitted && f.content.errors\">\n            <p class=\"error-message\" *ngIf=\"f.content.errors\">\n              Content is required  & must be at least 15 characters!\n            </p>\n          </ng-container>\n\n          </div>\n\n        \n      </div> \n            <div class=\"form-group row\">\n            <div class=\"offset-sm-3 col-sm-9\">\n              <p class=\"error-message\"></p>\n              <button type=\"submit\" [nbSpinner]=\"spinner\" nbSpinnerStatus=\"success\"\n                class=\"btn  btn-success \">Add</button>\n            </div>\n          </div>\n        </form>\n      </nb-card-body>\n    </nb-card>\n  </div>\n\n</div>"
 
 /***/ }),
 
@@ -475,8 +475,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/index.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../environments/environment */ "./src/environments/environment.ts");
-/* harmony import */ var _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../helpers/toaster.service */ "./src/app/helpers/toaster.service.ts");
-/* harmony import */ var _pages_menu__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../pages-menu */ "./src/app/pages/pages-menu.ts");
+/* harmony import */ var _nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @nebular/theme/components/toastr/model */ "./node_modules/@nebular/theme/components/toastr/model.js");
+/* harmony import */ var _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../helpers/toaster.service */ "./src/app/helpers/toaster.service.ts");
+/* harmony import */ var _pages_menu__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../pages-menu */ "./src/app/pages/pages-menu.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -486,6 +487,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -507,7 +509,7 @@ var AddComponent = /** @class */ (function () {
     AddComponent.prototype.ngOnInit = function () {
         //  this.emailError='';
         var data = [];
-        for (var i = 0; i < _pages_menu__WEBPACK_IMPORTED_MODULE_6__["MENU_ITEMS"].length; i++) {
+        for (var i = 0; i < _pages_menu__WEBPACK_IMPORTED_MODULE_7__["MENU_ITEMS"].length; i++) {
             if (i == 0) {
             }
             else if (i == 1) {
@@ -515,7 +517,7 @@ var AddComponent = /** @class */ (function () {
             else if (i == 2) {
             }
             else {
-                data.push(_pages_menu__WEBPACK_IMPORTED_MODULE_6__["MENU_ITEMS"][i]);
+                data.push(_pages_menu__WEBPACK_IMPORTED_MODULE_7__["MENU_ITEMS"][i]);
             }
         }
         this.menu = data;
@@ -530,6 +532,7 @@ var AddComponent = /** @class */ (function () {
         configurable: true
     });
     AddComponent.prototype.addEvent = function () {
+        var _this = this;
         this.submitted = true;
         if (this.eventForm.invalid) {
             return;
@@ -537,33 +540,22 @@ var AddComponent = /** @class */ (function () {
         // --------------------------------------------------------------          
         this.spinner = true;
         // this.formError=""
-        var formData = new FormData();
-        formData.append('title', this.f.title.value);
-        formData.append('content', this.f.content.value);
-        console.log(this.f.title.value, this.f.content.value);
-        // this.http.post(this.baseUrl + 'admin/contents/add', formData).subscribe(
-        //   (response: any) => {
-        //    console.log(response);
-        //     this.spinner = false;
-        //     if (response.message === 'Exists' || response.message === 'Error') {
-        //     //  this.toast.showToast(NbToastStatus.DANGER, 'Error', response.body);
-        //     } else if (response.message === 'Page created successfully!') {
-        //       this.toast.showToast(NbToastStatus.SUCCESS, 'Page',response.message);
-        //       this.form.nativeElement.reset();
-        //       for (const i in this.eventForm.controls) {
-        //         this.eventForm.controls[i].setErrors(null);
-        //       }
-        //     }
-        //  },
-        //   (error) => {
-        //     console.log(error);
-        //     this.spinner = false;
-        //     if( error.error.body.email){
-        //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error );
-        //     }else if(error.error.body.username){
-        //       this.toast.showToast(NbToastStatus.DANGER, 'Error', error);
-        //     }       
-        //   });
+        var data = {
+            title: this.f.title.value,
+            content: this.f.content.value,
+        };
+        this.http.post(this.baseUrl + 'api/addpage', data).subscribe(function (response) {
+            _this.spinner = false;
+            if (response.message === 'Page Added Successfully!') {
+                _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_5__["NbToastStatus"].SUCCESS, 'Page', response.message);
+                _this.f['title'].setValue('');
+                _this.f['content'].setValue('');
+                _this.submitted = false;
+            }
+        }, function (error) {
+            _this.spinner = false;
+            _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_5__["NbToastStatus"].DANGER, 'Error', error.error.message);
+        });
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
@@ -586,7 +578,7 @@ var AddComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"],
             _nebular_theme__WEBPACK_IMPORTED_MODULE_2__["NbDateService"],
             _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"],
-            _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_5__["ToastrMessages"]])
+            _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__["ToastrMessages"]])
     ], AddComponent);
     return AddComponent;
 }());
@@ -767,7 +759,7 @@ var PagesModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nb-card>\n  <nb-card-header>\n   CRM Pages\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"onEdit($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n <div class=\"modal-header\">\n    <h4 class=\"modal-title\">Page</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div> \n  <div class=\"modal-body\">\n\n    <form [formGroup]=\"eventForm\" #form [formGroup]=\"eventForm\" (ngSubmit)=\"updatePage()\">\n      <div class=\"form-group row\">\n        <label class=\"col-sm-3 col-form-label\">Title </label>\n        <div class=\"col-sm-9\">\n          <input type=\"text\"    formControlName=\"title\" class=\"form-control\" placeholder=\"Page Title\"\n          [ngClass]=\"{'form-control-danger':submitted && f.title.errors}\" />\n          <ng-container *ngIf=\"submitted && f.title.errors\">\n            <p  style=\"color: red;\" class=\"error-message\" *ngIf=\"f.title.errors\">\n              Title is required & must be at least 5 characters!\n            </p>\n          </ng-container>\n        </div>\n      </div>\n    \n\n      <div class=\"form-group row\">\n        <label for=\"duration\" class=\"col-sm-3 col-form-label\">Content</label>\n        <div class=\"col-sm-9\">\n          <textarea type=\"text\" rows=\"10\"  [ngClass]=\"{'form-control-danger':submitted && f.content.errors}\" class=\"form-control\"\n            formControlName=\"content\" placeholder=\"Content($)\" [ngClass]=\"{ 'is-invalid': submitted && f.content.errors }\" autocomplete=\"off\"></textarea>\n          <ng-container *ngIf=\"submitted && f.content.errors\">\n            <p  style=\"color: red;\" class=\"error-message\" *ngIf=\"f.content.errors\">\n              Content is required & length should be geater then 15\n            </p>\n          </ng-container>\n\n        \n        </div>\n      </div>\n\n        <div class=\"form-group row\">\n        <div class=\"offset-sm-3 col-sm-9\">\n          <p class=\"error-message\">{{formError}}</p>\n          <button type=\"submit\" [nbSpinner]=\"spinner\" nbSpinnerStatus=\"success\"\n            class=\"btn  btn-success \">Update</button>\n        </div>\n      </div>\n    </form>\n    \n  </div>\n\n</ng-template>\n\n"
+module.exports = "<nb-card>\n  <nb-card-header>\n   CRM Pages\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"onEdit($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n <div class=\"modal-header\">\n    <h4 class=\"modal-title\">Edit Page</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div> \n  <div class=\"modal-body\">\n\n    <form [formGroup]=\"eventForm\" #form [formGroup]=\"eventForm\" (ngSubmit)=\"updatePage()\">\n      <div class=\"form-group row\">\n        <label class=\"col-sm-3 col-form-label\">Title </label>\n        <div class=\"col-sm-9\">\n          <input type=\"text\"    formControlName=\"title\" class=\"form-control\" placeholder=\"Page Title\"\n          [ngClass]=\"{'form-control-danger':submitted && f.title.errors}\" />\n          <ng-container *ngIf=\"submitted && f.title.errors\">\n            <p  style=\"color: red;\" class=\"error-message\" *ngIf=\"f.title.errors\">\n              Title is required & must be at least 5 characters!\n            </p>\n          </ng-container>\n        </div>\n      </div>\n\n      <div class=\"form-group row\">\n        <label class=\"col-sm-3 col-form-label\">status</label>\n        <div class=\"col-sm-9\">\n             <select name=\"status\" formControlName=\"status\" class=\"form-control\">\n              <option value=\"1\">Enable</option>\n              <option value=\"0\">Disable</option>\n             \n            </select>\n         </div>\n      </div>\n    \n\n      <div class=\"form-group row\">\n        <label for=\"content\" class=\"col-sm-3 col-form-label\">Content</label>\n        <div class=\"col-sm-9\">\n        <ckeditor\n          formControlName=\"content\"  [ngClass]=\"{'form-control-danger':submitted && f.content.errors}\">\n        </ckeditor>\n    <ng-container *ngIf=\"submitted && f.content.errors\">\n      <p class=\"error-message\" *ngIf=\"f.content.errors\">\n        Content is required  & must be at least 15 characters!\n      </p>\n    </ng-container>\n    </div>\n  \n</div> \n\n        <div class=\"form-group row\">\n        <div class=\"offset-sm-3 col-sm-9\">\n          <p class=\"error-message\">{{formError}}</p>\n          <button type=\"submit\" [nbSpinner]=\"spinner\" nbSpinnerStatus=\"success\"\n            class=\"btn  btn-success \">Update</button>\n        </div>\n      </div>\n    </form>\n    \n  </div>\n\n</ng-template>\n\n"
 
 /***/ }),
 
@@ -829,6 +821,7 @@ var ViewComponent = /** @class */ (function () {
             actions: {
                 columnTitle: "",
                 position: 'right',
+                add: false
             },
             add: {
                 addButtonContent: '<i class="nb-plus"></i>',
@@ -865,7 +858,8 @@ var ViewComponent = /** @class */ (function () {
         //  this.getAllGroups();
         this.eventForm = this.formBuilder.group({
             title: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].minLength(4)]],
-            content: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].minLength(15)]]
+            content: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_9__["Validators"].minLength(15)]],
+            status: ['0']
         });
         this.getAllContents();
     };
@@ -876,10 +870,7 @@ var ViewComponent = /** @class */ (function () {
     });
     ViewComponent.prototype.getAllContents = function () {
         var _this = this;
-        this.http.get(this.baseUrl + 'admin/contents').subscribe(function (response) {
-            response.body.forEach(function (element) {
-                element['id'] = parseInt(element._id.substring(0, 8), 16);
-            });
+        this.http.get(this.baseUrl + 'api/pageslist').subscribe(function (response) {
             _this.source.load(response.body);
         }, function (error) {
         });
@@ -887,9 +878,9 @@ var ViewComponent = /** @class */ (function () {
     ViewComponent.prototype.onDelete = function (event) {
         var _this = this;
         if (confirm('Are you sure to delete this Page?')) {
-            this.http.delete(this.baseUrl + 'admin/contents/' + event.data._id + "/delete")
+            this.http.delete(this.baseUrl + 'api/page/' + event.data.id)
                 .subscribe(function (response) {
-                if (response.message == 'Page deleted successfully') {
+                if (response.message == 'Page Successfully Deleted!') {
                     _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__["NbToastStatus"].SUCCESS, 'Page', response.message);
                     _this.getAllContents();
                 }
@@ -900,9 +891,10 @@ var ViewComponent = /** @class */ (function () {
         this.selectedItem = item;
         this.eventForm.setValue({
             title: item.data.title,
+            status: item.data.status,
             content: item.data.content,
         });
-        this.modalService.open(modelId);
+        this.modalService.open(modelId, { size: 'lg' });
     };
     ViewComponent.prototype.updatePage = function () {
         var _this = this;
@@ -912,19 +904,19 @@ var ViewComponent = /** @class */ (function () {
         }
         //    // --------------------------------------------------------------          
         this.spinner = true;
-        var formData = new FormData();
-        formData.append('title', this.f.title.value);
-        formData.append('content', this.f.content.value);
-        this.http.patch(this.baseUrl + "admin/contents/" + this.selectedItem.data._id + "/edit", formData).subscribe(function (response) {
+        // const formData = new FormData();
+        // formData.append('title', this.f.title.value);
+        // formData.append('content', this.f.content.value);
+        var data = {
+            title: this.f.title.value,
+            content: this.f.content.value,
+            status: this.f.status.value
+        };
+        this.http.put(this.baseUrl + "api/pageedit/" + this.selectedItem.data.id, data).subscribe(function (response) {
             _this.modalService.dismissAll();
             _this.spinner = false;
-            if (response.message === 'Exists' || response.message === 'Error') {
-            }
-            else if (response.message === 'Page updated successfully') {
+            if (response.message === 'Page updated Successfully!') {
                 _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__["NbToastStatus"].SUCCESS, 'Page', response.message);
-                for (var i in _this.eventForm.controls) {
-                    _this.eventForm.controls[i].setErrors(null);
-                }
             }
             _this.getAllContents();
         }, function (error) {

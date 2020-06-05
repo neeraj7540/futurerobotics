@@ -443,25 +443,24 @@ var ViewComponent = /** @class */ (function () {
     }
     ViewComponent.prototype.ngOnInit = function () {
         //  this.getAllGroups();
-        this.getAllUsers();
+        this.getAllItems();
     };
-    ViewComponent.prototype.getAllUsers = function () {
-        var _this = this;
-        this.http.get(this.baseUrl + 'admin/users').subscribe(function (response) {
-            response.body.forEach(function (element) {
-                if (element['user_group'] == "1") {
-                    element['user_group'] = "Free user";
-                }
-                else if (element['user_group'] == "2") {
-                    element['user_group'] = "Active Premium user";
-                }
-                else if (element['user_group'] == "3") {
-                    element['user_group'] = "Previous premium user";
-                }
-                element['id'] = parseInt(element._id.substring(0, 8), 16);
-            });
-            var userList = response.body.filter(function (item) { return item.user_type == "User"; });
-            _this.source.load(userList);
+    ViewComponent.prototype.getAllItems = function () {
+        this.http.get(this.baseUrl + 'api/allfeeds').subscribe(function (response) {
+            console.log(response);
+            // response.body.forEach(element => {
+            //   if(element['user_group']=="1"){
+            //     element['user_group']="Free user";
+            //   }else if(element['user_group']=="2"){
+            //     element['user_group']="Active Premium user";
+            //   }
+            //   else if(element['user_group']=="3"){
+            //     element['user_group']="Previous premium user";
+            //   }
+            //   element['id'] = parseInt(element._id.substring(0, 8), 16)
+            // });
+            // let userList =  response.body.filter(item=>item.user_type=="User");
+            //this.source.load(userList);
         }, function (error) {
         });
     };
@@ -472,7 +471,7 @@ var ViewComponent = /** @class */ (function () {
                 .subscribe(function (response) {
                 if (response.message == 'User deleted successfully') {
                     _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__["NbToastStatus"].SUCCESS, 'Users', response.message);
-                    _this.getAllUsers();
+                    _this.getAllItems();
                 }
             });
         }
@@ -506,38 +505,6 @@ var ViewComponent = /** @class */ (function () {
         //    this._NgbModal.open(modelId, {
         //     windowClass: 'modal-job-scrollable'
         //  });
-    };
-    ViewComponent.prototype.getAllGroups = function () {
-        var _this = this;
-        this.http.get(this.baseUrl + 'categories').subscribe(function (response) {
-            response.body.map(function (item) {
-                item.id = item.id;
-                item.name = item.name;
-                item.image = item.image;
-                item['status'] = false;
-            });
-            _this.allGroups = response.body;
-            // console.log(this.getAllGroups);
-        }, function (error) {
-        });
-    };
-    ViewComponent.prototype.modifyGroupAccess = function (item, event) {
-        var status = '0';
-        if (event) {
-            status = '2';
-        }
-        var data = {
-            groupId: item.id,
-            userId: this.selectedUserId,
-            status: status
-        };
-        this.http.put(this.baseUrl + 'updateUserGroupAccess', data).subscribe(function (response) {
-            console.log(response);
-        }, function (error) {
-        });
-    };
-    ViewComponent.prototype.getGroupStatus = function () {
-        return true;
     };
     ViewComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({

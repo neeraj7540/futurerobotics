@@ -118,36 +118,38 @@ export class ViewComponent implements OnInit {
   }
   ngOnInit() {
   //  this.getAllGroups();
-  this.getAllUsers();
+  this.getAllItems();
    
   }
 
 
-  getAllUsers(){
+  getAllItems(){
 
-    this.http.get(this.baseUrl + 'admin/users').subscribe(
+    this.http.get(this.baseUrl + 'api/allfeeds').subscribe(
       (response: any) => {
+
+          console.log(response);
           
-        response.body.forEach(element => {
-          if(element['user_group']=="1"){
+        // response.body.forEach(element => {
+        //   if(element['user_group']=="1"){
 
-            element['user_group']="Free user";
+        //     element['user_group']="Free user";
 
-          }else if(element['user_group']=="2"){
-            element['user_group']="Active Premium user";
-          }
-          else if(element['user_group']=="3"){
-            element['user_group']="Previous premium user";
-          }
+        //   }else if(element['user_group']=="2"){
+        //     element['user_group']="Active Premium user";
+        //   }
+        //   else if(element['user_group']=="3"){
+        //     element['user_group']="Previous premium user";
+        //   }
 
-          element['id'] = parseInt(element._id.substring(0, 8), 16)
+        //   element['id'] = parseInt(element._id.substring(0, 8), 16)
           
-        });
+        // });
 
 
 
-        let userList =  response.body.filter(item=>item.user_type=="User");
-        this.source.load(userList);
+       // let userList =  response.body.filter(item=>item.user_type=="User");
+        //this.source.load(userList);
       
      
       },
@@ -166,7 +168,7 @@ export class ViewComponent implements OnInit {
           (response: any) => {
             if (response.message == 'User deleted successfully') {
                  this.toast.showToast(NbToastStatus.SUCCESS, 'Users', response.message);
-                 this.getAllUsers();
+                 this.getAllItems();
             }
         });
     }
@@ -212,51 +214,5 @@ export class ViewComponent implements OnInit {
 
   }
 
-
-  getAllGroups(){
-      this.http.get(this.baseUrl + 'categories').subscribe(
-      (response: any) => {
-       
-      response.body.map(item=> {
-        item.id = item.id;
-        item.name = item.name;
-        item.image = item.image;
-
-        item['status']=false;
-      }) 
-
-      this.allGroups = response.body;
-     // console.log(this.getAllGroups);
-       
-      },
-      (error) => {
-      });
-  }
-
-
-  modifyGroupAccess(item,event){
- 
-    let status='0';
-    if(event){
-      status='2'
-    }
-    
-   let data= {
-     groupId:item.id,
-     userId:this.selectedUserId,
-     status:status
-   }
-
-   this.http.put(this.baseUrl + 'updateUserGroupAccess',data).subscribe(
-    (response: any) => {
-      console.log(response);
-    },
-    (error) => {
-    });
-  }
-
-  getGroupStatus(){
-    return true;
-  }
 
 }
