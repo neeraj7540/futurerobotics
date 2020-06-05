@@ -37,6 +37,9 @@ routes.use(function (req, res, next) {
   routes.post('/logout',passport.authenticate('admin', { session: false }), adminAuthCtrl.logout);
   routes.get('/user',passport.authenticate('admin', { session: false }), adminAuthCtrl.viewUser);
 
+
+  routes.get('/dashboarddata',passport.authenticate('admin', { session: false }), feedsCtrl.getDashBoardData);
+
  
  
   routes.post('/adduser',passport.authenticate('admin', { session: false }), appUsersCtrl.addUserByAdmin);

@@ -5,6 +5,8 @@ const reportedFeedsTable = db.models.reportedfeed;
 const feedsTable =  db.models.feed;
 const appUsersTable = db.models.appusers;
 const feeCatTable = db.models.feedscategory;
+const groupsTable = db.models.groups;
+const reportedTable = db.models.reportedfeed;
 
 const likeDeslikeTable = db.models.feedlikedeslike
 
@@ -199,5 +201,46 @@ return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Ag
 
 
 }
+,
+
+getDashBoardData :  async (req, res) => {
+
+  try{
+   
+     const users = await appUsersTable.findAll({
+       attributes:['id'],
+       raw:true,
+     })
+
+     const groups = await groupsTable.findAll({
+      attributes:['id'],
+      raw:true,
+    })
+
+    const feeds = await feedsTable.findAll({
+      attributes:['id'],
+      raw:true,
+    })
+
+    const reports = await reportedTable.findAll({
+      attributes:['id'],
+      raw:true,
+    })
+    
+    return apiResponseHelper.post(res, true, 'Dashboard Items',{totalUsers:users.length,totalGroups:groups.length,totalPost:feeds.length,totalReport:reports.length});
+
+  }
+ catch (e) {
+  console.log(e);
+ 
+return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+   
+}
+
+
+}
+
+
+
 
 }
