@@ -91,6 +91,9 @@ routes.put('/pageedit/:id',passport.authenticate('admin', { session: false }), c
 routes.get('/reportedfeeds',passport.authenticate('admin', { session: false }), feedsCtrl.getAllreportedFeeds);
 routes.put('/feedstatuschange',passport.authenticate('admin', { session: false }), feedsCtrl.updateFeedStatus);
 routes.get('/allfeeds',passport.authenticate('admin', { session: false }), feedsCtrl.getAllFeeds);
+routes.get('/allcomments/:id',passport.authenticate('admin', { session: false }), feedsCtrl.getAllComments);
+routes.get('/allikes/:id',passport.authenticate('admin', { session: false }), feedsCtrl.getAllLikes);
+
 
 //routes.delete('/page/:id',passport.authenticate('admin', { session: false }), crmPagesCtrl.deletePageAdmin);
 //routes.put('/pageedit/:id',passport.authenticate('admin', { session: false }), crmPagesCtrl.pageEditAdmin);
