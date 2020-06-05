@@ -72,12 +72,12 @@ export class ViewComponent implements OnInit {
         type: 'string'
       },
       platform: {
-        title: 'platform',
+        title: 'Platform',
         type: 'string',
       },
 
       url: {
-        title: 'url',
+        title: 'Url',
         type: 'string',
       },
 

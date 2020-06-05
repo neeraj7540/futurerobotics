@@ -1,0 +1,71 @@
+<div class="row">
+  <div class="col-lg-7">
+    <nb-card>
+      <nb-card-header>Add Item</nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="eventForm" #form [formGroup]="eventForm" (ngSubmit)="addEvent()">
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Title </label>
+            <div class="col-sm-9">
+              <input type="text"   autofocus formControlName="name" class="form-control" placeholder="Title"
+                [ngClass]="{ 'is-invalid': submitted && f.name.errors, 'form-control-danger':submitted && f.name.errors }" />
+              <ng-container *ngIf="submitted && f.name.errors">
+                <p class="error-message"> 
+                  Title is required & must be at least 4 characters!
+                </p>
+              </ng-container>
+            
+            </div>
+          </div>
+
+              <div class="form-group row">
+              <label class="col-sm-3 col-form-label">URL</label>
+              <div class="col-sm-9">
+                <input type="text"   class="form-control"
+                formControlName="url" placeholder="URL"
+                 autocomplete="off"  [ngClass]="{ 'is-invalid': submitted && f.url.errors, 'form-control-danger':submitted && f.url.errors }">
+             
+               <ng-container *ngIf="submitted && f.url.errors">
+                <p class="error-message">
+                  URL is required & must be a valid URL
+                </p>
+              </ng-container>
+            </div>
+            </div>
+
+            <div class="form-group row">
+            <label class="col-sm-3 col-form-label"> Image</label>
+            <div class="col-sm-9">
+              <input type="file" nbInput fullWidth #file accept='image/*' (change)="preview(file.files)" />
+              <input type="hidden" formControlName="image" class="form-control" />
+              <ng-container *ngIf="submitted && fileData==null">
+                <p class="error-message">
+                  Image is required
+                </p>
+              </ng-container>
+            </div>
+          </div>
+
+         
+          <div class="form-group row">
+            <div class="offset-sm-3 col-sm-9">
+              <p class="error-message">{{formError}}</p>
+              <button type="submit" [nbSpinner]="spinner" nbSpinnerStatus="success"
+                class="btn  btn-success ">Add</button>
+            </div>
+          </div>
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+  <div class="col-lg-5">
+    <nb-card>
+      <nb-card-header>Image</nb-card-header>
+      <nb-card-body>
+        <img [src]="imgURL" width="auto" height="170" alt="">
+      </nb-card-body>
+    </nb-card>
+
+  </div>
+</div>

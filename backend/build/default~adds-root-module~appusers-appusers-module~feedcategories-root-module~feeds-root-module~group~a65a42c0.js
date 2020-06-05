@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0"],{
 
 /***/ "./node_modules/ngx-ui-switch/ui-switch.es5.js":
 /*!*****************************************************!*\
@@ -381,4 +381,4 @@ var UiSwitchModule = /** @class */ (function () {
 /***/ })
 
 }]);
-//# sourceMappingURL=default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e.js.map
+//# sourceMappingURL=default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0.js.map

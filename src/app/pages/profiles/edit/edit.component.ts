@@ -41,7 +41,7 @@ export class EditComponent implements OnInit {
          this.f['name'].setValue(response.body.name);
          this.f['email'].setValue(response.body.email);
          this.f['image'].setValue('');
-         this.imgURL = environment.imagesUrl + response.body.image;
+        this.imgURL = environment.imagesUrl + response.body.image;
          this.currentImage = environment.imagesUrl + response.body.image;
          this.userId = response.body.id;
       }, (error) => {
@@ -60,7 +60,7 @@ export class EditComponent implements OnInit {
   ngOnInit() {
     this.eventForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(4)]],
-      email: ['', {disabled: true}],
+      email: [''],
       image: [''],
       password : ['', [Validators.required, Validators.minLength(8)]],
     });
@@ -112,20 +112,19 @@ export class EditComponent implements OnInit {
   formData.append('email', this.f.email.value);
   formData.append('image', this.fileData);
     if (this.fileData){
-    formData.append('imagechnaged', 'yes');
+    formData.append('isImage', 'true');
   } else{
-    formData.append('imagechnaged', 'no');
+    formData.append('isImage', 'false');
   }
   //alert("process it");
-  this.http.put(this.baseUrl + 'api/user/'+  this.userId, formData).subscribe(
+  this.http.put(this.baseUrl + 'api/updateUser', formData).subscribe(
     (response: any) => {
       this.spinner = false;
-      if (response.message === 'User updated successfully') {
+      if (response.message === 'details updated Successfully!') {
         this.toast.showToast(NbToastStatus.SUCCESS, 'Profile', response.message);
-        localStorage.setItem('userData', JSON.stringify(response.body));
-         for (const i in this.eventForm.controls) {
-          this.eventForm.controls[i].setErrors(null);
-        }
+        localStorage.setItem('userName', response.body.name);
+        localStorage.setItem('userImage', response.body.image);
+       // window.location.reload();
       }
     },
     (error) => {

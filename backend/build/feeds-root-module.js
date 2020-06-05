@@ -326,7 +326,7 @@ var RootModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nb-card>\n  <nb-card-header>\n    App Users\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"onEdit($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n <div class=\"modal-header\">\n    <h4 class=\"modal-title\">{{this.selectedUserName}}  groups</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div> \n  <div class=\"modal-body\" style=\"overflow-y: scroll;height: 450px\">\n    <ul class=\"list-group\" style=\"list-style-type:none;\" *ngIf=\"allGroups.length>0\">\n     <li *ngFor=\"let item of allGroups; let i = index\">\n      <div class=\"list-group-item d-flex justify-content-between align-items-center\">\n        <img src=\"{{imagesUrl+item.profile_image}}\" width=\"30\" height=\"30\"  alt=\"\">\n      {{item.name}}   \n        <div class=\"image-parent\" >\n          <ui-switch [checked]=\"item.status\" (valueChange)=\"modifyGroupAccess(item,$event)\"></ui-switch>\n      </div>\n    </div>  \n      </li>\n    </ul>\n  </div>\n  <div class=\"modal-footer\">\n    <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"c('Close click')\">Close</button>\n  </div>\n</ng-template>"
+module.exports = "<nb-card>\n  <nb-card-header>\n   Feeds list\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"onEdit($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n \n</ng-template>"
 
 /***/ }),
 
@@ -412,7 +412,7 @@ var ViewComponent = /** @class */ (function () {
                     valuePrepareFunction: function (image) { return "<img width=\"30px\" src=\"" + _this.imagesUrl + image + "\" />"; },
                 },
                 description: {
-                    title: 'description',
+                    title: 'Description',
                     type: 'string'
                 },
                 addedBy: {

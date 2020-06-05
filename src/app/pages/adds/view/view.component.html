@@ -1,0 +1,90 @@
+<nb-card>
+  <nb-card-header>
+   Adds List
+  </nb-card-header>
+  <nb-card-body>
+    <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEdit($event,groupsModel)"
+      (delete)="onDelete($event)">
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>
+
+<ng-template #groupsModel let-c="close" let-d="dismiss">
+ <div class="modal-header">
+    <h4 class="modal-title">Edit item</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div> 
+  <div class="modal-body" >
+        <form [formGroup]="eventForm" #form [formGroup]="eventForm" (ngSubmit)="updatItem()">
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Title </label>
+            <div class="col-sm-9">
+              <input type="text"   autofocus formControlName="title" class="form-control" placeholder="Title"
+                [ngClass]="{ 'is-invalid': submitted && f.title.errors, 'form-control-danger':submitted && f.title.errors }" />
+              <ng-container *ngIf="submitted && f.title.errors">
+                <p class="error-message" class="text-danger"> 
+                  Title is required & must be at least 4 characters!
+                </p>
+              </ng-container>
+            
+            </div>
+          </div>
+         
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label">URL</label>
+            <div class="col-sm-9">
+              <input type="text"   class="form-control"
+              formControlName="url" placeholder="URL"
+               autocomplete="off"  [ngClass]="{ 'is-invalid': submitted && f.url.errors, 'form-control-danger':submitted && f.url.errors }">
+           
+             <ng-container *ngIf="submitted && f.url.errors">
+              <p class="error-message">
+                URL is required & must be a valid URL
+              </p>
+            </ng-container>
+          </div>
+          </div>
+
+
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label">status</label>
+              <div class="col-sm-9">
+                   <select name="status" formControlName="status" class="form-control">
+                    <option value="1">Enable</option>
+                    <option value="0">Disable</option>
+                   
+                  </select>
+               </div>
+            </div>
+
+            <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Image</label>
+            <div class="col-sm-9">
+              <input type="file" nbInput fullWidth #file accept='image/*' (change)="preview(file.files)" />
+              <input type="hidden" formControlName="image" class="form-control" />
+        
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Image</label>
+            <div class="col-sm-9">
+              <nb-card-body>
+                <img [src]="imgURL" height="auto" width="150" alt="">
+              </nb-card-body>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="offset-sm-3 col-sm-9">
+              <p class="error-message">{{formError}}</p>
+              <button type="submit" [nbSpinner]="spinner" nbSpinnerStatus="success"
+                class="btn  btn-success ">Update</button>
+            </div>
+          </div>
+        </form>
+  </div>
+
+</ng-template>

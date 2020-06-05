@@ -9,6 +9,10 @@ const feedCatCtrl = require('../controllers/feedsCategoryController');
 const otherAppCtrl = require('../controllers/otherappcontroller');
 const crmPagesCtrl = require('../controllers/crmPagesController');
 const feedsCtrl = require('../controllers/feedsController');
+const postCtrl = require('../controllers/postController');
+const addsCtrl = require('../controllers/addController');
+
+
 const responseHelper = require('../helpers/responseHelper');
 
 
@@ -36,8 +40,8 @@ routes.use(function (req, res, next) {
   routes.post('/login', adminAuthCtrl.adminLogin);
   routes.post('/logout',passport.authenticate('admin', { session: false }), adminAuthCtrl.logout);
   routes.get('/user',passport.authenticate('admin', { session: false }), adminAuthCtrl.viewUser);
-
-
+  routes.put('/updateuser',passport.authenticate('admin', { session: false }), adminAuthCtrl.updateUser);
+  
   routes.get('/dashboarddata',passport.authenticate('admin', { session: false }), feedsCtrl.getDashBoardData);
 
  
@@ -92,8 +96,21 @@ routes.get('/allfeeds',passport.authenticate('admin', { session: false }), feeds
 //routes.put('/pageedit/:id',passport.authenticate('admin', { session: false }), crmPagesCtrl.pageEditAdmin);
 
 
+//post
+
+routes.post('/addpost',passport.authenticate('admin', { session: false }), postCtrl.addPostAdmin);
+routes.get('/postlist',passport.authenticate('admin', { session: false }), postCtrl.postListAdmin);
+routes.delete('/post/:id',passport.authenticate('admin', { session: false }), postCtrl.deletePostAdmin);
+routes.put('/postedit/:id',passport.authenticate('admin', { session: false }), postCtrl.postEditAdmin);
 
 
+
+// adds
+
+routes.post('/addadd',passport.authenticate('admin', { session: false }), addsCtrl.addAddAdmin);
+routes.get('/addslist',passport.authenticate('admin', { session: false }), addsCtrl.addListAdmin);
+routes.delete('/add/:id',passport.authenticate('admin', { session: false }), addsCtrl.deleteAddAdmin);
+routes.put('/addedit/:id',passport.authenticate('admin', { session: false }), addsCtrl.addEditAdmin);
 
 
 

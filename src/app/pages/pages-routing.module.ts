@@ -34,6 +34,17 @@ const routes: Routes = [{
     loadChildren: './otherapp/root.module#RootModule',
   },
 
+  {
+    path: 'post',
+    loadChildren: './post/root.module#RootModule',
+  },
+
+
+  {
+    path: 'adds',
+    loadChildren: './adds/root.module#RootModule',
+  },
+
   { path: 'pages',
   loadChildren : './pages/pages.module#PagesModule'
 },

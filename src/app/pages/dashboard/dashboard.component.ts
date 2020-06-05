@@ -45,7 +45,7 @@ export class DashboardComponent implements OnDestroy {
     title: 'Posts',
     iconClass: 'nb-email',
     type: 'info',
-    link:'/pages/feeds/view',
+    link:'/pages/post/view',
     items:0
   };
   coffeeMakerCard: CardSettings = {

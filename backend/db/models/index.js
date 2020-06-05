@@ -28,6 +28,8 @@ let modules = [
   require('./feedlikedeslike.js'),
   require('./feedcomment.js'),
   require('./reportedfeed.js'),
+  require('./post.js'),
+  require('./adds.js')
   
    
 ];

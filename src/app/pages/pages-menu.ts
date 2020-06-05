@@ -88,6 +88,43 @@ export const MENU_ITEMS: NbMenuItem[] = [
   }  ,
 
   {
+    title: 'Manage Post',
+    icon: 'nb-list',
+    link: '/pages/post',
+    
+    children: [
+      {
+        title: 'Add',
+        link: '/pages/post/add',
+      },
+      {
+        title: 'View',
+        link: '/pages/post/view',
+      },
+    ],
+    hidden: false,
+  }  ,
+
+
+  {
+    title: 'Manage Adds',
+    icon: 'nb-star',
+    link: '/pages/post',
+    
+    children: [
+      {
+        title: 'Add',
+        link: '/pages/adds/add',
+      },
+      {
+        title: 'View',
+        link: '/pages/adds/view',
+      },
+    ],
+    hidden: false,
+  }  ,
+
+  {
     title: 'Other App Links',
     icon: 'nb-gear',
     link: '/pages/otherapp',

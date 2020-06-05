@@ -848,7 +848,7 @@ var ViewComponent = /** @class */ (function () {
                 },
                 content: {
                     title: 'Content',
-                    type: 'string',
+                    type: 'html',
                 },
             },
         };

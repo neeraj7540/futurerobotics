@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const admin = db.models.admin;
 const hashPassword = require('../helpers/hashPassword');
 const apiResponseHelper = require('../helpers/apiResponseHelper');
+const filesUpload = require('../helpers/uploadFiles').uploadFile;
 
 module.exports = {
 
@@ -108,6 +109,67 @@ viewUser: async (req, res) => {
     return apiResponseHelper.onError(res, false, 'Error', e);
   }
 }
+,
+updateUser :async (req, res) => {
+
+
+  try {
+    const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+   
+    if (uploadFile) {
+        const item = await admin.findOne({
+            attributes:['id','image'],
+            where: {
+                id: req.user.id
+            }
+        });
+        if (item) {
+          const data = req.body;
+          if(req.body.isImage=="false"){
+            data.image = item.dataValues.image;
+         }else{
+             data.image = uploadFile[0].imageName;
+         }
+          const password = await hashPassword.generatePass(req.body.password);
+          const updateUser = await admin.update(
+               {
+                password: password,
+                name:req.body.name,
+                image:data.image
+                }, {
+                where: {
+                id: req.user.id
+                }
+          });
+   
+
+                 if(updateUser){
+                    return apiResponseHelper.post(res, true, 'details updated Successfully!', {name:req.body.name,image:data.image});
+
+                 }else{
+
+                    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
+
+                 }
+        } else {
+             fs.unlinkSync(uploadFile[0].imageName);
+            return apiResponseHelper.onError(res, false,  'User not found', {});
+        
+        }
+    }
+    else {
+        return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{} );
+           
+    }
+
+}
+catch (e) {
+  console.log(e);
+  return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!', {});
+   }
+
+}
+
 
 
 }

@@ -414,11 +414,11 @@ var ViewComponent = /** @class */ (function () {
                     type: 'string'
                 },
                 platform: {
-                    title: 'platform',
+                    title: 'Platform',
                     type: 'string',
                 },
                 url: {
-                    title: 'url',
+                    title: 'Url',
                     type: 'string',
                 },
             },

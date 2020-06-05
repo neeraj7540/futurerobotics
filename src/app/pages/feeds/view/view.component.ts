@@ -72,7 +72,7 @@ export class ViewComponent implements OnInit {
       },
 
       description:{
-        title: 'description',
+        title: 'Description',
         type: 'string'
       },
 

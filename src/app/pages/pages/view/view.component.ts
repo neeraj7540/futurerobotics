@@ -70,7 +70,7 @@ export class ViewComponent implements OnInit {
       },
       content: {
         title: 'Content',
-        type: 'string',
+        type: 'html',
       },
 
      

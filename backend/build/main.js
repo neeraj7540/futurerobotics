@@ -515,58 +515,72 @@ module.exports = function (css) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
+	"./adds/root.module": [
+		"./src/app/pages/adds/root.module.ts",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
+		"common",
+		"adds-root-module"
+	],
 	"./appusers/appusers.module": [
 		"./src/app/pages/appusers/appusers.module.ts",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
 		"common",
 		"appusers-appusers-module"
 	],
 	"./feedcategories/root.module": [
 		"./src/app/pages/feedcategories/root.module.ts",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
 		"common",
 		"feedcategories-root-module"
 	],
 	"./feeds/root.module": [
 		"./src/app/pages/feeds/root.module.ts",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
 		"common",
 		"feeds-root-module"
 	],
 	"./groups/root.module": [
 		"./src/app/pages/groups/root.module.ts",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
 		"common",
 		"groups-root-module"
 	],
 	"./otherapp/root.module": [
 		"./src/app/pages/otherapp/root.module.ts",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
 		"common",
 		"otherapp-root-module"
 	],
 	"./pages/pages.module": [
 		"./src/app/pages/pages/pages.module.ts",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
 		"common",
 		"pages-pages-module"
 	],
+	"./post/root.module": [
+		"./src/app/pages/post/root.module.ts",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
+		"common",
+		"post-root-module"
+	],
 	"./profiles/profiles.module": [
 		"./src/app/pages/profiles/profiles.module.ts",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
 		"common",
 		"profiles-profiles-module"
 	],
 	"./reportedfeeds/root.module": [
 		"./src/app/pages/reportedfeeds/root.module.ts",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~4225388f",
-		"default~appusers-appusers-module~feedcategories-root-module~feeds-root-module~groups-root-module~oth~1474f45e",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
+		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
 		"common",
 		"reportedfeeds-root-module"
 	],
@@ -6946,6 +6960,7 @@ var LogoutComponent = /** @class */ (function () {
     }
     LogoutComponent.prototype.ngOnInit = function () {
         localStorage.removeItem('authToken');
+        localStorage.clear();
         this.router.navigate(['/auth']);
     };
     LogoutComponent = __decorate([

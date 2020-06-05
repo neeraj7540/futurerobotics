@@ -43,8 +43,6 @@ app.use(passport.initialize());
 require('./passport')(passport);
 app.use('/api', routes);
 
-
-
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/build', express.static(path.join(__dirname, 'build')));
 

@@ -1,6 +1,6 @@
 <nb-card>
   <nb-card-header>
-    App Users
+   Feeds list
   </nb-card-header>
   <nb-card-body>
     <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEdit($event,groupsModel)"
@@ -10,26 +10,5 @@
 </nb-card>
 
 <ng-template #groupsModel let-c="close" let-d="dismiss">
- <div class="modal-header">
-    <h4 class="modal-title">{{this.selectedUserName}}  groups</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div> 
-  <div class="modal-body" style="overflow-y: scroll;height: 450px">
-    <ul class="list-group" style="list-style-type:none;" *ngIf="allGroups.length>0">
-     <li *ngFor="let item of allGroups; let i = index">
-      <div class="list-group-item d-flex justify-content-between align-items-center">
-        <img src="{{imagesUrl+item.profile_image}}" width="30" height="30"  alt="">
-      {{item.name}}   
-        <div class="image-parent" >
-          <ui-switch [checked]="item.status" (valueChange)="modifyGroupAccess(item,$event)"></ui-switch>
-      </div>
-    </div>  
-      </li>
-    </ul>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-  </div>
+ 
 </ng-template>

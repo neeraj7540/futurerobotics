@@ -8,6 +8,8 @@ const feeCatTable = db.models.feedscategory;
 const groupsTable = db.models.groups;
 const reportedTable = db.models.reportedfeed;
 
+const postTable = db.models.post;
+
 const likeDeslikeTable = db.models.feedlikedeslike
 
 const feedCommentTable = db.models.feedcomment;
@@ -217,7 +219,7 @@ getDashBoardData :  async (req, res) => {
       raw:true,
     })
 
-    const feeds = await feedsTable.findAll({
+    const posts = await postTable.findAll({
       attributes:['id'],
       raw:true,
     })
@@ -227,7 +229,7 @@ getDashBoardData :  async (req, res) => {
       raw:true,
     })
     
-    return apiResponseHelper.post(res, true, 'Dashboard Items',{totalUsers:users.length,totalGroups:groups.length,totalPost:feeds.length,totalReport:reports.length});
+    return apiResponseHelper.post(res, true, 'Dashboard Items',{totalUsers:users.length,totalGroups:groups.length,totalPost:posts.length,totalReport:reports.length});
 
   }
  catch (e) {
