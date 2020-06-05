@@ -92,18 +92,18 @@ getAllFeeds:  async (req, res) => {
            
           },
 
-          {
-            model: likeDeslikeTable,
-            attributes: ['id','feedId','userId','likeDeslike','status','createdAt','updatedAt'],
-            // include: [
-            //   {
-            //     model: appUsersTable,
-            //     attributes: ['id','name','email','image','status']
+          // {
+          //   model: likeDeslikeTable,
+          //   attributes: ['id','feedId','userId','likeDeslike','status','createdAt','updatedAt'],
+          //   include: [
+          //     {
+          //       model: appUsersTable,
+          //       attributes: ['id','name','email','image','status']
                
-            //   }
-            // ]
+          //     }
+          //   ]
            
-          },
+          // },
 
           // {
           //   model: feedCommentTable,

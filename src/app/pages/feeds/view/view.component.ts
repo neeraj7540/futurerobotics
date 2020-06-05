@@ -64,42 +64,30 @@ export class ViewComponent implements OnInit {
     ,   
     columns: {
 
-      id:{
-        title: 'Id',
-        type: 'string'
-      },
-
-      email:{
-        title: 'Email',
-        type: 'string'
-      },
-      name: {
-        title: 'Name',
-        type: 'string',
-      },
-
-      city: {
-        title: 'City',
-        type: 'string',
-      },
-
-      phone: {
-        title: 'Phone',
-        type: 'string',
-      },
-
-      user_group:{
-        title: 'User group',
-        type: 'string',
-
-      },
-
-       profile_image: {
-        title: 'Image',
+      image: {
+        title: 'Feed Image',
         type: 'html',
         filter: false,
-        valuePrepareFunction: (profile_image: string) => `<img width="30px" src="${this.imagesUrl}${profile_image}" />`,
-      }
+        valuePrepareFunction: (image: string) => `<img width="30px" src="${this.imagesUrl}${image}" />`,
+      },
+
+      description:{
+        title: 'description',
+        type: 'string'
+      },
+
+      addedBy:{
+        title: 'Added by',
+        type: 'string'
+      },
+
+      status:{
+        title: 'Feed Status',
+        type: 'string'
+      },
+      
+      
+
      
     },
 
@@ -130,26 +118,24 @@ export class ViewComponent implements OnInit {
 
           console.log(response);
           
-        // response.body.forEach(element => {
-        //   if(element['user_group']=="1"){
+        response.body.forEach(element => {
+          element['addedBy']=element.appuser.name;
 
-        //     element['user_group']="Free user";
-
-        //   }else if(element['user_group']=="2"){
-        //     element['user_group']="Active Premium user";
-        //   }
-        //   else if(element['user_group']=="3"){
-        //     element['user_group']="Previous premium user";
-        //   }
-
-        //   element['id'] = parseInt(element._id.substring(0, 8), 16)
+          if(element.status=='0'){
+            element['status']="InActive";
+          }else  if(element.status=='1'){
+            element['status']="Active";
+          }  
           
-        // });
+        });
+
+
+
 
 
 
        // let userList =  response.body.filter(item=>item.user_type=="User");
-        //this.source.load(userList);
+        this.source.load(response.body);
       
      
       },
@@ -163,14 +149,14 @@ export class ViewComponent implements OnInit {
 
   onDelete(event): void {
     if (confirm('Are you sure to delete this user?')) {
-      this.http.delete(this.baseUrl + 'admin/user/' + event.data._id+"/delete")
-        .subscribe(
-          (response: any) => {
-            if (response.message == 'User deleted successfully') {
-                 this.toast.showToast(NbToastStatus.SUCCESS, 'Users', response.message);
-                 this.getAllItems();
-            }
-        });
+      // this.http.delete(this.baseUrl + 'admin/user/' + event.data._id+"/delete")
+      //   .subscribe(
+      //     (response: any) => {
+      //       if (response.message == 'User deleted successfully') {
+      //            this.toast.showToast(NbToastStatus.SUCCESS, 'Users', response.message);
+      //            this.getAllItems();
+      //       }
+      //   });
     }
   }
   onEdit(item, modelId){

@@ -347,8 +347,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 /* harmony import */ var _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../helpers/toaster.service */ "./src/app/helpers/toaster.service.ts");
-/* harmony import */ var _nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @nebular/theme/components/toastr/model */ "./node_modules/@nebular/theme/components/toastr/model.js");
-/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
+/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -358,7 +357,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 
@@ -407,36 +405,24 @@ var ViewComponent = /** @class */ (function () {
                     title: '<i class="nb-trash"></i>'
                 }],
             columns: {
-                id: {
-                    title: 'Id',
-                    type: 'string'
-                },
-                email: {
-                    title: 'Email',
-                    type: 'string'
-                },
-                name: {
-                    title: 'Name',
-                    type: 'string',
-                },
-                city: {
-                    title: 'City',
-                    type: 'string',
-                },
-                phone: {
-                    title: 'Phone',
-                    type: 'string',
-                },
-                user_group: {
-                    title: 'User group',
-                    type: 'string',
-                },
-                profile_image: {
-                    title: 'Image',
+                image: {
+                    title: 'Feed Image',
                     type: 'html',
                     filter: false,
-                    valuePrepareFunction: function (profile_image) { return "<img width=\"30px\" src=\"" + _this.imagesUrl + profile_image + "\" />"; },
-                }
+                    valuePrepareFunction: function (image) { return "<img width=\"30px\" src=\"" + _this.imagesUrl + image + "\" />"; },
+                },
+                description: {
+                    title: 'description',
+                    type: 'string'
+                },
+                addedBy: {
+                    title: 'Added by',
+                    type: 'string'
+                },
+                status: {
+                    title: 'Feed Status',
+                    type: 'string'
+                },
             },
         };
         this.source = new ng2_smart_table__WEBPACK_IMPORTED_MODULE_1__["LocalDataSource"]();
@@ -446,34 +432,33 @@ var ViewComponent = /** @class */ (function () {
         this.getAllItems();
     };
     ViewComponent.prototype.getAllItems = function () {
+        var _this = this;
         this.http.get(this.baseUrl + 'api/allfeeds').subscribe(function (response) {
             console.log(response);
-            // response.body.forEach(element => {
-            //   if(element['user_group']=="1"){
-            //     element['user_group']="Free user";
-            //   }else if(element['user_group']=="2"){
-            //     element['user_group']="Active Premium user";
-            //   }
-            //   else if(element['user_group']=="3"){
-            //     element['user_group']="Previous premium user";
-            //   }
-            //   element['id'] = parseInt(element._id.substring(0, 8), 16)
-            // });
+            response.body.forEach(function (element) {
+                element['addedBy'] = element.appuser.name;
+                if (element.status == '0') {
+                    element['status'] = "InActive";
+                }
+                else if (element.status == '1') {
+                    element['status'] = "Active";
+                }
+            });
             // let userList =  response.body.filter(item=>item.user_type=="User");
-            //this.source.load(userList);
+            _this.source.load(response.body);
         }, function (error) {
         });
     };
     ViewComponent.prototype.onDelete = function (event) {
-        var _this = this;
         if (confirm('Are you sure to delete this user?')) {
-            this.http.delete(this.baseUrl + 'admin/user/' + event.data._id + "/delete")
-                .subscribe(function (response) {
-                if (response.message == 'User deleted successfully') {
-                    _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__["NbToastStatus"].SUCCESS, 'Users', response.message);
-                    _this.getAllItems();
-                }
-            });
+            // this.http.delete(this.baseUrl + 'admin/user/' + event.data._id+"/delete")
+            //   .subscribe(
+            //     (response: any) => {
+            //       if (response.message == 'User deleted successfully') {
+            //            this.toast.showToast(NbToastStatus.SUCCESS, 'Users', response.message);
+            //            this.getAllItems();
+            //       }
+            //   });
         }
     };
     ViewComponent.prototype.onEdit = function (item, modelId) {
@@ -515,7 +500,7 @@ var ViewComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"],
             _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
             _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__["ToastrMessages"],
-            _angular_common__WEBPACK_IMPORTED_MODULE_5__["DatePipe"], _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__["NgbModal"]])
+            _angular_common__WEBPACK_IMPORTED_MODULE_5__["DatePipe"], _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_7__["NgbModal"]])
     ], ViewComponent);
     return ViewComponent;
 }());
