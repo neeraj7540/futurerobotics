@@ -38,7 +38,8 @@ module.exports = {
                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
                 
                 }
-            },
+            }
+            ,
 
  feedsCategoryListAdmin: async (req, res) => {
          try {

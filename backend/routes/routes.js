@@ -55,10 +55,10 @@ routes.use(function (req, res, next) {
 
 //feeds category 
 
-routes.post('/addfeedscategory',passport.authenticate('admin', { session: false }), crmPagesCtrl.addPageAdmin);
-routes.get('/feedscategorylist',passport.authenticate('admin', { session: false }), crmPagesCtrl.pageListAdmin);
-routes.delete('/feedscategory/:id',passport.authenticate('admin', { session: false }), crmPagesCtrl.deletePageAdmin);
-routes.put('/feedscategoryedit/:id',passport.authenticate('admin', { session: false }), crmPagesCtrl.pageEditAdmin);
+routes.post('/addfeedscategory',passport.authenticate('admin', { session: false }), feedCatCtrl.addFeedsCategoryAdmin);
+routes.get('/feedscategorylist',passport.authenticate('admin', { session: false }), feedCatCtrl.feedsCategoryListAdmin);
+routes.delete('/feedscategory/:id',passport.authenticate('admin', { session: false }), feedCatCtrl.deleteFeedsCategoryAdmin);
+routes.put('/feedscategoryedit/:id',passport.authenticate('admin', { session: false }), feedCatCtrl.feedsCategoryEditAdmin);
 
 
 
