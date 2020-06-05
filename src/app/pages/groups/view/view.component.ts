@@ -47,7 +47,8 @@ export class ViewComponent implements OnInit {
     actions: {
       columnTitle:"",
       position: 'right', // left|right
-      edit:true
+      edit:true,
+      add:false
     },
 
     add: {
@@ -75,7 +76,7 @@ export class ViewComponent implements OnInit {
 
      
       name:{
-        title: 'Name',
+        title: 'Group Name',
         type: 'string'
       },
       category: {
@@ -201,7 +202,7 @@ export class ViewComponent implements OnInit {
      this.http.put(this.baseUrl + 'api/groupedit/'+ this.selectedItem.id, formData).subscribe(
       (response: any) => {
         this.modalService.dismissAll();
-        if (response.message === 'Group Added Successfully!') {
+        if (response.message === 'Group Updated Successfully!') {
           this.modalService.dismissAll();
            this.spinner = false;
            this.toast.showToast(NbToastStatus.SUCCESS, 'Group',response.message);

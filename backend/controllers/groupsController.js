@@ -160,7 +160,7 @@ groupEditByAdmin : async (req, res) => {
                         });  
 
                      if(updateEntry){
-                        return apiResponseHelper.post(res, true, 'Group Added Successfully!', {});
+                        return apiResponseHelper.post(res, true, 'Group Updated Successfully!', {});
 
                      }else{
 
