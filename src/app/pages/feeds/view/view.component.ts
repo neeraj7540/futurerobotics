@@ -32,7 +32,7 @@ export class ViewComponent implements OnInit {
   dropdownList = [];
   selectedItems:any;
   currentSelection="";
-  likeCommentList:any;
+  likeCommentList:any=[];
 
   selectedUserId:any;
 
@@ -214,6 +214,8 @@ export class ViewComponent implements OnInit {
   }
 
   viewDetails(type,data){
+
+    this.likeCommentList=[];
   
     if(type=="Likes"){
       this.currentSelection = "Like/Deslike"
@@ -261,6 +263,7 @@ export class ViewComponent implements OnInit {
   }
 
   getAllLikes(id){
+    this.likeCommentList=[];
 
     this.http.get(this.baseUrl +'api/allikes/'+id).subscribe(
       (response: any) => {
@@ -273,6 +276,7 @@ export class ViewComponent implements OnInit {
 
 
   getAllComments(id){
+    this.likeCommentList=[];
 
     this.http.get(this.baseUrl + 'api/allcomments/'+id).subscribe(
       (response: any) => {

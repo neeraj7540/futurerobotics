@@ -329,7 +329,7 @@ var RootModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nb-card>\n  <nb-card-header>\n   Feeds list\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"onEdit($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n  <div class=\"modal-header\">\n    <h4 class=\"modal-title\">{{currentSelection}}</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n    </div>\n\n    <div class=\"modal-body\" style=\"overflow-y: scroll;height: 450px\">\n      <ul class=\"list-group\" style=\"list-style-type:none;\">\n       <li *ngFor=\"let item of likeCommentList; let i = index\">\n        <div class=\"list-group-item d-flex justify-content-between align-items-center\">\n         <span><img src=\"{{imagesUrl+item.appuser.image}}\" width=\"30\" height=\"30\"  alt=\"\"> {{item.appuser.name}}   </span>\n          \n           <span >{{item.comment}}</span> \n           <span *ngIf=\"currentSelection!='comments' && item.likeDeslike==1\"><i class=\"far fa-thumbs-up\"></i></span> \n           <span *ngIf=\"currentSelection!='comments' && item.likeDeslike==0\"><i class=\"far fa-thumbs-down\"></i></span>   \n          <div class=\"image-parent\" >\n            <!-- <ui-switch [checked]=\"item.status\" (valueChange)=\"modifyGroupAccess(item,$event)\"></ui-switch> -->\n        </div>\n      </div>  \n        </li>\n      </ul>\n    </div>\n\n\n\n \n</ng-template>"
+module.exports = "<nb-card>\n  <nb-card-header>\n   Feeds list\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"onEdit($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n  <div class=\"modal-header\">\n    <h4 class=\"modal-title\">{{currentSelection}}</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n    </div>\n\n    <div class=\"modal-body\" style=\"overflow-y: scroll;height: 450px\">\n      <ul class=\"list-group\" style=\"list-style-type:none;\" *ngIf=\"likeCommentList.length>0\">\n       <li *ngFor=\"let item of likeCommentList; let i = index\">\n        <div class=\"list-group-item d-flex justify-content-between align-items-center\">\n         <span><img src=\"{{imagesUrl+item.appuser.image}}\" width=\"30\" height=\"30\"  alt=\"\"> {{item.appuser.name}}   </span>\n           <span *ngIf=\"currentSelection=='Comments'\">{{item.comment }}</span><span *ngIf=\"currentSelection=='Comments'\">  Like: {{item.like}}</span> <span > Deslike: {{item.deslike}}</span>\n           <span *ngIf=\"currentSelection!='Comments' && item.likeDeslike==1\"><i class=\"far fa-thumbs-up\"></i></span> \n           <span *ngIf=\"currentSelection!='Comments' && item.likeDeslike==0\"><i class=\"far fa-thumbs-down\"></i></span>   \n          <div class=\"image-parent\" >\n               </div>\n      </div>  \n        </li>\n      </ul>\n    </div>\n \n</ng-template>"
 
 /***/ }),
 
@@ -386,6 +386,7 @@ var ViewComponent = /** @class */ (function () {
         this.userGroups = [];
         this.dropdownList = [];
         this.currentSelection = "";
+        this.likeCommentList = [];
         this.selectedUserName = "";
         this.settings = {
             mode: 'external',
@@ -510,6 +511,7 @@ var ViewComponent = /** @class */ (function () {
     };
     ViewComponent.prototype.viewDetails = function (type, data) {
         var _this = this;
+        this.likeCommentList = [];
         if (type == "Likes") {
             this.currentSelection = "Like/Deslike";
             this.getAllLikes(data.id);
@@ -544,6 +546,7 @@ var ViewComponent = /** @class */ (function () {
     };
     ViewComponent.prototype.getAllLikes = function (id) {
         var _this = this;
+        this.likeCommentList = [];
         this.http.get(this.baseUrl + 'api/allikes/' + id).subscribe(function (response) {
             _this.likeCommentList = response.body;
         }, function (error) {
@@ -551,6 +554,7 @@ var ViewComponent = /** @class */ (function () {
     };
     ViewComponent.prototype.getAllComments = function (id) {
         var _this = this;
+        this.likeCommentList = [];
         this.http.get(this.baseUrl + 'api/allcomments/' + id).subscribe(function (response) {
             console.log(response);
             _this.likeCommentList = response.body;
