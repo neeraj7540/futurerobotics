@@ -288,7 +288,7 @@ getAllComments:  async (req, res) => {
   try{
 
     const item = await feedCommentTable.findAll({
-      attributes: ['id','feedId','userId','comment','status','createdAt','updatedAt'],
+      attributes: ['id','feedId','userId','comment','status','createdAt','like','deslike','updatedAt'],
       where:{
         feedId:req.params.id
       },

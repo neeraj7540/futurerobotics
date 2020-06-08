@@ -35,6 +35,23 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false,
        }
       ,
+
+      like : {
+        type: DataTypes.INTEGER(11),
+        allowNull: false,
+        default: 0
+        
+       }
+
+   ,
+
+   deslike : {
+    type: DataTypes.INTEGER(11),
+    allowNull: false,
+    default: 0
+    
+   },
+
   createdAt: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
