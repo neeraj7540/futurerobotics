@@ -414,7 +414,8 @@ var ViewComponent = /** @class */ (function () {
             actions: {
                 columnTitle: "",
                 position: 'right',
-                edit: true
+                edit: true,
+                add: false
             },
             add: {
                 addButtonContent: '<i class="nb-plus"></i>',

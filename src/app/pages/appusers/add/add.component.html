@@ -39,7 +39,7 @@
               <div class="col-sm-9">
                 <input [nbDatepicker]="datepicker"  [ngClass]="{'form-control-danger':submitted && f.dob.errors}" class="form-control"
                   formControlName="dob" placeholder="date of birth"  [ngClass]="{ 'is-invalid': submitted && f.dob.errors }" autocomplete="off"/>
-                  <nb-datepicker #datepicker [min]="endMinDate"></nb-datepicker>
+                  <nb-datepicker #datepicker></nb-datepicker>
                   <ng-container *ngIf="submitted && f.dob.errors">
                     <p class="error-message">
                     Date of birth is required!

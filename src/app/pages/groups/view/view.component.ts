@@ -117,7 +117,7 @@ export class ViewComponent implements OnInit {
   //  this.getAllGroups();
   this.getAllItems();
   this.eventForm = this.formBuilder.group({
-    name: ['', [Validators.required, Validators.minLength(4)]],
+    name: ['', [Validators.required]],
     image: ['',[Validators.required]],
     category:['GENERAL'],
     description:['', [Validators.required, Validators.minLength(4)]],

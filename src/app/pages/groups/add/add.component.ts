@@ -75,7 +75,7 @@ export class AddComponent implements OnInit {
     
     this.menu=data;
     this.eventForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(4)]],
+      name: ['', [Validators.required]],
       image: ['',[Validators.required]],
       category:['GENERAL'],
       description:['', [Validators.required, Validators.minLength(4)]],

@@ -3,7 +3,7 @@
 Reported Feeds
   </nb-card-header>
   <nb-card-body>
-    <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEdit($event,groupsModel)"
+    <ng2-smart-table [settings]="settings" [source]="source" (edit)="viewUsrList($event,groupsModel)"
       (delete)="onDelete($event)">
     </ng2-smart-table>
   </nb-card-body>
@@ -11,19 +11,25 @@ Reported Feeds
 
 <ng-template #groupsModel let-c="close" let-d="dismiss">
  <div class="modal-header">
-    <h4 class="modal-title">{{this.selectedUserName}}  groups</h4>
+    <h4 class="modal-title">Reported by listed users</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div> 
   <div class="modal-body" style="overflow-y: scroll;height: 450px">
-    <ul class="list-group" style="list-style-type:none;" *ngIf="allGroups.length>0">
-     <li *ngFor="let item of allGroups; let i = index">
+    <ul class="list-group" style="list-style-type:none;" *ngIf="allUsers.length>0">
+     <li *ngFor="let item of allUsers; let i = index">
       <div class="list-group-item d-flex justify-content-between align-items-center">
-        <img src="{{imagesUrl+item.profile_image}}" width="30" height="30"  alt="">
-      {{item.name}}   
-        <div class="image-parent" >
-          <ui-switch [checked]="item.status" (valueChange)="modifyGroupAccess(item,$event)"></ui-switch>
+        <img src="{{imagesUrl+item.appuser.image}}" width="30" height="30"  alt="">
+       <div style="width: 60%;">
+        <span> {{item.appuser.name}}</span>
+       <span> {{item.appuser.email}}</span>
+      </div>
+     
+
+        <div  style="width: 30%;" >
+          <span> {{item.reason}}</span>
+          <!-- <ui-switch [checked]="item.status" (valueChange)="modifyGroupAccess(item,$event)"></ui-switch> -->
       </div>
     </div>  
       </li>

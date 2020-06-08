@@ -351,7 +351,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 /* harmony import */ var _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../helpers/toaster.service */ "./src/app/helpers/toaster.service.ts");
-/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
+/* harmony import */ var _nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @nebular/theme/components/toastr/model */ "./node_modules/@nebular/theme/components/toastr/model.js");
+/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -361,6 +362,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -390,7 +392,7 @@ var ViewComponent = /** @class */ (function () {
             actions: {
                 columnTitle: "",
                 position: 'right',
-                edit: true,
+                edit: false,
                 add: false,
                 delete: false,
             },
@@ -427,9 +429,22 @@ var ViewComponent = /** @class */ (function () {
                     title: 'Added by',
                     type: 'string'
                 },
+                createdAt: {
+                    title: 'Date',
+                    type: 'string'
+                },
+                feedsCat: {
+                    title: 'Feeds Category',
+                    type: 'string'
+                },
                 status: {
-                    title: 'status',
-                    type: 'string',
+                    title: 'Status',
+                    type: 'custom',
+                    renderComponent: ButtonViewComponent,
+                    onComponentInitFunction: function (instance) {
+                        instance.save.subscribe(function (row) {
+                        });
+                    }
                 },
                 likes: {
                     title: 'Likes',
@@ -465,11 +480,13 @@ var ViewComponent = /** @class */ (function () {
                 element['addedBy'] = element.appuser.name;
                 element['likes'] = "Likes";
                 element['comments'] = "Comments";
+                element['createdAt'] = new Date(element.createdAt * 1000).toDateString();
+                element['feedsCat'] = element.feedscategory.name;
                 if (element.status == '0') {
-                    element['status'] = "InActive";
+                    element['status'] = "Enable";
                 }
                 else if (element.status == '1') {
-                    element['status'] = "Active";
+                    element['status'] = "Disable";
                 }
             });
             // let userList =  response.body.filter(item=>item.user_type=="User");
@@ -492,15 +509,37 @@ var ViewComponent = /** @class */ (function () {
     ViewComponent.prototype.onEdit = function (item, modelId) {
     };
     ViewComponent.prototype.viewDetails = function (type, data) {
-        console.log(type);
-        this.modalService.open(this.modalExample, { size: 'lg', backdrop: 'static' });
+        var _this = this;
         if (type == "Likes") {
             this.currentSelection = "Like/Deslike";
             this.getAllLikes(data.id);
+            this.modalService.open(this.modalExample, { size: 'lg', backdrop: 'static' });
         }
-        else {
+        else if (type == "Comments") {
             this.currentSelection = "Comments";
             this.getAllComments(data.id);
+            this.modalService.open(this.modalExample, { size: 'lg', backdrop: 'static' });
+        }
+        else if (type == "Enable" || type == "Disable") {
+            console.log(data);
+            var status_1 = '0';
+            if (type == 'Enable') {
+                status_1 = '1';
+            }
+            else {
+                status_1 = '0';
+            }
+            data = {
+                "status": status_1,
+                "feedId": data.id
+            };
+            this.http.put(this.baseUrl + 'api/feedstatuschange', data).subscribe(function (response) {
+                if (response.message == 'Status has been updated!') {
+                    _this.toast.showToast(_nebular_theme_components_toastr_model__WEBPACK_IMPORTED_MODULE_7__["NbToastStatus"].SUCCESS, 'Feed', response.message);
+                    _this.getAllItems();
+                }
+            }, function (error) {
+            });
         }
     };
     ViewComponent.prototype.getAllLikes = function (id) {
@@ -531,8 +570,8 @@ var ViewComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"],
             _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
             _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__["ToastrMessages"],
-            _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_7__["NgbModal"],
-            _angular_common__WEBPACK_IMPORTED_MODULE_5__["DatePipe"], _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_7__["NgbModal"]])
+            _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__["NgbModal"],
+            _angular_common__WEBPACK_IMPORTED_MODULE_5__["DatePipe"], _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__["NgbModal"]])
     ], ViewComponent);
     return ViewComponent;
 }());

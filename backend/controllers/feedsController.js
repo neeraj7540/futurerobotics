@@ -36,23 +36,19 @@ getAllreportedFeeds:  async (req, res) => {
     try {
         const itemList = await reportedFeedsTable.findAll({
            attributes: ['id', 'feedId', 'userId','status','reason','createdAt','updatedAt'],
+           group: ['feedId'],
            include: [
             {
               model: feedsTable,
-              attributes: ['id','description','image','status','createdAt','updatedAt'],
-              required: true
-            },
-
-
-            {
-                model: appUsersTable,
-                attributes: ['id','name','email','image'],
-                required: true
-              },
+              attributes: ['id','description','feedCatId','image','status','createdAt','updatedAt'],
+              include: [
+                {
+                  attributes: ['id','name'],
+                   model: feeCatTable
+                }
+              ]  
+            }
           ],
-
-
-
            order :   [
            ['id', 'DESC']
             ]
@@ -321,6 +317,47 @@ catch (e) {
 return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
   
 }
+
+
+}
+,
+
+feedReporterList:  async (req, res) => {
+
+  try{
+
+    const item = await reportedFeedsTable.findAll({
+      attributes: ['id', 'feedId', 'userId','reason'],
+      group:'userId',
+      where:{
+        feedId:req.params.id
+      },
+      include: [
+            {
+              model: appUsersTable,
+              attributes: ['id','name','email','image','status']
+             
+            }
+          ]
+    })
+
+    if(item.length>0){
+      return apiResponseHelper.post(res, true, 'details',item);
+
+    }else{
+      return apiResponseHelper.post(res, true, 'details',{});
+    }
+
+  }
+
+catch (e) {
+ console.log(e);
+
+return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+  
+}
+
+
 
 
 }

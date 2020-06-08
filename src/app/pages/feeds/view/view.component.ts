@@ -42,7 +42,7 @@ export class ViewComponent implements OnInit {
     actions: {
       columnTitle:"",
       position: 'right', // left|right
-      edit:true,
+      edit:false,
       add:false,
       delete:false,
     },
@@ -87,9 +87,29 @@ export class ViewComponent implements OnInit {
         type: 'string'
       },
 
+      createdAt:{
+        title: 'Date',
+        type: 'string'
+      },
+      
+      feedsCat:{
+
+        title: 'Feeds Category',
+        type: 'string'
+
+      }                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+      ,
+      
+
+
       status: {
-        title: 'status',
-        type: 'string',
+        title: 'Status',
+        type: 'custom',
+        renderComponent: ButtonViewComponent,
+        onComponentInitFunction(instance) {
+          instance.save.subscribe(row => {
+          });
+        }
        
       },
       
@@ -150,11 +170,15 @@ export class ViewComponent implements OnInit {
 
           element['likes']="Likes";
           element['comments']="Comments";
+
+          element['createdAt'] = new Date(element.createdAt*1000).toDateString();
+
+          element['feedsCat'] = element.feedscategory.name;
           
           if(element.status=='0'){
-            element['status']="InActive";
+            element['status']="Enable";
           }else  if(element.status=='1'){
-            element['status']="Active";
+            element['status']="Disable";
           }  
           
         });
@@ -190,22 +214,48 @@ export class ViewComponent implements OnInit {
   }
 
   viewDetails(type,data){
-    console.log(type);
- 
-   
-    this.modalService.open(this.modalExample,{ size: 'lg', backdrop: 'static' });
+  
     if(type=="Likes"){
       this.currentSelection = "Like/Deslike"
 
       this.getAllLikes(data.id);
+      this.modalService.open(this.modalExample,{ size: 'lg', backdrop: 'static' });
 
-    }else{
+    }else if(type=="Comments"){
 
       this.currentSelection = "Comments"
 
       this.getAllComments(data.id);
+      this.modalService.open(this.modalExample,{ size: 'lg', backdrop: 'static' });
 
+    }else if(type=="Enable" || type=="Disable"){
+
+      console.log(data)
+   
+     let status='0'
+     if(type=='Enable'){
+      status = '1';
+    }else{
+      status = '0';
     }
+
+    data = {
+      "status":status,
+      "feedId":data.id
+    }
+         this.http.put(this.baseUrl + 'api/feedstatuschange',data).subscribe(
+        (response: any) => {
+
+          if (response.message == 'Status has been updated!') {
+            this.toast.showToast(NbToastStatus.SUCCESS, 'Feed', response.message);
+            this.getAllItems();
+          }
+        },
+        (error) => {
+       });
+      
+
+    }  
 
    
   }

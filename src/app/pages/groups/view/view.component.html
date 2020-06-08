@@ -25,7 +25,7 @@
                 [ngClass]="{ 'is-invalid': submitted && f.name.errors, 'form-control-danger':submitted && f.name.errors }" />
               <ng-container *ngIf="submitted && f.name.errors">
                 <p class="error-message" class="text-danger"> 
-                  Name is required & must be at least 4 characters!
+                  Name is required!
                 </p>
               </ng-container>
             

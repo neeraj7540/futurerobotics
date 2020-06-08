@@ -161,7 +161,7 @@ var RootModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nb-card>\n  <nb-card-header>\nReported Feeds\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"onEdit($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n <div class=\"modal-header\">\n    <h4 class=\"modal-title\">{{this.selectedUserName}}  groups</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div> \n  <div class=\"modal-body\" style=\"overflow-y: scroll;height: 450px\">\n    <ul class=\"list-group\" style=\"list-style-type:none;\" *ngIf=\"allGroups.length>0\">\n     <li *ngFor=\"let item of allGroups; let i = index\">\n      <div class=\"list-group-item d-flex justify-content-between align-items-center\">\n        <img src=\"{{imagesUrl+item.profile_image}}\" width=\"30\" height=\"30\"  alt=\"\">\n      {{item.name}}   \n        <div class=\"image-parent\" >\n          <ui-switch [checked]=\"item.status\" (valueChange)=\"modifyGroupAccess(item,$event)\"></ui-switch>\n      </div>\n    </div>  \n      </li>\n    </ul>\n  </div>\n  <div class=\"modal-footer\">\n    <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"c('Close click')\">Close</button>\n  </div>\n</ng-template>"
+module.exports = "<nb-card>\n  <nb-card-header>\nReported Feeds\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"viewUsrList($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n <div class=\"modal-header\">\n    <h4 class=\"modal-title\">Reported by listed users</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div> \n  <div class=\"modal-body\" style=\"overflow-y: scroll;height: 450px\">\n    <ul class=\"list-group\" style=\"list-style-type:none;\" *ngIf=\"allUsers.length>0\">\n     <li *ngFor=\"let item of allUsers; let i = index\">\n      <div class=\"list-group-item d-flex justify-content-between align-items-center\">\n        <img src=\"{{imagesUrl+item.appuser.image}}\" width=\"30\" height=\"30\"  alt=\"\">\n       <div style=\"width: 60%;\">\n        <span> {{item.appuser.name}}</span>\n       <span> {{item.appuser.email}}</span>\n      </div>\n     \n\n        <div  style=\"width: 30%;\" >\n          <span> {{item.reason}}</span>\n          <!-- <ui-switch [checked]=\"item.status\" (valueChange)=\"modifyGroupAccess(item,$event)\"></ui-switch> -->\n      </div>\n    </div>  \n      </li>\n    </ul>\n  </div>\n  <div class=\"modal-footer\">\n    <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"c('Close click')\">Close</button>\n  </div>\n</ng-template>"
 
 /***/ }),
 
@@ -204,35 +204,36 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var ViewComponent = /** @class */ (function () {
-    function ViewComponent(http, router, toast, datePipe, _NgbModal) {
+    function ViewComponent(http, router, toast, modalService, datePipe, _NgbModal) {
         var _this = this;
         this.http = http;
         this.router = router;
         this.toast = toast;
+        this.modalService = modalService;
         this.datePipe = datePipe;
         this._NgbModal = _NgbModal;
         this.baseUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].baseUrl;
         this.imagesUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].imagesUrl;
-        this.allGroups = [];
+        this.allUsers = [];
         this.userGroups = [];
         this.dropdownList = [];
         this.selectedUserName = "";
         this.settings = {
             mode: 'external',
             actions: {
-                columnTitle: "",
+                columnTitle: "Reportd by users",
                 position: 'right',
-                edit: false,
+                edit: true,
                 add: false,
                 delete: false
             },
             add: {
-                addButtonContent: '<i class="nb-plus"></i>',
+                addButtonContent: '<i class="nb-person"></i>',
                 createButtonContent: '<i class="nb-checkmark"></i>',
                 cancelButtonContent: '<i class="nb-close"></i>',
             },
             edit: {
-                editButtonContent: '<i class="nb-edit"></i>',
+                editButtonContent: '<i class="nb-list"></i>',
                 saveButtonContent: '<i class="nb-checkmark"></i>',
                 cancelButtonContent: '<i class="nb-close"></i>',
             },
@@ -252,19 +253,11 @@ var ViewComponent = /** @class */ (function () {
                     valuePrepareFunction: function (image) { return "<img width=\"30px\" src=\"" + _this.imagesUrl + image + "\" />"; },
                 },
                 description: {
-                    title: 'Feed description',
+                    title: 'Feed Description',
                     type: 'string',
                 },
-                userName: {
-                    title: 'Reported by User Name',
-                    type: 'string',
-                },
-                userEmail: {
-                    title: 'Reported by User Email',
-                    type: 'string'
-                },
-                reason: {
-                    title: 'Reason',
+                feedCat: {
+                    title: 'Feed Category',
                     type: 'string',
                 },
                 feedStatus: {
@@ -291,8 +284,8 @@ var ViewComponent = /** @class */ (function () {
             response.body.forEach(function (element) {
                 element['image'] = element.feed.image;
                 element['description'] = element.feed.description;
-                element['userName'] = element.appuser.name;
-                element['userEmail'] = element.appuser.email;
+                element['feedCat'] = element.feed.feedscategory.name;
+                // element['userEmail']=element.appuser.email;
                 element['feedStatus'] = element.feed.status;
             });
             _this.source.load(response.body);
@@ -334,6 +327,18 @@ var ViewComponent = /** @class */ (function () {
         }, function (error) {
         });
     };
+    ViewComponent.prototype.viewUsrList = function (item, model) {
+        var _this = this;
+        // console.log(item); 
+        //private modalService: NgbModal,
+        this.allUsers = [];
+        this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+        this.http.get(this.baseUrl + 'api/feedreporterlist/' + item.data.feedId).subscribe(function (response) {
+            console.log(response);
+            _this.allUsers = response.body;
+        }, function (error) {
+        });
+    };
     ViewComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'ngx-sponsersview',
@@ -343,6 +348,7 @@ var ViewComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"],
             _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
             _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__["ToastrMessages"],
+            _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__["NgbModal"],
             _angular_common__WEBPACK_IMPORTED_MODULE_5__["DatePipe"], _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__["NgbModal"]])
     ], ViewComponent);
     return ViewComponent;

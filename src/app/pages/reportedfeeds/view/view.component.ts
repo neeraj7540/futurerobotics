@@ -27,7 +27,7 @@ export class ViewComponent implements OnInit {
 
   baseUrl = environment.baseUrl;
   imagesUrl = environment.imagesUrl;
-  allGroups:any = [];
+  allUsers:any = [];
   userGroups = [];
   dropdownList = [];
   selectedItems:any;
@@ -37,21 +37,21 @@ export class ViewComponent implements OnInit {
   settings = {
     mode: 'external',
     actions: {
-      columnTitle:"",
+      columnTitle:"Reportd by users",
       position: 'right', // left|right
-      edit:false,
+      edit:true,
       add:false,
       delete:false
     },
 
     add: {
-      addButtonContent: '<i class="nb-plus"></i>',
+      addButtonContent: '<i class="nb-person"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
     },
 
     edit: {
-      editButtonContent: '<i class="nb-edit"></i>',
+      editButtonContent: '<i class="nb-list"></i>',
       saveButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
     },
@@ -76,27 +76,16 @@ export class ViewComponent implements OnInit {
       },
 
       description: {
-        title: 'Feed description',
+        title: 'Feed Description',
         type: 'string',
+      }
+      ,
+       feedCat: {
+         title: 'Feed Category',
+         type: 'string',
       },
 
-      userName: {
-        title: 'Reported by User Name',
-        type: 'string',
-      },
-
-      userEmail:{
-        title: 'Reported by User Email',
-        type: 'string'
-      },
-     
- 
-
-      reason: {
-        title: 'Reason',
-        type: 'string',
-      },
-
+      
       feedStatus:{
         title: 'Action',
         type: 'custom',
@@ -119,6 +108,7 @@ export class ViewComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private toast: ToastrMessages,
+    private modalService: NgbModal,
     private datePipe:DatePipe,private _NgbModal: NgbModal) { 
     
   }
@@ -141,8 +131,8 @@ export class ViewComponent implements OnInit {
 
           element['image']=element.feed.image;
           element['description']=element.feed.description;
-          element['userName']=element.appuser.name;
-          element['userEmail']=element.appuser.email;
+          element['feedCat']=element.feed.feedscategory.name;
+          // element['userEmail']=element.appuser.email;
           element['feedStatus']=element.feed.status;
 
         });
@@ -197,6 +187,24 @@ export class ViewComponent implements OnInit {
        });
 
   }
+
+  viewUsrList(item, model){
+
+   // console.log(item); 
+   //private modalService: NgbModal,
+   this.allUsers=[];
+   this.modalService.open(model,{ size: 'lg', backdrop: 'static' });
+    this.http.get(this.baseUrl + 'api/feedreporterlist/'+item.data.feedId).subscribe(
+      (response: any) => {
+          console.log(response);
+          this.allUsers = response.body;
+       
+      },
+      (error) => {
+     });
+
+  }
+
 
 }
 

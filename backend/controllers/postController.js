@@ -82,7 +82,7 @@ deletePostAdmin: async (req, res) => {
         });
         if (item) {
 
-            const deleteItem = await group.destroy({
+            const deleteItem = await postTable.destroy({
                 where: {
                     id: req.params.id
                 }
@@ -102,6 +102,7 @@ deletePostAdmin: async (req, res) => {
 
         }
     } catch (e) {
+        console.log(e);
         return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
         
     }

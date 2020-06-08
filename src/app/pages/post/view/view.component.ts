@@ -47,7 +47,8 @@ export class ViewComponent implements OnInit {
     actions: {
       columnTitle:"",
       position: 'right', // left|right
-      edit:true
+      edit:true,
+      add:false
     },
 
     add: {
