@@ -2,6 +2,11 @@ const config = require('config');
 const db = require('../db/db');
 const apiResponseHelper = require('../helpers/apiResponseHelper');
 const appusers = db.models.appusers;
+const reportedTable = db.models.reportedfeed;
+const feedsTable =  db.models.feed;
+
+const likeDeslikeTable = db.models.feedlikedeslike
+const feedCommentTable = db.models.feedcomment;
 const filesUpload = require('../helpers/uploadFiles').uploadFile;
 const responseHelper = require('../helpers/responseHelper');
 const hashPassword = require('../helpers/hashPassword');
@@ -86,21 +91,102 @@ deleteAppUserByAdmin: async (req, res) => {
                     where: {
                         id: req.params.id
                     }
+                    
                 });
 
 
-                console.log(users);
+
+
                 if (users) {
     
-                    const deleteUser = await appusers.destroy({
+                    const allReports = await reportedTable.findAll({
+                        attributes: ['id'],
                         where: {
-                            id: req.params.id
+                            userId: req.params.id
+                        }
+                        ,raw:true
+                    })
+                    
+                    if(allReports.length>0){
+                    
+                    const deleteReports = await reportedTable.destroy({
+                        where: {
+                            userId: req.params.id
                         }
                     })
+                   }
+
+
+
+
+                const allFeeds = await feedsTable.findAll({
+                    attributes: ['id'],
+                    where: {
+                        userId: req.params.id
+                    }
+                    ,raw:true
+                })
+                
+                if(allFeeds.length>0){
+                
+                const deleteFeeds = await feedsTable.destroy({
+                    where: {
+                        userId: req.params.id
+                    }
+                })
+               }
+
+            
+             
+
+
+
+
+               const alllikedeslike = await likeDeslikeTable.findAll({
+                attributes: ['id'],
+                where: {
+                    userId: req.params.id
+                }
+                ,raw:true
+            })
+            
+            if(alllikedeslike.length>0){
+            
+            const deletelikedislike = await likeDeslikeTable.destroy({
+                where: {
+                    userId: req.params.id
+                }
+            })
+           }
+                       const allcomment = await feedCommentTable.findAll({
+                        attributes: ['id'],
+                        where: {
+                            userId: req.params.id
+                        }
+                        ,raw:true
+                    })
+                    
+                    if(allcomment.length>0){
+                    
+                    const deletecmments = await feedCommentTable.destroy({
+                        where: {
+                            userId: req.params.id
+                        }
+                    })
+                }
+
+
+                const deleteUser = await appusers.destroy({
+
+                    where: {
+                        id: req.params.id
+                    }
+                })
+
+
                     if (deleteUser) {
                         fs.unlinkSync(users.dataValues.image);
-                   
-                        return apiResponseHelper.post(res, true, 'Users Successfully Deleted!',{});
+                    return apiResponseHelper.post(res, true, 'Users Successfully Deleted!',{});
     
                     } else {
                        return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
@@ -112,6 +198,7 @@ deleteAppUserByAdmin: async (req, res) => {
     
                 }
             } catch (e) {
+                console.log(e);
                 return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
                 
             }

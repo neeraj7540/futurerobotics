@@ -49,7 +49,7 @@ export class DashboardComponent implements OnDestroy {
     items:0
   };
   coffeeMakerCard: CardSettings = {
-    title: 'Reported Post',
+    title: 'Reported Feeds',
     iconClass: 'nb-alert',
     type: 'warning',
     link:'/pages/reportedfeeds/view',

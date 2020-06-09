@@ -62,7 +62,7 @@ export class EditComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(4)]],
       email: [''],
       image: [''],
-      password : ['', [Validators.required, Validators.minLength(8)]],
+      password : ['', [Validators.minLength(8)]],
     });
    
     
@@ -108,15 +108,19 @@ export class EditComponent implements OnInit {
   formData.append('name', this.f.name.value);
    if (this.f.password.value != ''){
     formData.append('password', this.f.password.value);
+    formData.append('isPassword', 'true');
+    
+  }else{
+    formData.append('isPassword', 'false');
   }
   formData.append('email', this.f.email.value);
+
   formData.append('image', this.fileData);
     if (this.fileData){
     formData.append('isImage', 'true');
   } else{
     formData.append('isImage', 'false');
   }
-  //alert("process it");
   this.http.put(this.baseUrl + 'api/updateUser', formData).subscribe(
     (response: any) => {
       this.spinner = false;
@@ -124,7 +128,8 @@ export class EditComponent implements OnInit {
         this.toast.showToast(NbToastStatus.SUCCESS, 'Profile', response.message);
         localStorage.setItem('userName', response.body.name);
         localStorage.setItem('userImage', response.body.image);
-       // window.location.reload();
+        this.imgURL=environment.imagesUrl+response.body.image;
+        window.location.reload();
       }
     },
     (error) => {

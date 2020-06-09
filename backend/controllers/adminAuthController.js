@@ -118,11 +118,13 @@ updateUser :async (req, res) => {
    
     if (uploadFile) {
         const item = await admin.findOne({
-            attributes:['id','image'],
+            attributes:['id','image','password'],
             where: {
                 id: req.user.id
             }
         });
+
+        let password;
         if (item) {
           const data = req.body;
           if(req.body.isImage=="false"){
@@ -130,8 +132,14 @@ updateUser :async (req, res) => {
          }else{
              data.image = uploadFile[0].imageName;
          }
-          const password = await hashPassword.generatePass(req.body.password);
-          const updateUser = await admin.update(
+
+
+         if(req.body.isPassword=="false"){
+          password = item.dataValues.password
+         }else{
+          password = await hashPassword.generatePass(req.body.password);
+         } 
+         const updateUser = await admin.update(
                {
                 password: password,
                 name:req.body.name,
@@ -141,8 +149,7 @@ updateUser :async (req, res) => {
                 id: req.user.id
                 }
           });
-   
-
+          
                  if(updateUser){
                     return apiResponseHelper.post(res, true, 'details updated Successfully!', {name:req.body.name,image:data.image});
 
