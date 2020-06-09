@@ -225,7 +225,8 @@ getDashBoardData :  async (req, res) => {
     })
 
     const reports = await reportedTable.findAll({
-      attributes:['id'],
+      attributes:['id','feedId','userId'],
+      group:['feedId'],
       raw:true,
     })
     

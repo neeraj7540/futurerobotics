@@ -22,7 +22,7 @@
        <li *ngFor="let item of likeCommentList; let i = index">
         <div class="list-group-item d-flex justify-content-between align-items-center">
          <span><img src="{{imagesUrl+item.appuser.image}}" width="30" height="30"  alt=""> {{item.appuser.name}}   </span>
-           <span *ngIf="currentSelection=='Comments'">{{item.comment }}</span><span *ngIf="currentSelection=='Comments'">  Like: {{item.like}}</span> <span > Deslike: {{item.deslike}}</span>
+           <span *ngIf="currentSelection=='Comments'">{{item.comment }}</span><span *ngIf="currentSelection=='Comments'">  Like: {{item.like}}</span> <span  *ngIf="currentSelection=='Comments'"> Dislike: {{item.dislike}}</span>
            <span *ngIf="currentSelection!='Comments' && item.likeDeslike==1"><i class="far fa-thumbs-up"></i></span> 
            <span *ngIf="currentSelection!='Comments' && item.likeDeslike==0"><i class="far fa-thumbs-down"></i></span>   
           <div class="image-parent" >
