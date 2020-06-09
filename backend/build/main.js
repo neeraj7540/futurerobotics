@@ -6992,18 +6992,18 @@ __webpack_require__.r(__webpack_exports__);
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
-var environment = {
-    production: false,
-    baseUrl: 'http://localhost:4100/',
-    imagesUrl: 'http://localhost:4100/',
-    googleMapKey: '',
-};
 // export const environment = {
 //   production: false,
-//   baseUrl: 'http://34.232.2.249:4100/',
-//   imagesUrl: 'http://34.232.2.249:4100/',
+//   baseUrl: 'http://localhost:4100/',
+//   imagesUrl: 'http://localhost:4100/',
 //   googleMapKey: '',
 // };
+var environment = {
+    production: false,
+    baseUrl: 'http://34.232.2.249:4100/',
+    imagesUrl: 'http://34.232.2.249:4100/',
+    googleMapKey: '',
+};
 
 
 /***/ }),
