@@ -77,8 +77,28 @@ module.exports = function(sequelize, DataTypes) {
     
     ,
 
+    hireAvailable:{
+      type:Boolean,
+      default:true
+    }
+     ,
+      
+     occupation: {
+      type: DataTypes.TEXT(),
+      default: ""
+    }
+    ,
+    company:{
+      type: DataTypes.TEXT(),
+      default: ""
 
-    
+    }
+    ,
+    experience:{
+      type: DataTypes.TEXT(),
+      default: ""
+    }
+     ,
     password: {
       type: DataTypes.STRING(100),
       allowNull: false

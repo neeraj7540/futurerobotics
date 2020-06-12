@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-lg-7\">\n    <nb-card>\n      <nb-card-header>App User</nb-card-header>\n      <nb-card-body>\n        <form [formGroup]=\"eventForm\" #form [formGroup]=\"eventForm\" (ngSubmit)=\"addEvent()\">\n          <div class=\"form-group row\">\n            <label class=\"col-sm-3 col-form-label\">Name </label>\n            <div class=\"col-sm-9\">\n              <input type=\"text\"   autofocus formControlName=\"name\" class=\"form-control\" placeholder=\"Username\"\n                [ngClass]=\"{ 'is-invalid': submitted && f.name.errors, 'form-control-danger':submitted && f.name.errors }\" />\n              <ng-container *ngIf=\"submitted && f.name.errors\">\n                <p class=\"error-message\"> \n                  Name is required & must be at least 4 characters!\n                </p>\n              </ng-container>\n            \n            </div>\n          </div>\n\n\n          <div class=\"form-group row\">\n              <label for=\"inputEmail1\" class=\"col-sm-3 col-form-label\">Email</label>\n              <div class=\"col-sm-9\">\n                <input type=\"email\"  [ngClass]=\"{'form-control-danger':submitted && f.email.errors}\" class=\"form-control\"\n                  formControlName=\"email\" placeholder=\"Email\" [ngClass]=\"{ 'is-invalid': submitted && f.email.errors }\" autocomplete=\"off\"/>\n                <ng-container *ngIf=\"submitted && f.email.errors\">\n                  <p class=\"error-message\">\n                    Email is required and must be a valid email address!\n                  </p>\n                \n                </ng-container>\n              </div>\n            </div>\n\n\n            <div class=\"form-group row\">\n              <label for=\"inputEmail1\" class=\"col-sm-3 col-form-label\">Date of Birth</label>\n              <div class=\"col-sm-9\">\n                <input [nbDatepicker]=\"datepicker\"  [ngClass]=\"{'form-control-danger':submitted && f.dob.errors}\" class=\"form-control\"\n                  formControlName=\"dob\" placeholder=\"date of birth\"  [ngClass]=\"{ 'is-invalid': submitted && f.dob.errors }\" autocomplete=\"off\"/>\n                  <nb-datepicker #datepicker></nb-datepicker>\n                  <ng-container *ngIf=\"submitted && f.dob.errors\">\n                    <p class=\"error-message\">\n                    Date of birth is required!\n                  </p>\n                \n                </ng-container>\n         \n              </div>\n            </div>\n\n\n            <div class=\"form-group row\">\n              <label class=\"col-sm-3 col-form-label\">About </label>\n              <div class=\"col-sm-9\">\n                <input type=\"text\"   autofocus formControlName=\"about\" class=\"form-control\" placeholder=\"about\"\n               />\n       \n              </div>\n            </div>\n\n            <div class=\"form-group row\">\n              <label class=\"col-sm-3 col-form-label\">Location</label>\n              <div class=\"col-sm-9\">\n                <input type=\"text\"   autofocus formControlName=\"location\" class=\"form-control\" placeholder=\"Location\"\n               />\n               </div>\n            </div>\n\n            <div class=\"form-group row\">\n              <label class=\"col-sm-3 col-form-label\">Country</label>\n              <div class=\"col-sm-9\">\n                   <select name=\"country\" formControlName=\"country\" class=\"form-control\">\n                    <option *ngFor=\"let item of citiesList\" \n                      [value]=\"item.name\" \n                    >\n                    {{item.name}}\n                  </option>\n                  </select>\n\n               </div>\n            </div>\n          <div class=\"form-group row\">\n            <label for=\"inputEmail1\" class=\"col-sm-3 col-form-label\">Work</label>\n            <div class=\"col-sm-9\">\n              <textarea type=\"number\"   class=\"form-control\"\n                formControlName=\"work\" placeholder=\"Work details\" autocomplete=\"off\"></textarea>\n           </div>\n        </div> \n\n        <div class=\"form-group row\">\n          <label for=\"inputEmail1\" class=\"col-sm-3 col-form-label\">Additional</label>\n          <div class=\"col-sm-9\">\n            <textarea type=\"number\"   class=\"form-control\"\n              formControlName=\"additional\" placeholder=\"Additional details\"\n               autocomplete=\"off\"></textarea>\n        </div>\n      </div>\n\n            <div class=\"form-group row\">\n            <label class=\"col-sm-3 col-form-label\"> Image</label>\n            <div class=\"col-sm-9\">\n              <input type=\"file\" nbInput fullWidth #file accept='image/*' (change)=\"preview(file.files)\" />\n              <input type=\"hidden\" formControlName=\"image\" class=\"form-control\" />\n              <ng-container *ngIf=\"submitted && fileData==null\">\n                <p class=\"error-message\">\n                  Image is required\n                </p>\n              </ng-container>\n            </div>\n          </div>\n\n          <div class=\"form-group row\">\n            <label class=\"col-sm-3 col-form-label\">Password</label>\n            <div class=\"col-sm-9\">\n              <input type=\"password\" formControlName=\"password\" class=\"form-control\"\n                placeholder=\"********\" autocomplete=\"off\" [ngClass]=\"{'form-control-danger':submitted && f.password.errors}\"/>\n                <ng-container *ngIf=\"submitted && f.password.errors\">\n                    <p class=\"error-message\">\n                      Password  is required & must be at least 8 characters!\n                    </p>\n                  </ng-container>\n            </div>\n          </div>\n  \n          <div class=\"form-group row\">\n            <div class=\"offset-sm-3 col-sm-9\">\n              <p class=\"error-message\">{{formError}}</p>\n              <button type=\"submit\" [nbSpinner]=\"spinner\" nbSpinnerStatus=\"success\"\n                class=\"btn  btn-success \">Add</button>\n            </div>\n          </div>\n        </form>\n      </nb-card-body>\n    </nb-card>\n  </div>\n\n  <div class=\"col-lg-5\">\n    <nb-card>\n      <nb-card-header>User image</nb-card-header>\n      <nb-card-body>\n        <img [src]=\"imgURL\" width=\"auto\" height=\"170\" alt=\"\">\n      </nb-card-body>\n    </nb-card>\n\n  </div>\n</div>"
+module.exports = "<div class=\"row\">\n  <div class=\"col-lg-7\">\n    <nb-card>\n      <nb-card-header>App User</nb-card-header>\n      <nb-card-body>\n        <form [formGroup]=\"eventForm\" #form [formGroup]=\"eventForm\" (ngSubmit)=\"addEvent()\">\n          <div class=\"form-group row\">\n            <label class=\"col-sm-3 col-form-label\">Name </label>\n            <div class=\"col-sm-9\">\n              <input type=\"text\"   autofocus formControlName=\"name\" class=\"form-control\" placeholder=\"Username\"\n                [ngClass]=\"{ 'is-invalid': submitted && f.name.errors, 'form-control-danger':submitted && f.name.errors }\" />\n              <ng-container *ngIf=\"submitted && f.name.errors\">\n                <p class=\"error-message\"> \n                  Name is required & must be at least 4 characters!\n                </p>\n              </ng-container>\n            \n            </div>\n          </div>\n\n\n          <div class=\"form-group row\">\n              <label for=\"inputEmail1\" class=\"col-sm-3 col-form-label\">Email</label>\n              <div class=\"col-sm-9\">\n                <input type=\"email\"  [ngClass]=\"{'form-control-danger':submitted && f.email.errors}\" class=\"form-control\"\n                  formControlName=\"email\" placeholder=\"Email\" [ngClass]=\"{ 'is-invalid': submitted && f.email.errors }\" autocomplete=\"off\"/>\n                <ng-container *ngIf=\"submitted && f.email.errors\">\n                  <p class=\"error-message\">\n                    Email is required and must be a valid email address!\n                  </p>\n                \n                </ng-container>\n              </div>\n            </div>\n\n\n            <div class=\"form-group row\">\n              <label for=\"inputEmail1\" class=\"col-sm-3 col-form-label\">Date of Birth</label>\n              <div class=\"col-sm-9\">\n                <input [nbDatepicker]=\"datepicker\"  [ngClass]=\"{'form-control-danger':submitted && f.dob.errors}\" class=\"form-control\"\n                  formControlName=\"dob\" placeholder=\"date of birth\"  [ngClass]=\"{ 'is-invalid': submitted && f.dob.errors }\" autocomplete=\"off\"/>\n                  <nb-datepicker #datepicker></nb-datepicker>\n                  <ng-container *ngIf=\"submitted && f.dob.errors\">\n                    <p class=\"error-message\">\n                    Date of birth is required!\n                  </p>\n                \n                </ng-container>\n         \n              </div>\n            </div>\n\n\n            <div class=\"form-group row\">\n              <label class=\"col-sm-3 col-form-label\">About </label>\n              <div class=\"col-sm-9\">\n                <input type=\"text\"   autofocus formControlName=\"about\" class=\"form-control\" placeholder=\"about\"\n               />\n       \n              </div>\n            </div>\n\n            <div class=\"form-group row\">\n              <label class=\"col-sm-3 col-form-label\">Location</label>\n              <div class=\"col-sm-9\">\n                <input type=\"text\"   autofocus formControlName=\"location\" class=\"form-control\" placeholder=\"Location\"\n               />\n               </div>\n            </div>\n\n            <div class=\"form-group row\">\n              <label class=\"col-sm-3 col-form-label\">Country</label>\n              <div class=\"col-sm-9\">\n                   <select name=\"country\" formControlName=\"country\" class=\"form-control\">\n                    <option *ngFor=\"let item of citiesList\" \n                      [value]=\"item.name\" \n                    >\n                    {{item.name}}\n                  </option>\n                  </select>\n\n               </div>\n            </div>\n        \n            <div class=\"form-group row\">\n              <label for=\"inputEmail1\" class=\"col-sm-3 col-form-label\">Work</label>\n              <div class=\"col-sm-9\">\n                <textarea type=\"number\"   class=\"form-control\"\n                  formControlName=\"work\" placeholder=\"Work details\" autocomplete=\"off\"></textarea>\n             </div>\n            </div> \n\n\n            <div class=\"form-group row\">\n              <label class=\"col-sm-3 col-form-label\">Hire Availability</label>\n              <div class=\"col-sm-9\">\n                   <select name=\"hireAvailable\" formControlName=\"hireAvailable\" class=\"form-control\">\n                    <option [value]=\"1\" >Yes</option>\n                    <option [value]=\"0\" >No</option>\n                  </select>\n\n               </div>\n            </div>\n\n\n            \n\n            <div class=\"form-group row\">\n              <label class=\"col-sm-3 col-form-label\">Occupation </label>\n              <div class=\"col-sm-9\">\n                <input type=\"text\"   autofocus formControlName=\"occupation\" class=\"form-control\" placeholder=\"Occupation\"\n               />\n       \n              </div>\n            </div>\n\n            <div class=\"form-group row\">\n              <label class=\"col-sm-3 col-form-label\">Company </label>\n              <div class=\"col-sm-9\">\n                <input type=\"text\"   autofocus formControlName=\"company\" class=\"form-control\" placeholder=\"Company\"\n               />\n       \n              </div>\n            </div>\n\n            <div class=\"form-group row\">\n              <label class=\"col-sm-3 col-form-label\">Experience </label>\n              <div class=\"col-sm-9\">\n                <input type=\"text\"  autofocus formControlName=\"experience\" class=\"form-control\" placeholder=\"Experience\"\n               />\n       \n              </div>\n            </div>\n\n            \n            \n            \n\n\n          <div class=\"form-group row\">\n            <label for=\"inputEmail1\" class=\"col-sm-3 col-form-label\">Work</label>\n            <div class=\"col-sm-9\">\n              <textarea type=\"number\"   class=\"form-control\"\n                formControlName=\"work\" placeholder=\"Work details\" autocomplete=\"off\"></textarea>\n           </div>\n          </div> \n\n        <div class=\"form-group row\">\n          <label for=\"inputEmail1\" class=\"col-sm-3 col-form-label\">Additional</label>\n          <div class=\"col-sm-9\">\n            <textarea type=\"number\"   class=\"form-control\"\n              formControlName=\"additional\" placeholder=\"Additional details\"\n               autocomplete=\"off\"></textarea>\n        </div>\n      </div>\n\n            <div class=\"form-group row\">\n            <label class=\"col-sm-3 col-form-label\"> Image</label>\n            <div class=\"col-sm-9\">\n              <input type=\"file\" nbInput fullWidth #file accept='image/*' (change)=\"preview(file.files)\" />\n              <input type=\"hidden\" formControlName=\"image\" class=\"form-control\" />\n              <ng-container *ngIf=\"submitted && fileData==null\">\n                <p class=\"error-message\">\n                  Image is required\n                </p>\n              </ng-container>\n            </div>\n          </div>\n\n          <div class=\"form-group row\">\n            <label class=\"col-sm-3 col-form-label\">Password</label>\n            <div class=\"col-sm-9\">\n              <input type=\"password\" formControlName=\"password\" class=\"form-control\"\n                placeholder=\"********\" autocomplete=\"off\" [ngClass]=\"{'form-control-danger':submitted && f.password.errors}\"/>\n                <ng-container *ngIf=\"submitted && f.password.errors\">\n                    <p class=\"error-message\">\n                      Password  is required & must be at least 8 characters!\n                    </p>\n                  </ng-container>\n            </div>\n          </div>\n  \n          <div class=\"form-group row\">\n            <div class=\"offset-sm-3 col-sm-9\">\n              <p class=\"error-message\">{{formError}}</p>\n              <button type=\"submit\" [nbSpinner]=\"spinner\" nbSpinnerStatus=\"success\"\n                class=\"btn  btn-success \">Add</button>\n            </div>\n          </div>\n        </form>\n      </nb-card-body>\n    </nb-card>\n  </div>\n\n  <div class=\"col-lg-5\">\n    <nb-card>\n      <nb-card-header>User image</nb-card-header>\n      <nb-card-body>\n        <img [src]=\"imgURL\" width=\"auto\" height=\"170\" alt=\"\">\n      </nb-card-body>\n    </nb-card>\n\n  </div>\n</div>"
 
 /***/ }),
 
@@ -93,8 +93,12 @@ var AddComponent = /** @class */ (function () {
             name: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].minLength(4)]],
             email: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].email]],
             dob: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
+            hireAvailable: ['1'],
             about: [''],
             location: [''],
+            occupation: [],
+            company: [''],
+            experience: [''],
             country: ['United States', _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
             password: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].minLength(8)]],
             work: [''],
@@ -152,6 +156,10 @@ var AddComponent = /** @class */ (function () {
         formData.append('country', this.f.country.value);
         formData.append('location', this.f.location.value);
         formData.append('about', this.f.about.value);
+        formData.append('hireAvailable', this.f.hireAvailable.value);
+        formData.append('occupation', this.f.occupation.value);
+        formData.append('company', this.f.company.value);
+        formData.append('experience', this.f.experience.value);
         formData.append('dob', this.f.dob.value);
         formData.append('work', this.f.work.value);
         formData.append('image', this.fileData);
@@ -379,7 +387,7 @@ var AppUsersModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nb-card>\n  <nb-card-header>\n    App Users\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"onEdit($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n <div class=\"modal-header\">\n    <h4 class=\"modal-title\">{{this.selectedUserName}}  groups</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div> \n  <div class=\"modal-body\" style=\"overflow-y: scroll;height: 450px\">\n    <ul class=\"list-group\" style=\"list-style-type:none;\" *ngIf=\"allGroups.length>0\">\n     <li *ngFor=\"let item of allGroups; let i = index\">\n      <div class=\"list-group-item d-flex justify-content-between align-items-center\">\n        <img src=\"{{imagesUrl+item.profile_image}}\" width=\"30\" height=\"30\"  alt=\"\">\n      {{item.name}}   \n        <div class=\"image-parent\" >\n          <ui-switch [checked]=\"item.status\" (valueChange)=\"modifyGroupAccess(item,$event)\"></ui-switch>\n      </div>\n    </div>  \n      </li>\n    </ul>\n  </div>\n  <div class=\"modal-footer\">\n    <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"c('Close click')\">Close</button>\n  </div>\n</ng-template>"
+module.exports = "<nb-card>\n  <nb-card-header>\n    App Users\n  </nb-card-header>\n  <nb-card-body>\n    <ng2-smart-table [settings]=\"settings\" [source]=\"source\" (edit)=\"viewDetails($event,groupsModel)\"\n      (delete)=\"onDelete($event)\">\n    </ng2-smart-table>\n  </nb-card-body>\n</nb-card>\n\n<ng-template #groupsModel let-c=\"close\" let-d=\"dismiss\">\n <div class=\"modal-header\">\n    <h4 class=\"modal-title\">{{selectedItems.name}}</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div> \n  <div class=\"modal-body\" style=\"overflow-y: scroll;height: 450px\">\n    <div class=\"modal-title\"><b>Occupation:</b><span>{{selectedItems.occupation}}</span></div>\n    <div class=\"modal-title\"><b>Company:</b><span>{{selectedItems.company}}</span></div>\n    <div class=\"modal-title\"><b>Experience:</b><span>{{selectedItems.experience}}</span></div>\n    <br>\n    <ul class=\"list-group\" style=\"list-style-type:none;\" *ngIf=\"userGroups.length>0\">\n     <li *ngFor=\"let item of userGroups; let i = index\">\n     <div class=\"list-group-item d-flex justify-content-between align-items-center\">\n      <img src=\"{{imagesUrl+item.group.image}}\" width=\"30\" height=\"30\"  alt=\"\">\n     {{item.group.name}} - {{item.group.category}}\n      <div class=\"image-parent\" >\n        </div>\n    </div>  \n      </li>\n    </ul>\n  </div>\n \n</ng-template>"
 
 /***/ }),
 
@@ -422,11 +430,12 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var ViewComponent = /** @class */ (function () {
-    function ViewComponent(http, router, toast, datePipe, _NgbModal) {
+    function ViewComponent(http, router, toast, modalService, datePipe, _NgbModal) {
         var _this = this;
         this.http = http;
         this.router = router;
         this.toast = toast;
+        this.modalService = modalService;
         this.datePipe = datePipe;
         this._NgbModal = _NgbModal;
         this.baseUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].baseUrl;
@@ -438,9 +447,9 @@ var ViewComponent = /** @class */ (function () {
         this.settings = {
             mode: 'external',
             actions: {
-                columnTitle: "",
+                columnTitle: "Details/Delete",
                 position: 'right',
-                edit: false,
+                edit: true,
                 add: false
             },
             add: {
@@ -449,7 +458,7 @@ var ViewComponent = /** @class */ (function () {
                 cancelButtonContent: '<i class="nb-close"></i>',
             },
             edit: {
-                editButtonContent: '<i class="nb-edit"></i>',
+                editButtonContent: '<i class="nb-list"></i>',
                 saveButtonContent: '<i class="nb-checkmark"></i>',
                 cancelButtonContent: '<i class="nb-close"></i>',
             },
@@ -474,16 +483,22 @@ var ViewComponent = /** @class */ (function () {
                     title: 'Date of birth',
                     type: 'string'
                 },
-                about: {
-                    title: 'About',
-                    type: 'string'
-                },
-                work: {
-                    title: 'Work',
-                    type: 'string'
-                },
-                additional: {
-                    title: 'Additional',
+                // about:{
+                //   title: 'About',
+                //   type: 'string'
+                // }
+                // ,
+                // work:{
+                //   title: 'Work',
+                //   type: 'string'
+                // },
+                // ,
+                //       additional:{
+                //         title: 'Additional',
+                //         type: 'string'
+                //       },
+                hireAvailable: {
+                    title: 'Hiring Availibility',
                     type: 'string'
                 },
                 country: {
@@ -518,6 +533,12 @@ var ViewComponent = /** @class */ (function () {
         this.http.get(this.baseUrl + 'api/appusers').subscribe(function (response) {
             console.log(response);
             response.body.forEach(function (element) {
+                if (element['hireAvailable'] == '0') {
+                    element['hireAvailable'] = "No";
+                }
+                else {
+                    element['hireAvailable'] = "Yes";
+                }
                 element['dob'] = new Date(element.dob).toDateString();
             });
             var userList = response.body;
@@ -538,33 +559,36 @@ var ViewComponent = /** @class */ (function () {
         }
     };
     ViewComponent.prototype.getAllGroups = function () {
-        var _this = this;
-        this.http.get(this.baseUrl + 'categories').subscribe(function (response) {
-            response.body.map(function (item) {
-                item.id = item.id;
-                item.name = item.name;
-                item.image = item.image;
-                item['status'] = false;
-            });
-            _this.allGroups = response.body;
-            // console.log(this.getAllGroups);
-        }, function (error) {
-        });
+        //   this.http.get(this.baseUrl + 'categories').subscribe(
+        //   (response: any) => {
+        //   response.body.map(item=> {
+        //     item.id = item.id;
+        //     item.name = item.name;
+        //     item.image = item.image;
+        //     item['status']=false;
+        //   }) 
+        //   this.allGroups = response.body;
+        //  // console.log(this.getAllGroups);
+        //   },
+        //   (error) => {
+        //   });
     };
     ViewComponent.prototype.modifyGroupAccess = function (item, event) {
-        var status = '0';
-        if (event) {
-            status = '2';
-        }
-        var data = {
-            groupId: item.id,
-            userId: this.selectedUserId,
-            status: status
-        };
-        this.http.put(this.baseUrl + 'updateUserGroupAccess', data).subscribe(function (response) {
-            console.log(response);
-        }, function (error) {
-        });
+        //   let status='0';
+        //   if(event){
+        //     status='2'
+        //   }
+        //  let data= {
+        //    groupId:item.id,
+        //    userId:this.selectedUserId,
+        //    status:status
+        //  }
+        //  this.http.put(this.baseUrl + 'updateUserGroupAccess',data).subscribe(
+        //   (response: any) => {
+        //     console.log(response);
+        //   },
+        //   (error) => {
+        //   });
     };
     ViewComponent.prototype.getGroupStatus = function () {
         return true;
@@ -592,6 +616,11 @@ var ViewComponent = /** @class */ (function () {
         }, function (error) {
         });
     };
+    ViewComponent.prototype.viewDetails = function (item, model) {
+        this.selectedItems = item.data;
+        this.userGroups = item.data.groupaccesses;
+        this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    };
     ViewComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'ngx-sponsersview',
@@ -601,6 +630,7 @@ var ViewComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"],
             _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
             _helpers_toaster_service__WEBPACK_IMPORTED_MODULE_6__["ToastrMessages"],
+            _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__["NgbModal"],
             _angular_common__WEBPACK_IMPORTED_MODULE_5__["DatePipe"], _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__["NgbModal"]])
     ], ViewComponent);
     return ViewComponent;
@@ -639,6 +669,167 @@ var ButtonViewComponent = /** @class */ (function () {
     return ButtonViewComponent;
 }());
 
+
+
+/***/ }),
+
+/***/ "./src/app/pages/pages-menu.ts":
+/*!*************************************!*\
+  !*** ./src/app/pages/pages-menu.ts ***!
+  \*************************************/
+/*! exports provided: MENU_ITEMS */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MENU_ITEMS", function() { return MENU_ITEMS; });
+var MENU_ITEMS = [
+    {
+        title: 'Dashboard',
+        icon: 'nb-home',
+        link: '/pages/dashboard',
+    },
+    {
+        title: 'Manage Users',
+        icon: 'nb-person',
+        link: '/pages/appusers',
+        children: [
+            {
+                title: 'Add',
+                link: '/pages/appusers/add',
+            },
+            {
+                title: 'View',
+                link: '/pages/appusers/view',
+            },
+        ],
+        hidden: false,
+    },
+    {
+        title: 'Manage Feeds',
+        icon: 'nb-volume-high',
+        link: '/pages/feeds',
+        children: [
+            // {
+            //   title: 'Add',
+            //   link: '/pages/appusers/add',
+            // },
+            {
+                title: 'View',
+                link: '/pages/feeds/view',
+            },
+        ],
+        hidden: false,
+    },
+    {
+        title: 'Manage Groups',
+        icon: 'nb-keypad',
+        link: '/pages/groups',
+        children: [
+            {
+                title: 'Add',
+                link: '/pages/groups/add',
+            },
+            {
+                title: 'View',
+                link: '/pages/groups/view',
+            },
+        ],
+        hidden: false,
+    },
+    {
+        title: 'Manage Feeds Categories',
+        icon: 'nb-grid-b-outline',
+        link: '/pages/feedcategories',
+        children: [
+            {
+                title: 'Add',
+                link: '/pages/feedcategories/add',
+            },
+            {
+                title: 'View',
+                link: '/pages/feedcategories/view',
+            },
+        ],
+        hidden: false,
+    },
+    {
+        title: 'Manage Post',
+        icon: 'nb-list',
+        link: '/pages/post',
+        children: [
+            {
+                title: 'Add',
+                link: '/pages/post/add',
+            },
+            {
+                title: 'View',
+                link: '/pages/post/view',
+            },
+        ],
+        hidden: false,
+    },
+    {
+        title: 'Manage Adds',
+        icon: 'nb-star',
+        link: '/pages/post',
+        children: [
+            {
+                title: 'Add',
+                link: '/pages/adds/add',
+            },
+            {
+                title: 'View',
+                link: '/pages/adds/view',
+            },
+        ],
+        hidden: false,
+    },
+    {
+        title: 'Other App Links',
+        icon: 'nb-gear',
+        link: '/pages/otherapp',
+        children: [
+            {
+                title: 'Add',
+                link: '/pages/otherapp/add',
+            },
+            {
+                title: 'View',
+                link: '/pages/otherapp/view',
+            },
+        ],
+        hidden: false,
+    },
+    {
+        title: 'Reported Feeds',
+        icon: 'nb-alert',
+        link: 'pages/reportedfeeds',
+        children: [
+            {
+                title: 'View',
+                link: '/pages/reportedfeeds/view',
+            },
+        ],
+        hidden: false,
+    },
+    {
+        title: 'CRM Pages',
+        icon: 'nb-email',
+        link: 'pages/pages',
+        children: [
+            {
+                title: 'Add',
+                link: '/pages/pages/add',
+            },
+            {
+                title: 'View',
+                link: '/pages/pages/view',
+            },
+        ],
+        hidden: false,
+    },
+];
 
 
 /***/ })

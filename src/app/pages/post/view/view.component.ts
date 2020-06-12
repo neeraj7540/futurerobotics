@@ -82,7 +82,7 @@ export class ViewComponent implements OnInit {
      
       description: {
         title: 'description',
-        type: 'string',
+        type: 'html',
       },
 
        image: {
@@ -165,7 +165,7 @@ export class ViewComponent implements OnInit {
    
   });  
     
-    this.modalService.open(modelId);  
+    this.modalService.open(modelId,{size:'lg'});  
   
   }
 

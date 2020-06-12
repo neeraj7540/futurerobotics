@@ -31,14 +31,15 @@ export class ViewComponent implements OnInit {
   dropdownList = [];
   selectedItems:any;
 
+
   selectedUserId:any;
   selectedUserName="";
   settings = {
     mode: 'external',
     actions: {
-      columnTitle:"",
+      columnTitle:"Details/Delete",
       position: 'right', // left|right
-      edit:false,
+      edit:true,
       add:false
     },
 
@@ -49,7 +50,7 @@ export class ViewComponent implements OnInit {
     },
 
     edit: {
-      editButtonContent: '<i class="nb-edit"></i>',
+      editButtonContent: '<i class="nb-list"></i>',
       saveButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
     },
@@ -83,24 +84,30 @@ export class ViewComponent implements OnInit {
       },
 
 
-      about:{
-        title: 'About',
-        type: 'string'
+      // about:{
+      //   title: 'About',
+      //   type: 'string'
 
-      }
-      ,
+      // }
+      // ,
 
-      work:{
-        title: 'Work',
-        type: 'string'
+      // work:{
+      //   title: 'Work',
+      //   type: 'string'
 
-      },
+      // },
+// ,
+//       additional:{
+//         title: 'Additional',
+//         type: 'string'
 
-      additional:{
-        title: 'Additional',
-        type: 'string'
+//       },
 
-      },
+     hireAvailable:{
+      title: 'Hiring Availibility',
+      type: 'string'
+
+     },
 
       country:{
         title: 'Country',
@@ -138,6 +145,7 @@ export class ViewComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private toast: ToastrMessages,
+    private modalService: NgbModal,
     private datePipe:DatePipe,private _NgbModal: NgbModal) { 
     
   }
@@ -156,6 +164,12 @@ export class ViewComponent implements OnInit {
         console.log(response);
 
         response.body.forEach(element => {
+
+          if(element['hireAvailable']=='0'){
+            element['hireAvailable']="No"
+          }else{
+            element['hireAvailable']="Yes"
+          }
           element['dob'] = new Date(element.dob).toDateString();
       
         });
@@ -187,45 +201,45 @@ export class ViewComponent implements OnInit {
   }
   
   getAllGroups(){
-      this.http.get(this.baseUrl + 'categories').subscribe(
-      (response: any) => {
+    //   this.http.get(this.baseUrl + 'categories').subscribe(
+    //   (response: any) => {
        
-      response.body.map(item=> {
-        item.id = item.id;
-        item.name = item.name;
-        item.image = item.image;
+    //   response.body.map(item=> {
+    //     item.id = item.id;
+    //     item.name = item.name;
+    //     item.image = item.image;
 
-        item['status']=false;
-      }) 
+    //     item['status']=false;
+    //   }) 
 
-      this.allGroups = response.body;
-     // console.log(this.getAllGroups);
+    //   this.allGroups = response.body;
+    //  // console.log(this.getAllGroups);
        
-      },
-      (error) => {
-      });
+    //   },
+    //   (error) => {
+    //   });
   }
 
 
   modifyGroupAccess(item,event){
  
-    let status='0';
-    if(event){
-      status='2'
-    }
+  //   let status='0';
+  //   if(event){
+  //     status='2'
+  //   }
     
-   let data= {
-     groupId:item.id,
-     userId:this.selectedUserId,
-     status:status
-   }
+  //  let data= {
+  //    groupId:item.id,
+  //    userId:this.selectedUserId,
+  //    status:status
+  //  }
 
-   this.http.put(this.baseUrl + 'updateUserGroupAccess',data).subscribe(
-    (response: any) => {
-      console.log(response);
-    },
-    (error) => {
-    });
+  //  this.http.put(this.baseUrl + 'updateUserGroupAccess',data).subscribe(
+  //   (response: any) => {
+  //     console.log(response);
+  //   },
+  //   (error) => {
+  //   });
   }
 
   getGroupStatus(){
@@ -258,6 +272,15 @@ export class ViewComponent implements OnInit {
        });
 
   }
+
+  viewDetails(item,model){
+
+    this.selectedItems = item.data;
+    this.userGroups = item.data.groupaccesses;
+    this.modalService.open(model,{ size: 'lg', backdrop: 'static' });
+
+  }
+
 
 }
 

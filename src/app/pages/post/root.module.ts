@@ -12,6 +12,8 @@ import { AuthInterceptor } from '../../interceptor/auth.interceptor';
 import { RootComponents } from './root.component';
 
 import { UiSwitchModule } from 'ngx-ui-switch';
+import { CKEditorModule } from 'ng2-ckeditor';
+import { FormsModule } from '@angular/forms';
  
 const components = [
   RootComponents,
@@ -24,6 +26,7 @@ const components = [
     ThemeModule,
     RootRoutingModule,
     Ng2SmartTableModule,
+    CKEditorModule, FormsModule,
 
     UiSwitchModule.forRoot({   
     })

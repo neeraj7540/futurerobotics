@@ -519,74 +519,65 @@ var map = {
 		"./src/app/pages/adds/root.module.ts",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
-		"common",
 		"adds-root-module"
 	],
 	"./appusers/appusers.module": [
 		"./src/app/pages/appusers/appusers.module.ts",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
-		"common",
 		"appusers-appusers-module"
 	],
 	"./feedcategories/root.module": [
 		"./src/app/pages/feedcategories/root.module.ts",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
-		"common",
 		"feedcategories-root-module"
 	],
 	"./feeds/root.module": [
 		"./src/app/pages/feeds/root.module.ts",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
-		"common",
 		"feeds-root-module"
 	],
 	"./groups/root.module": [
 		"./src/app/pages/groups/root.module.ts",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
-		"common",
 		"groups-root-module"
 	],
 	"./otherapp/root.module": [
 		"./src/app/pages/otherapp/root.module.ts",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
-		"common",
 		"otherapp-root-module"
 	],
 	"./pages/pages.module": [
 		"./src/app/pages/pages/pages.module.ts",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
-		"common",
+		"default~pages-pages-module~post-root-module",
 		"pages-pages-module"
 	],
 	"./post/root.module": [
 		"./src/app/pages/post/root.module.ts",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
-		"common",
+		"default~pages-pages-module~post-root-module",
 		"post-root-module"
 	],
 	"./profiles/profiles.module": [
 		"./src/app/pages/profiles/profiles.module.ts",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
-		"common",
 		"profiles-profiles-module"
 	],
 	"./reportedfeeds/root.module": [
 		"./src/app/pages/reportedfeeds/root.module.ts",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~1ac08c4c",
 		"default~adds-root-module~appusers-appusers-module~feedcategories-root-module~feeds-root-module~group~a65a42c0",
-		"common",
 		"reportedfeeds-root-module"
 	],
 	"app/pages/pages.module": [
 		"./src/app/pages/pages.module.ts",
-		"common",
 		"app-pages-pages-module"
 	]
 };

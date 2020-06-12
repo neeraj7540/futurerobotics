@@ -35,10 +35,9 @@
             <div class="form-group row">
               <label class="col-sm-3 col-form-label">Description</label>
               <div class="col-sm-9">
-                <textarea type="text"   class="form-control"
-                formControlName="description" placeholder="Description"
-                 autocomplete="off"  [ngClass]="{ 'is-invalid': submitted && f.description.errors, 'form-control-danger':submitted && f.description.errors }"></textarea>
-             
+                <ckeditor
+                 formControlName="description"  [ngClass]="{'form-control-danger':submitted && f.description.errors}">
+               </ckeditor>    
                <ng-container *ngIf="submitted && f.description.errors">
                 <p class="error-message" class="text-danger">
                   Description is required & must be at least 4 characters!

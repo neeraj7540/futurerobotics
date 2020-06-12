@@ -78,8 +78,12 @@ export class AddComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(4)]],
       email:['', [Validators.required, Validators.email]],
       dob:['',Validators.required],
+      hireAvailable:['1'],
       about:  [''],
       location:[''],
+      occupation:[],
+      company:[''],
+      experience:[''],
       country : ['United States',Validators.required],
       password:  ['', [Validators.required, Validators.minLength(8)]],
       work:  [''],
@@ -152,6 +156,12 @@ export class AddComponent implements OnInit {
     formData.append('country', this.f.country.value);
     formData.append('location', this.f.location.value);
     formData.append('about', this.f.about.value);
+    
+    formData.append('hireAvailable', this.f.hireAvailable.value);
+    formData.append('occupation', this.f.occupation.value);
+    formData.append('company', this.f.company.value);
+    formData.append('experience', this.f.experience.value);
+
     formData.append('dob', this.f.dob.value);
     formData.append('work', this.f.work.value);
     formData.append('image', this.fileData);

@@ -184,6 +184,15 @@ try{
     }); 
 
 
+    const reporteTable =  await reportedFeedsTable.update(
+      data,
+      {
+          where: {
+            feedId: req.body.feedId,
+  
+          }
+      }); 
+
     if(updateEntry){
 
       return apiResponseHelper.post(res, true, 'Status has been updated!',{});
@@ -225,8 +234,11 @@ getDashBoardData :  async (req, res) => {
     })
 
     const reports = await reportedTable.findAll({
-      attributes:['id','feedId','userId'],
+      attributes:['id','feedId','userId','status'],
       group:['feedId'],
+      where: {
+        status: '1'
+    },
       raw:true,
     })
     

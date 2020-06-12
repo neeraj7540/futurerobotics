@@ -13,7 +13,6 @@
 //   googleMapKey: '',
 // };
 
-
 export const environment = {
   production: false,
   baseUrl: 'http://34.232.2.249:4100/',
