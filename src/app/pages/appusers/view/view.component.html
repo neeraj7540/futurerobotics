@@ -21,16 +21,36 @@
     <div class="modal-title"><b>Company:</b><span>{{selectedItems.company}}</span></div>
     <div class="modal-title"><b>Experience:</b><span>{{selectedItems.experience}}</span></div>
     <br>
+    <div style="text-align: center;"><h4>Groups</h4></div>
+    <br>
+    <h5>PLS5</h5>
     <ul class="list-group" style="list-style-type:none;" *ngIf="userGroups.length>0">
      <li *ngFor="let item of userGroups; let i = index">
-     <div class="list-group-item d-flex justify-content-between align-items-center">
-      <img src="{{imagesUrl+item.group.image}}" width="30" height="30"  alt="">
-     {{item.group.name}} - {{item.group.category}}
+      <div class="list-group-item d-flex justify-content-between align-items-center" *ngIf="item.group.category=='PLS5'">
+     <img src="{{imagesUrl+item.group.image}}" width="30" height="30"  alt="">
+     {{item.group.name}}
       <div class="image-parent" >
         </div>
     </div>  
       </li>
     </ul>
+    
+    <br>
+    <h5>ROBOT</h5>
+    <ul class="list-group" style="list-style-type:none;" *ngIf="userGroups.length>0">
+     <li *ngFor="let item of userGroups; let i = index">
+      <div class="list-group-item d-flex justify-content-between align-items-center" *ngIf="item.group.category=='ROBOT'">
+     <img src="{{imagesUrl+item.group.image}}" width="30" height="30"  alt="">
+     {{item.group.name}}
+      <div class="image-parent" >
+        </div>
+    </div>  
+      </li>
+    </ul>
+
+   
+
+
   </div>
  
 </ng-template>
