@@ -2,6 +2,7 @@ const config = require('config');
 const db = require('../db/db');
 const apiResponseHelper = require('../helpers/apiResponseHelper');
 const groups = db.models.groups;
+const groupaccessTable = db.models.groupaccess;
 const filesUpload = require('../helpers/uploadFiles').uploadFile;
 const fs = require('fs');
 
@@ -86,6 +87,27 @@ deleteGroupByAdmin: async (req, res) => {
                     }
                 });
                 if (group) {
+
+
+
+
+                    const allEntry = await groupaccessTable.findAll({
+                        attributes: ['id'],
+                        where: {
+                            groupId: req.params.id
+                        }
+                        ,raw:true
+                    })
+                    
+                    if(allEntry.length>0){
+                    
+                    const deleteItems = await groupaccessTable.destroy({
+                        where: {
+                            groupId: req.params.id
+                        }
+                    })
+                   }
+
     
                     const deleteGroup = await group.destroy({
                         where: {
