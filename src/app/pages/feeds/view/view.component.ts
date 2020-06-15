@@ -291,6 +291,31 @@ export class ViewComponent implements OnInit {
   }
 
 
+  modifyGroupAccess(item,event){
+
+    console.log(item)
+
+    let status='0';
+
+    if(event){
+      status='1'
+
+    }
+  
+    let data= {
+     commentId:item.id,
+     status:status
+   }
+
+   this.http.put(this.baseUrl + 'api/commentstatusupdate',data).subscribe(
+    (response: any) => {
+      console.log(response);
+    },
+    (error) => {
+    });
+  }
+
+
 
 }
 

@@ -375,4 +375,68 @@ return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Ag
 
 }
 
+,
+
+updateCommentStatus:  async (req, res) => {
+
+
+    try{
+
+    const item = await feedCommentTable.findOne({
+    attributes:['id','status'],
+    where: {
+        id: req.body.commentId
+    }
+
+   });
+
+   
+  
+   if(item){
+    let data = {
+      status:req.body.status
+    }
+       
+
+    const updateEntry =  await feedCommentTable.update(
+      data,
+      {
+          where: {
+          id: req.body.commentId,
+  
+          }
+      }); 
+
+
+      if(updateEntry){
+
+        return apiResponseHelper.post(res, true, 'Status has been updated!',{});
+      }else{
+        return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+      }
+
+
+   }else{
+
+    return apiResponseHelper.onError(res, false, 'Comment not found',{});
+
+
+   }
+   
+
+    }
+    catch (e) {
+ console.log(e);
+
+return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+  
+}
+
+
+} 
+
+
+
+
+
 }

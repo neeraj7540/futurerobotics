@@ -1,7 +1,7 @@
 const config = require('config');
 const db = require('../db/db');
 const apiResponseHelper = require('../helpers/apiResponseHelper');
-const addsTable = db.models.adds;
+const addsTable = db.models.ads;
 const filesUpload = require('../helpers/uploadFiles').uploadFile;
 const fs = require('fs');
 module.exports = {

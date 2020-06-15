@@ -26,7 +26,9 @@
            <span *ngIf="currentSelection!='Comments' && item.likeDeslike==1"><i class="far fa-thumbs-up"></i></span> 
            <span *ngIf="currentSelection!='Comments' && item.likeDeslike==0"><i class="far fa-thumbs-down"></i></span>   
           <div class="image-parent" >
-               </div>
+            <ui-switch [checked]="item.status==1" (valueChange)="modifyGroupAccess(item,$event)"></ui-switch>
+  
+             </div>
       </div>  
         </li>
       </ul>

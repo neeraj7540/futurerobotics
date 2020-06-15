@@ -95,6 +95,8 @@ routes.get('/allcomments/:id',passport.authenticate('admin', { session: false })
 routes.get('/allikes/:id',passport.authenticate('admin', { session: false }), feedsCtrl.getAllLikes);
 routes.get('/feedreporterlist/:id',passport.authenticate('admin', { session: false }), feedsCtrl.feedReporterList);
 
+routes.put('/commentstatusupdate',passport.authenticate('admin', { session: false }), feedsCtrl.updateCommentStatus);
+
 
 
 

@@ -29,7 +29,7 @@ let modules = [
   require('./feedcomment.js'),
   require('./reportedfeed.js'),
   require('./post.js'),
-  require('./adds.js'),
+  require('./ads.js'),
   require('./groupaccess.js') 
   
    
