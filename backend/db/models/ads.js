@@ -1,6 +1,6 @@
 const common = require('../../helpers/common');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('adds', {
+  return sequelize.define('ads', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -46,7 +46,7 @@ module.exports = function(sequelize, DataTypes) {
 
          
 }, {
-    tableName: 'adds',
+    tableName: 'ads',
     timestamps: true
   });
 };
