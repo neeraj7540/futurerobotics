@@ -177,6 +177,57 @@ module.exports = {
             return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!', {});
         }
 
-    }
+    },
+
+    addStatusUpdteByAdmin : async (req, res) => {
+
+        try {
+    
+         
+          req.checkBody('addId', 'addId required').notEmpty();
+          req.checkBody('status', 'status required').notEmpty();
+    
+          const error = req.validationErrors();
+    
+          if (error) {
+             return apiResponseHelper.onError(res, false, 'Error', error[0].msg);
+               
+            }
+           
+            const getAdd = await addsTable.findOne({
+                      where: {
+                        id: req.body.addId,
+                      },
+                      raw:true
+           });
+            
+           if (getAdd) {
+            const updateEntry =    await addsTable.update(
+                  {
+                  status:req.body.status,
+                  
+                },
+                  {
+                      where: {
+                      id: req.body.addId,
+    
+                      }
+                  });  
+          if (updateEntry) {
+            return apiResponseHelper.post(res, true, 'Status updated Successfully!',{});
+          } else {
+           
+              return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!',{});
+          }
+        }else{
+          return apiResponseHelper.onError(res, false, 'Adds Not Exists', {});
+        }
+    
+        }
+        catch (e) {
+          return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!', {});
+           }
+    
+      },
 
 }

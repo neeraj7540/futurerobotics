@@ -180,7 +180,58 @@ postEditAdmin : async (req, res) => {
       return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!', {});
        }
 
-  }
+  },
+
+  postStatusUpdteByAdmin : async (req, res) => {
+
+    try {
+
+     
+      req.checkBody('postId', 'postId required').notEmpty();
+      req.checkBody('status', 'status required').notEmpty();
+
+      const error = req.validationErrors();
+
+      if (error) {
+         return apiResponseHelper.onError(res, false, 'Error', error[0].msg);
+           
+        }
+       
+        const getPost = await postTable.findOne({
+                  where: {
+                    id: req.body.postId,
+                  },
+                  raw:true
+       });
+        
+       if (getPost) {
+        const updateEntry =    await postTable.update(
+              {
+              status:req.body.status,
+              
+            },
+              {
+                  where: {
+                  id: req.body.postId,
+
+                  }
+              });  
+      if (updateEntry) {
+        return apiResponseHelper.post(res, true, 'Status updated Successfully!',{});
+      } else {
+       
+          return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!',{});
+      }
+    }else{
+      return apiResponseHelper.onError(res, false, 'Post Not Exists', {});
+    }
+
+    }
+    catch (e) {
+      return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!', {});
+       }
+
+  },
 
 
 

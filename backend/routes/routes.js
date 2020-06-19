@@ -58,6 +58,7 @@ routes.use(function (req, res, next) {
   routes.get('/grouplist',passport.authenticate('admin', { session: false }), groupCtrl.groupListAdmin);
   routes.delete('/group/:id',passport.authenticate('admin', { session: false }), groupCtrl.deleteGroupByAdmin);
   routes.put('/groupedit/:id',passport.authenticate('admin', { session: false }), groupCtrl.groupEditByAdmin);
+  routes.put('/groupstatusupdate',passport.authenticate('admin', { session: false }), groupCtrl.groupStatusUpdteByAdmin);
 
 
 //feeds category 
@@ -66,6 +67,7 @@ routes.post('/addfeedscategory',passport.authenticate('admin', { session: false 
 routes.get('/feedscategorylist',passport.authenticate('admin', { session: false }), feedCatCtrl.feedsCategoryListAdmin);
 routes.delete('/feedscategory/:id',passport.authenticate('admin', { session: false }), feedCatCtrl.deleteFeedsCategoryAdmin);
 routes.put('/feedscategoryedit/:id',passport.authenticate('admin', { session: false }), feedCatCtrl.feedsCategoryEditAdmin);
+routes.put('/feedsCategorystatusupdate',passport.authenticate('admin', { session: false }), feedCatCtrl.feedsCategoryStatusUpdteByAdmin);
 
 
 
@@ -110,6 +112,7 @@ routes.post('/addpost',passport.authenticate('admin', { session: false }), postC
 routes.get('/postlist',passport.authenticate('admin', { session: false }), postCtrl.postListAdmin);
 routes.delete('/post/:id',passport.authenticate('admin', { session: false }), postCtrl.deletePostAdmin);
 routes.put('/postedit/:id',passport.authenticate('admin', { session: false }), postCtrl.postEditAdmin);
+routes.put('/poststatusupdate',passport.authenticate('admin', { session: false }), postCtrl.postStatusUpdteByAdmin);
 
 
 
@@ -119,6 +122,7 @@ routes.post('/addadd',passport.authenticate('admin', { session: false }), addsCt
 routes.get('/addslist',passport.authenticate('admin', { session: false }), addsCtrl.addListAdmin);
 routes.delete('/add/:id',passport.authenticate('admin', { session: false }), addsCtrl.deleteAddAdmin);
 routes.put('/addedit/:id',passport.authenticate('admin', { session: false }), addsCtrl.addEditAdmin);
+routes.put('/addstatusupdate',passport.authenticate('admin', { session: false }), addsCtrl.addStatusUpdteByAdmin);
 
 
 

@@ -208,7 +208,58 @@ groupEditByAdmin : async (req, res) => {
       return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!', {});
        }
 
-  }
+  },
+
+  groupStatusUpdteByAdmin : async (req, res) => {
+
+    try {
+
+     
+      req.checkBody('groupId', 'groupId required').notEmpty();
+      req.checkBody('status', 'status required').notEmpty();
+
+      const error = req.validationErrors();
+
+      if (error) {
+         return apiResponseHelper.onError(res, false, 'Error', error[0].msg);
+           
+        }
+       
+        const getGroup = await groups.findOne({
+                  where: {
+                    id: req.body.groupId,
+                  },
+                  raw:true
+       });
+        
+       if (getGroup) {
+        const updateEntry =    await groups.update(
+              {
+              status:req.body.status,
+              
+            },
+              {
+                  where: {
+                  id: req.body.groupId,
+
+                  }
+              });  
+      if (updateEntry) {
+        return apiResponseHelper.post(res, true, 'Status updated Successfully!',{});
+      } else {
+       
+          return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!',{});
+      }
+    }else{
+      return apiResponseHelper.onError(res, false, 'Group Not Exists', {});
+    }
+
+    }
+    catch (e) {
+      return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!', {});
+       }
+
+  },
 
 
  }

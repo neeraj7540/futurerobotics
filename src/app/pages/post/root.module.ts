@@ -14,9 +14,11 @@ import { RootComponents } from './root.component';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { CKEditorModule } from 'ng2-ckeditor';
 import { FormsModule } from '@angular/forms';
+import {ButtonViewComponent} from './view/view.component';
  
 const components = [
   RootComponents,
+  ButtonViewComponent,
   ViewComponent,
   AddComponent
  ];
@@ -40,6 +42,7 @@ const components = [
   
   
    ],
+   entryComponents:[ ButtonViewComponent ]
   
 })
 export class RootModule { }

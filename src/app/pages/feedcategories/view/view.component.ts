@@ -1,5 +1,5 @@
 import { map } from 'rxjs/operators';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
@@ -12,6 +12,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { element } from '@angular/core/src/render3';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { ViewCell } from 'ng2-smart-table';
 
 
 @Component({
@@ -81,6 +82,15 @@ export class ViewComponent implements OnInit {
       description: {
         title: 'Description',
         type: 'string',
+      },
+      status: {
+        title: 'Status',
+        type: 'custom',
+        renderComponent: ButtonViewComponent,
+        onComponentInitFunction(instance) {
+          instance.save.subscribe(row => {
+          });
+        }
       },
 
     },
@@ -193,4 +203,61 @@ export class ViewComponent implements OnInit {
   }
   get f() { return this.eventForm.controls; }
 
+  statusChange(data){
+    console.log(data);
+    let itemStatus = 0;
+    let itemId = data.id;
+    if(data.status==0){
+      itemStatus = 1;
+    }else{
+       itemStatus = 0;
+    }
+
+    data = {
+      "status":itemStatus,
+      "feedCategoryId":itemId
+    }
+         this.http.put(this.baseUrl + 'api/feedsCategorystatusupdate',data).subscribe(
+        (response: any) => {
+
+          if (response.message == 'Status updated Successfully!') {
+            this.toast.showToast(NbToastStatus.SUCCESS, 'Feeds Category', response.message);
+            this.getAllItems();
+          }
+        },
+        (error) => {
+       });
+
+  }
+
+}
+
+@Component({
+  selector: 'button-view',
+  template: `
+    <button (click)="onClick()" *ngIf="renderValue==0">Activate</button>
+    <button (click)="onClick()" *ngIf="renderValue==1">Deactivate</button>
+
+  `,
+})
+export class ButtonViewComponent implements ViewCell, OnInit {
+  renderValue: string;
+
+  @Input() value: string | number;
+  @Input() rowData: any;
+
+  @Output() save: EventEmitter<any> = new EventEmitter();
+
+  constructor(private vewcomp:ViewComponent){
+
+  }
+
+  ngOnInit() {
+
+      this.renderValue = this.value.toString().toUpperCase();
+  }
+
+  onClick() {
+   this.vewcomp.statusChange(this.rowData);
+  }
 }

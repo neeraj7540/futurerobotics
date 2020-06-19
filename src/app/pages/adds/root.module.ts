@@ -12,9 +12,11 @@ import { AuthInterceptor } from '../../interceptor/auth.interceptor';
 import { RootComponents } from './root.component';
 
 import { UiSwitchModule } from 'ngx-ui-switch';
+import {ButtonViewComponent} from './view/view.component';
  
 const components = [
   RootComponents,
+  ButtonViewComponent,
   ViewComponent,
   AddComponent
  ];
@@ -37,6 +39,8 @@ const components = [
   
   
    ],
+
+   entryComponents:[ ButtonViewComponent ]
   
 })
 export class RootModule { }

@@ -240,7 +240,58 @@ feedsCategoryEditAdmin : async (req, res) => {
       return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!',e);
        }
 
-  }
+  },
+
+  feedsCategoryStatusUpdteByAdmin : async (req, res) => {
+
+    try {
+
+     
+      req.checkBody('feedCategoryId', 'feedCategoryId required').notEmpty();
+      req.checkBody('status', 'status required').notEmpty();
+
+      const error = req.validationErrors();
+
+      if (error) {
+         return apiResponseHelper.onError(res, false, 'Error', error[0].msg);
+           
+        }
+       
+        const getFeedCategory = await feedsCategory.findOne({
+                  where: {
+                    id: req.body.feedCategoryId,
+                  },
+                  raw:true
+       });
+        
+       if (getFeedCategory) {
+        const updateEntry =    await feedsCategory.update(
+              {
+              status:req.body.status,
+              
+            },
+              {
+                  where: {
+                  id: req.body.feedCategoryId,
+
+                  }
+              });  
+      if (updateEntry) {
+        return apiResponseHelper.post(res, true, 'Status updated Successfully!',{});
+      } else {
+       
+          return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!',{});
+      }
+    }else{
+      return apiResponseHelper.onError(res, false, 'Feed Category Not Exists', {});
+    }
+
+    }
+    catch (e) {
+      return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!', {});
+       }
+
+  },
 
 
  }
