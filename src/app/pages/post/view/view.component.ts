@@ -164,9 +164,7 @@ export class ViewComponent implements OnInit {
     }
   }
   onEdit(item, modelId){
-    console.log(item);
-    this.selectedItem =item.data;
-
+   this.selectedItem =item.data;
    this.imgURL = this.imagesUrl+item.data.image;
     this.eventForm.setValue({  
       name: item.data.title,
@@ -249,12 +247,12 @@ export class ViewComponent implements OnInit {
 
   statusChange(data){
     console.log(data);
-    let itemStatus = 0;
+    let itemStatus = '0';
     let itemId = data.id;
-    if(data.status==0){
-      itemStatus = 1;
+    if(data.status=='0'){
+      itemStatus = '1';
     }else{
-       itemStatus = 0;
+       itemStatus = '0';
     }
 
     data = {
