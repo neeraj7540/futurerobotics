@@ -7,7 +7,12 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-  
+    category_id: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+      
+    },
+
     title: {
       type: DataTypes.STRING(200),
       allowNull: true,

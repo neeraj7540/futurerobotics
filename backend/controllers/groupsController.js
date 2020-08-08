@@ -261,6 +261,88 @@ groupEditByAdmin : async (req, res) => {
 
   },
 
+  //------------------------------31-07-2020
+  get_all_groups: async (req, res) => {
+    try {
+           const groupList = await groups.findAll({
+              attributes: ['id', 'name','status','image','category', 'description','createdAt','updatedAt'],
+                 raw:true,
+             order :   [
+                   ['id', 'DESC']
+            ]
+           
+     });
+           
+       if (groupList) {
+          
+            return apiResponseHelper.post(res, true, 'Group list',groupList);
+           } else {
+               return apiResponseHelper.post(res, true, 'Group list',{});
+   }
+      } catch (e) {
+         
+       return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+           
+      }
+},
+
+
+get_group_messages:async(req,res)=>{
+    try{
+        const groupId=req.params.groupId;
+
+        const allEntry = await groupaccessTable.findAll({
+           // attributes: ['id'],
+            where: {
+                groupId:req.params.groupId
+            }
+            ,raw:true
+        })
+
+        console.log(allEntry[0].id)
+        if (allEntry) {
+               
+            const groupList = await groups.findAll({
+                attributes: ['id', 'name','status','image','category', 'description','createdAt','updatedAt'],
+                where: {
+                id:allEntry[0].id
+            },
+            raw:true,  
+       });
+
+       //console.log(groupList);
+       if(groupList){
+        return apiResponseHelper.post(res, true, 'Group Messages List',groupList);
+
+       }
+
+       else{
+        return apiResponseHelper.post(res, true, 'Group list',{});
+
+
+       }
+        } else {
+               return apiResponseHelper.post(res, true, 'Id Not Found');
+   }
+
+
+
+
+
+    }
+
+    catch (e) {
+         
+        return apiResponseHelper.onError(res, false, 'Group id not found', 'Something Went Wrong.Please Try Again');
+            
+       }
+
+
+
+
+
+}
+
 
  }
 

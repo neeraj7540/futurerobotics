@@ -9,7 +9,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     email: {
       type: DataTypes.STRING(60),
-      allowNull: false
+      allowNull: true
     },
   
     image: {
@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     name : {
       type: DataTypes.STRING(60),
-      allowNull: false,
+      allowNull: true,
     },
 
     about:{
@@ -37,7 +37,15 @@ module.exports = function(sequelize, DataTypes) {
 
     dob:{
       type: DataTypes.STRING(150),
-      allowNull: false,
+      //allowNull: false,
+      allowNull: true,
+      default: ""
+
+    }
+    ,
+    age:{
+      type: DataTypes.STRING(150),
+      allowNull: true,
       default: ""
 
     }
@@ -62,11 +70,11 @@ module.exports = function(sequelize, DataTypes) {
    
     deviceType : {
       type: DataTypes.STRING(10),
-      allowNull: false,
+      allowNull: true,
     },
     deviceToken : {
       type: DataTypes.STRING(200),
-      allowNull: false,
+      allowNull: true,
     }
     ,
     status : {
@@ -101,7 +109,7 @@ module.exports = function(sequelize, DataTypes) {
      ,
     password: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull:true
     },
     createdAt: {
       type: DataTypes.INTEGER(11),
@@ -113,6 +121,61 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: common.timestamp()
     },  
+    lat : {
+      type: DataTypes.STRING(60),
+      allowNull: true,
+      default: ""
+    },
+    long : {
+      type: DataTypes.STRING(60),
+      allowNull: true,
+      default: ""
+    },
+   
+    select_robots : {
+      type: DataTypes.STRING(60),
+      allowNull: true,
+      default: ""
+    },
+    select_plc : {
+      type: DataTypes.STRING(60),
+      allowNull: true,
+      default: ""
+    },
+    about_me : {
+      type: DataTypes.STRING(600),
+      allowNull: true,
+      default: ""
+    },
+    social_type : {
+      type: DataTypes.STRING(600),
+      allowNull: true,
+      default: ""
+    },
+    social_id : {
+      type: DataTypes.STRING(600),
+      allowNull: true,
+      default: ""
+    },
+
+
+
+    resetLink:{
+      type: DataTypes.STRING(600),
+      default: ""
+
+    },
+    otp:{
+      type: DataTypes.STRING(60),
+      default: ""
+
+    }
+    ,
+    emailStatus:{
+      type: DataTypes.STRING(60),
+      default: ""
+
+    }
 
          
 }, {

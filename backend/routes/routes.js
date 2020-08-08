@@ -125,5 +125,51 @@ routes.put('/addedit/:id',passport.authenticate('admin', { session: false }), ad
 routes.put('/addstatusupdate',passport.authenticate('admin', { session: false }), addsCtrl.addStatusUpdteByAdmin);
 
 
+//---New User--31-07-2020---------------------------------------------------------------------------
+
+routes.post('/sign_up', appUsersCtrl.sign_up);
+routes.get('/profile/:id',appUsersCtrl.profile);
+routes.post('/userlogin',appUsersCtrl.login);
+routes.post('/userlogout/:id', appUsersCtrl.logout);  
+routes.get('/get_all_post', appUsersCtrl.get_all_post);
+routes.get('/post_detail/:id',appUsersCtrl.post_detail);
+routes.get('/other_app/:id', otherAppCtrl.other_app);
+routes.post('/add_post', postCtrl.add_post);
+
+routes.put('/edit_profile/:id',appUsersCtrl.edit_profile);
+
+//------------------Forgot Password------------------------------------------------------------------------- ----
+
+routes.put('/forgot-password',appUsersCtrl.forgotPassword);
+routes.get('/reset-password/:resetLink',appUsersCtrl.resetPassword);
+
+routes.post('/reset-password/:resetLink',appUsersCtrl.setpasswordResponsemail);
+
+//---Email Verification---------------------------------------------------------------------------------------------------
+routes.post('/sendOtp',appUsersCtrl.sendOtp);
+routes.post('/emailVerification',appUsersCtrl.emailVerification);
+
+
+//-----Feed category-------------------------------------------
+routes.get('/community_feed_category_list',feedsCtrl.getAllFeeds);
+routes.get('/community_feed_post/:id',feedsCtrl.getAllComments);
+
+
+
+//-------------------------Group-----------------------------------------------------
+
+routes.get('/get_all_groups', groupCtrl.get_all_groups); 
+routes.get('/get_group_messages/:groupId',groupCtrl.get_group_messages);
+
+//--
+routes.post('/add_social_links',addsCtrl.add_social_links);
+
+//----------------robots---------------------------------------------------
+routes.get('/get_all_robots/:id',appUsersCtrl.get_all_robots);
+
+routes.get('/get_all_plc/:id',appUsersCtrl.get_all_plc);
+
+//----------------notification----------------------------
+routes.get('/notification_listing/:id',addsCtrl.notification);
 
 module.exports = routes;

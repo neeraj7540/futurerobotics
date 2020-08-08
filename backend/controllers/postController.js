@@ -233,6 +233,50 @@ postEditAdmin : async (req, res) => {
 
   },
 
+  
+  add_post: async (req, res) => {
+    
+    try {
+
+        const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+        if (uploadFile) {
+        const item = await postTable.findOne({
+               category_id:req.body.category_id,
+               description:req.body.description,
+
+
+                where: {
+                    title: req.body.title,
+                }
+            });
+            if (!item) {
+                const data = req.body;
+                data.image = uploadFile[0].imageName;
+                data.status = '1'
+                const itemAdded = await postTable.create(data);
+                if (itemAdded) {
+                    return apiResponseHelper.post(res, true, 'Post added Successfully!', data);
+                } else {
+                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+                }
+            } else {
+                return apiResponseHelper.onError(res, false,  'Post with same title already exists', {});
+            }
+        }
+            else{
+                return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{} );
+
+            }
+
+    } catch (e) {
+
+        console.log(e);
+
+        return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+    
+    }
+  },
+
 
 
 }

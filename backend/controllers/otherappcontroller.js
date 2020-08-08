@@ -163,7 +163,45 @@ appEditAdmin : async (req, res) => {
       return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!',e);
        }
 
-  }
+  },
+
+
+  //---------------------31-7-2020------------------------
+  
+
+
+other_app: async (req, res) => {
+    try {
+        const id=req.params.id;
+           const itemList = await otherApptable.findAll({
+            attributes: ['id', 'name', 'platform','url','status','createdAt','updatedAt'],
+                 raw:true,
+                 where: {
+                    id: req.params.id,
+                  }
+           
+     });
+           
+       if (itemList) {
+          
+            return apiResponseHelper.post(res, true, 'App list',itemList);
+           } else {
+               return apiResponseHelper.post(res, true, 'App list',{});
+   }
+      } catch (e) {
+         
+       return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+           
+      }
+}
+
+
+
+
+
+
+
+
 
 
  }

@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
 
     },
 
-    userId:{
+    groupId:{
         type: DataTypes.INTEGER(11),
         allowNull: false,
 

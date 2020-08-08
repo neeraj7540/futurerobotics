@@ -18,6 +18,7 @@ module.exports = {
   userFilePath: 'public/images/users/',
   jwtToken: 'hiliteMd',
   saltRounds: 10,
-  baseUrl: 'localhost:4100'
+  baseUrl: 'localhost:4100',
+  
  
 };

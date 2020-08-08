@@ -30,7 +30,8 @@ let modules = [
   require('./reportedfeed.js'),
   require('./post.js'),
   require('./ads.js'),
-  require('./groupaccess.js') 
+  require('./groupaccess.js'),
+  require('./notification.js')
   
    
 ];
