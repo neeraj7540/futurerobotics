@@ -19,6 +19,7 @@ module.exports = {
   jwtToken: 'hiliteMd',
   saltRounds: 10,
   baseUrl: 'localhost:4100',
+  baseUrl1:'34.232.2.249:4100'
   
  
 };

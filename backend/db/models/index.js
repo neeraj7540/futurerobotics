@@ -31,7 +31,11 @@ let modules = [
   require('./post.js'),
   require('./ads.js'),
   require('./groupaccess.js'),
-  require('./notification.js')
+  require('./notification.js'),
+  require('./chat.js'),
+  require('./constant'),
+  require('./blocked_user'),
+  require('./online_user')
   
    
 ];

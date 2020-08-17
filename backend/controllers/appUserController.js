@@ -497,9 +497,13 @@ profile: async (req, res) => {
 
 get_all_post: async (req, res) => {
     try {
+      const id=req.params.id;
            const itemList = await postTable.findAll({
-              attributes: ['id', 'title','status','image','description','createdAt','updatedAt'],
+              attributes: ['id','post_id' ,'title','status','image','description','createdAt','updatedAt'],
                  raw:true,
+                 where:{
+                   id:req.params.id
+                 },
              order :   [
                    ['id', 'DESC']
             ]
@@ -523,11 +527,14 @@ get_all_post: async (req, res) => {
 post_detail: async (req, res) => {
     try {
         const id=req.params.id;
+        const post_id=req.params.post_id;
            const itemList = await postTable.findAll({
-              attributes: ['id', 'title','status','image','description','createdAt','updatedAt'],
+              attributes: ['id','post_id','title','status','image','description','createdAt','updatedAt'],
                  raw:true,
                  where: {
                     id: req.params.id,
+                    post_id:req.params.post_id,
+
                   }
            
      });
@@ -733,7 +740,7 @@ forgotPassword: async (req, res) => {
       <h2>Please click on given link to reset your password </h2>
       You are receiving this because you (or someone else) have requested the reset of the password for your account.<br>
       Please click on the following link, or paste this into your browser to complete the process:<br>
-     <a href="http://${config.baseUrl}/api/reset-password/${token }">http://${config.baseUrl}/api/reset-password/${token }</a><br>
+     <a href="http://${config.baseUrl1}/api/reset-password/${token }">http://${config.baseUrl1}/api/reset-password/${token }</a><br>
      If you did not request this, please ignore this email and your password will remain unchanged.
        `
         };
@@ -773,10 +780,10 @@ resetPassword: async (req, res) => {
   const resetLink=req.params.resetLink
 
  
-  
+  //G:\CompanyProject\JustInMind\justinmind\backend\public\changepassword1.html
 
 
-  fs.readFile("H:/justinmind-master/backend/public/resetpassword.html", function (error, data) {  
+  fs.readFile("../backend/public/changepassword1.html", function (error, data) {  
     console.log("its working");  
     if (error) {  
         console.log(error);  
@@ -799,7 +806,7 @@ setpasswordResponsemail: async (req, res) => {
   
   try {
 
-    //const password=req.body.Password;
+    console.log(req.body.Password)
     const pswd= await hashPassword.generatePass(req.body.Password);
     const password=pswd;
   const resetLink=req.params.resetLink;
@@ -866,7 +873,7 @@ console.log('Message %s sent: %s', info.messageId, info.response);
 
     } else {
      
-        return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!',{});
+        return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!Sonu',{});
     }
 
 
@@ -876,7 +883,7 @@ console.log('Message %s sent: %s', info.messageId, info.response);
 
 
   catch (e) {
-    return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!', {});
+    return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!Neeraj', {});
      }
    
 },
@@ -1090,6 +1097,67 @@ get_all_plc: async (req, res) => {
          
     }
 },
+
+
+//----------------------------Social Login-------------------
+socialLogin: async (req, res) => {
+    
+  try {
+
+      req.checkBody('social_id', 'social_id is required in body').notEmpty();
+      req.checkBody('social_type', 'social_type is required in body').notEmpty();
+
+      const error = req.validationErrors();
+      const social_id = req.body.social_id;
+      const social_type = req.body.social_type;
+  if (error) {
+    
+    return apiResponseHelper.onError(res, false, error[0].msg, {});
+    
+  }
+
+const item = await appusers.findOne({
+           name: req.body.name,
+           email: req.body.email,
+           phone: req.body.phone,
+           deviceType: req.body.deviceType,
+           deviceToken: req.body.deviceToken,
+
+              where: {
+                social_id: req.body.social_id,
+              }
+          });
+          if (!item) {
+              const data = req.body;
+              data.status = '1'
+              // const pswd = await hashPassword.generatePass(req.body.password);
+              //             data.password = pswd;
+              const itemAdded = await appusers.create(data);
+              if (itemAdded) {
+                    
+                      return apiResponseHelper.post(res, true, 'Log in successfully', {data});
+              } else {
+                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+              }
+          } else {
+              return apiResponseHelper.onError(res, false,  'User already exists', {});
+          }
+
+  } catch (e) {
+
+      console.log(e);
+
+      return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+  
+  }
+},
+
+
+
+
+
+
+//----------------------------------------------------
 
 
 

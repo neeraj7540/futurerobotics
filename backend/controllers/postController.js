@@ -4,6 +4,7 @@ const apiResponseHelper = require('../helpers/apiResponseHelper');
 const postTable = db.models.post;
 const filesUpload = require('../helpers/uploadFiles').uploadFile;
 const fs = require('fs');
+const appusers = db.models.appusers;
 
 module.exports = {
 
@@ -277,6 +278,65 @@ postEditAdmin : async (req, res) => {
     }
   },
 
+  add_post1: async (req, res) => {
+    
+    
+    try {
+
+        const id=req.params.id;
+        // const category_id=req.body.category_id;
+        // const title=req.body.title;
+        // const description=req.body.description;
+
+
+        const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+        if (uploadFile) {
+        const item = await appusers.findOne({
+           // attributes:['id'],
+                where: {
+                    id:req.params.id,
+                }
+            });
+            //console.log(item);
+            if (item) {
+               // const id=req.params.id;
+               //const category_id=req.body.category_id;
+              // const title=req.body.title;
+              //  const description=req.body.description;
+            var test=uploadFile[0].imageName;
+            var test1='http://34.232.2.249:4100/'+test
+           // console.log(test1);
+                const data = req.body;
+                data.id=req.params.id;
+                data.category_id=req.body.category_id;
+                data.title=req.body.title;
+                data.description=req.body.description;
+               // data.image = uploadFile[0].imageName;
+               data.image=test1;
+                data.status = '1'
+                const itemAdded = await postTable.create(data);
+                if (itemAdded) {
+                    return apiResponseHelper.post(res, true, 'Post added Successfully!', data);
+                } else {
+                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+                }
+            } else {
+                return apiResponseHelper.onError(res, false,  'User not exists', {});
+            }
+        }
+            else{
+                return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{} );
+
+            }
+
+    } catch (e) {
+
+        console.log(e);
+
+        return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+    
+    }
+  },
 
 
 }

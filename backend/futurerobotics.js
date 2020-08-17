@@ -6,11 +6,13 @@ const fs = require('fs');
 const app = express();
 const bearerToken = require('express-bearer-token');
 const server = require('http').createServer(app);
+//var http = require('http').createServer(app);
 const expressValidator = require('express-validator');
 const port = process.env.PORT || 4100;
 const passport = require('passport');
 const routes = require('./routes/routes');
 const checkConn = require('./helpers/checkConn');
+var io = require('socket.io')(server);
 
 
 
@@ -42,6 +44,9 @@ app.use(express.static('public'));
 app.use(passport.initialize());
 require('./passport')(passport);
 app.use('/api', routes);
+
+//------New Add-------------------------------
+require('./socket')(io);
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/build', express.static(path.join(__dirname, 'build')));
