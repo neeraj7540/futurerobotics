@@ -180,6 +180,6 @@ routes.get('/notification_listing/:id',addsCtrl.notification);
 routes.post('/socialLogin',appUsersCtrl.socialLogin);
 
 //----------------socketio-------------------------------------------
-routes.get('/testing',socketFunction.get_typing_list);
+routes.get('/testings',socketFunction.get_typing_list);
 
 module.exports = routes;
