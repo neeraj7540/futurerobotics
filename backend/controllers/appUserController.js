@@ -530,7 +530,7 @@ post_detail: async (req, res) => {
         const post_id=req.params.post_id;
            const itemList = await postTable.findAll({
               attributes: ['id','post_id','title','status','image','description','createdAt','updatedAt'],
-                 raw:true,
+                raw:true,
                  where: {
                     id: req.params.id,
                     post_id:req.params.post_id,
@@ -538,10 +538,12 @@ post_detail: async (req, res) => {
                   }
            
      });
+    //var myJSON = itemList[0]
+   
            
        if (itemList) {
           
-            return apiResponseHelper.post(res, true, 'Post list',itemList);
+            return apiResponseHelper.post(res, true, 'Post list',{itemList});
            } else {
                return apiResponseHelper.post(res, true, 'Post list',{});
    }
@@ -763,7 +765,7 @@ forgotPassword: async (req, res) => {
             
             } else {
              
-                return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!',{});
+                return apiResponseHelper.onError(res, false, 'User Not Created',{});
             }
   
   }else{
@@ -772,7 +774,7 @@ forgotPassword: async (req, res) => {
 
   }
   catch (e) {
-    return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!', {});
+    return apiResponseHelper.onError(res, false,'User Not Created', {});
      }
 
 },
@@ -1128,11 +1130,20 @@ const item = await appusers.findOne({
               }
           });
           if (!item) {
-              const data = req.body;
-              data.status = '1'
+              const data1 = req.body;
+              data1.status = '1'
               // const pswd = await hashPassword.generatePass(req.body.password);
               //             data.password = pswd;
-              const itemAdded = await appusers.create(data);
+              const itemAdded = await appusers.create(data1);
+              const data = await appusers.findOne({
+                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+              
+                   where: {
+                     id: itemAdded.id,
+                   }
+               });
+
+               console.log(data);
               if (itemAdded) {
                     
                       return apiResponseHelper.post(res, true, 'Log in successfully', {data});
