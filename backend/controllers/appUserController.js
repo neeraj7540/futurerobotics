@@ -528,9 +528,9 @@ post_detail: async (req, res) => {
     try {
         const id=req.params.id;
         const post_id=req.params.post_id;
-           const itemList = await postTable.findAll({
-              attributes: ['id','post_id','title','status','image','description','createdAt','updatedAt'],
-                raw:true,
+           const itemList = await postTable.findOne({
+             // attributes: ['id','post_id','title','status','image','description','createdAt','updatedAt'],
+               // raw:true,
                  where: {
                     id: req.params.id,
                     post_id:req.params.post_id,
@@ -538,12 +538,12 @@ post_detail: async (req, res) => {
                   }
            
      });
-    //var myJSON = itemList[0]
+   // console.log(itemList);
    
            
-       if (itemList) {
+      if (itemList) {
           
-            return apiResponseHelper.post(res, true, 'Post list',{itemList});
+            return apiResponseHelper.post(res, true, 'Post list',itemList);
            } else {
                return apiResponseHelper.post(res, true, 'Post list',{});
    }
@@ -742,7 +742,7 @@ forgotPassword: async (req, res) => {
       <h2>Please click on given link to reset your password </h2>
       You are receiving this because you (or someone else) have requested the reset of the password for your account.<br>
       Please click on the following link, or paste this into your browser to complete the process:<br>
-     <a href="http://${config.baseUrl1}/api/reset-password/${token }">http://${config.baseUrl1}/api/reset-password/${token }</a><br>
+     <a href="http://${config.baseUrl}/api/reset-password/${token }">http://${config.baseUrl}/api/reset-password/${token }</a><br>
      If you did not request this, please ignore this email and your password will remain unchanged.
        `
         };
