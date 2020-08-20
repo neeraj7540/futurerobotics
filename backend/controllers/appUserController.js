@@ -743,7 +743,7 @@ forgotPassword: async (req, res) => {
       <h2>Please click on given link to reset your password </h2>
       You are receiving this because you (or someone else) have requested the reset of the password for your account.<br>
       Please click on the following link, or paste this into your browser to complete the process:<br>
-     <a href="http://${config.baseUrl}/api/reset-password/${token }">http://${config.baseUrl}/api/reset-password/${token }</a><br>
+     <a href="http://${config.baseUrl1}/api/reset-password/${token }">http://${config.baseUrl1}/api/reset-password/${token }</a><br>
      If you did not request this, please ignore this email and your password will remain unchanged.
        `
         };
