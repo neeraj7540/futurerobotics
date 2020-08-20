@@ -439,6 +439,7 @@ profile: async (req, res) => {
 
           if (user) {
             const getUser = user.toJSON();
+            console.log(getUser)
             const match = await hashPassword.comparePass(password, getUser.password);
 
               if (!match) {
@@ -455,7 +456,7 @@ profile: async (req, res) => {
               const token = jwt.sign(credentials, config.jwtToken, { algorithm: 'HS256'});
 
               getUser.token = token;
-              delete getUser.password;
+             // delete getUser.password;
               delete getUser.role;
 
               const updateEntry =await appusers.update(
@@ -1119,6 +1120,7 @@ socialLogin: async (req, res) => {
   }
 
 const item = await appusers.findOne({
+         attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
            name: req.body.name,
            email: req.body.email,
            phone: req.body.phone,
@@ -1143,15 +1145,20 @@ const item = await appusers.findOne({
                    }
                });
 
-               console.log(data);
+              // console.log(data);
               if (itemAdded) {
                     
-                      return apiResponseHelper.post(res, true, 'Log in successfully', {data});
+                      return apiResponseHelper.post(res, true, 'Log in successfully', data);
               } else {
                      return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
               }
-          } else {
-              return apiResponseHelper.onError(res, false,  'User already exists', {});
+          // } else {
+          //     return apiResponseHelper.onError(res, false,  'User already exists', {});
+          // }
+             } else if(item){
+
+              return apiResponseHelper.post(res, true, 'Log in successfully', item);
+
           }
 
   } catch (e) {
