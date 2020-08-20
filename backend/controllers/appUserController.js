@@ -320,8 +320,8 @@ sign_up: async (req, res) => {
             age:req.body.age,
             location:req.body.location,
             country:req.body.country,
-            lat:req.body.lat,
-            long:req.body.long,
+           // lat:req.body.lat,
+            //long:req.body.long,
 
 
                 where: {
