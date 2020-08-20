@@ -168,6 +168,8 @@ routes.get('/get_group_messages/:groupId',groupCtrl.get_group_messages);
 //--
 routes.post('/add_social_links',addsCtrl.add_social_links);
 
+
+
 //----------------robots---------------------------------------------------
 routes.get('/get_all_robots/:id',appUsersCtrl.get_all_robots);
 
@@ -182,4 +184,8 @@ routes.post('/socialLogin',appUsersCtrl.socialLogin);
 //----------------socketio-------------------------------------------
 routes.get('/testings',socketFunction.get_typing_list);
 
+
+
+//------------new----------
+routes.post('/social_links/:id',appUsersCtrl.add_social_url);
 module.exports = routes;

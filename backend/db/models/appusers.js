@@ -175,8 +175,22 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(60),
       default: ""
 
-    }
+    },
+    facebook_url:{
+      type: DataTypes.STRING(100),
+      default: ""
 
+    },
+    linkedin_url:{
+      type: DataTypes.STRING(100),
+      default: ""
+
+    },
+    instagram_url:{
+      type: DataTypes.STRING(100),
+      default: ""
+
+    }
          
 }, {
     tableName: 'appusers',

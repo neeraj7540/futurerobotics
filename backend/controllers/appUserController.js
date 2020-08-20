@@ -1175,7 +1175,78 @@ const item = await appusers.findOne({
 
 
 
-//----------------------------------------------------
+//----------------------------------------------------url save--
+
+add_social_url : async (req, res) => {
+
+  try {
+ const user = await appusers.findOne({
+             attributes: ['id', 'facebook_url','linkedin_url', 'instagram_url'],
+                where: {
+                  id: req.params.id
+                
+                },
+                raw:true
+     });
+     if (req.body.facebook_url== "") {
+      var facebook_url=user.facebook_url;
+    }
+    else{
+      var facebook_url=req.body.facebook_url;
+    }
+
+    if (req.body.linkedin_url== "") {
+      var linkedin_url=user.linkedin_url;
+    }
+    else{
+      var linkedin_url=req.body.linkedin_url;
+    }
+
+    if (req.body.instagram_url== "") {
+      var instagram_url=user.instagram_url;
+    }
+    else{
+      var instagram_url=req.body.instagram_url;
+    }    
+if (user) {
+      const updateEntry =await appusers.update(
+            {
+              facebook_url:facebook_url,
+              linkedin_url:linkedin_url,
+              instagram_url:instagram_url   
+          },
+            {
+                where: {
+                id:user.id,
+
+                }
+            });  
+            const userdata = await appusers.findOne({
+              attributes: ['id', 'facebook_url','linkedin_url', 'instagram_url'],
+                 where: {
+                   id: user.id
+                 
+                 },
+                 raw:true
+      });
+
+
+    if (updateEntry) {
+      return apiResponseHelper.post(res, true, 'links saved successfully!',userdata);
+    } else {
+     
+        return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!',{});
+    }
+  }else{
+    return apiResponseHelper.onError(res, false, 'Users Not Exists', {});
+  }
+
+  }
+  catch (e) {
+    return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!', {});
+     }
+
+},
 
 
 
