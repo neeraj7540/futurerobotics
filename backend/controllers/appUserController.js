@@ -360,7 +360,10 @@ profile: async (req, res) => {
     
       const userDetails = await appusers.findOne({
      
-       // attributes: ['id', 'email', 'name','image','country','about','work','additional','location','status','deviceType','deviceToken','experience','hireAvailable','occupation','company','lat','long'],
+        attributes:['id','name','image','age','location','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+
+
+        // attributes: ['id', 'email', 'name','image','country','about','work','additional','location','status','deviceType','deviceToken','experience','hireAvailable','occupation','company','lat','long'],
         where: {
           id: req.params.id,
         }
@@ -368,7 +371,7 @@ profile: async (req, res) => {
   
       if (userDetails) {
       
-        return apiResponseHelper.post(res, true, 'userDetails', userDetails);
+        return apiResponseHelper.post(res, true, 'User Details', userDetails);
   
       }
       else {

@@ -190,7 +190,13 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       default: ""
 
+    },
+   joined_date:{
+      type: DataTypes.STRING(100),
+      default: ""
+
     }
+    
          
 }, {
     tableName: 'appusers',
