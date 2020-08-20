@@ -360,7 +360,7 @@ profile: async (req, res) => {
     
       const userDetails = await appusers.findOne({
      
-        attributes: ['id', 'email', 'name','image','country','about','work','additional','location','status','deviceType','deviceToken','experience','hireAvailable','occupation','company','lat','long'],
+       // attributes: ['id', 'email', 'name','image','country','about','work','additional','location','status','deviceType','deviceToken','experience','hireAvailable','occupation','company','lat','long'],
         where: {
           id: req.params.id,
         }
@@ -1156,6 +1156,20 @@ const item = await appusers.findOne({
           //     return apiResponseHelper.onError(res, false,  'User already exists', {});
           // }
              } else if(item){
+              const data1 = await appusers.findOne({
+                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+              
+                   where: {
+                     id: item.id,
+                   }
+               });
+
+               if (data1) {
+                    
+                return apiResponseHelper.post(res, true, 'Log in successfully', data1);
+        } else {
+               return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+        }
 
               return apiResponseHelper.post(res, true, 'Log in successfully', item);
 
