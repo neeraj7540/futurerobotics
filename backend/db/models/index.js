@@ -35,7 +35,8 @@ let modules = [
   require('./chat.js'),
   require('./constant'),
   require('./blocked_user'),
-  require('./online_user')
+  require('./online_user'),
+  require('./user_post.js')
   
    
 ];

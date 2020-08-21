@@ -2,6 +2,8 @@ const config = require('config');
 const db = require('../db/db');
 const apiResponseHelper = require('../helpers/apiResponseHelper');
 const postTable = db.models.post;
+const UserPost=db.models.user_post;
+console.log(UserPost);
 const filesUpload = require('../helpers/uploadFiles').uploadFile;
 const fs = require('fs');
 const appusers = db.models.appusers;
@@ -314,7 +316,7 @@ postEditAdmin : async (req, res) => {
                // data.image = uploadFile[0].imageName;
                data.image=test1;
                 data.status = '1'
-                const itemAdded = await postTable.create(data);
+                const itemAdded = await UserPost.create(data);
                 if (itemAdded) {
                     return apiResponseHelper.post(res, true, 'Post added Successfully!', data);
                 } else {
