@@ -357,7 +357,7 @@ sign_up: async (req, res) => {
 profile: async (req, res) => {
     try {
         const id=req.params.id;
-    
+
       const userDetails = await appusers.findOne({
      
         attributes:['id','name','image','age','location','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
@@ -368,10 +368,81 @@ profile: async (req, res) => {
           id: req.params.id,
         }
       });
+
+    //  console.log(userDetails.select_robots)
+
+      //-----------Test-----------------------------------------------
+      // function  isJson(item) {
+      //   item = typeof item !== "string" ? JSON.stringify(item) : item;
+    
+      //   try {
+      //     item = JSON.parse(item);
+      //   } catch (e) {
+      //     return false;
+      //   }
+    
+      //   if (typeof item === "object" && item !== null) {
+      //     return true;
+      //   }
+    
+      //   return false;
+      // }
+
+      // var sonu=isJson(userDetails.select_robots);
+
+      var select_robots1=userDetails.select_robots
+      if(select_robots1){
+      var select_robots2=JSON.parse(select_robots1)
+      }
+      else{
+        var select_robots2=""
+      }
+     // console.log(test12345)
+
+      var select_plc1=userDetails.select_plc
+      if(select_plc1){
+      var select_plc2=JSON.parse(select_plc1)
+      }
+      else{
+        var select_plc2=""
+      }
+     // console.log(test12345)
+
+      var userdatas={
+        "id" :userDetails.id,
+        "name":userDetails.name,
+        "image":userDetails.image,
+        "age":userDetails.age,
+        "location":userDetails.location,
+        "joined_date":userDetails.joined_date,
+        "occupation":userDetails.occupation,
+        "company":userDetails.company,
+        "experience":userDetails.experience,
+        "hireAvailable":userDetails.hireAvailable,
+        "select_robots":select_robots2,
+        "select_plc":select_plc2,
+        "about_me":userDetails.about_me,
+        "facebook_url":userDetails.facebook_url,
+        "linkedin_url":userDetails.linkedin_url,
+        "instagram_url":userDetails.instagram_url
+
+
+
+
+        
+      }
+
+
+
+
+
+
+
+
   
       if (userDetails) {
       
-        return apiResponseHelper.post(res, true, 'User Details', userDetails);
+        return apiResponseHelper.post(res, true, 'User Details', userdatas);
   
       }
       else {
