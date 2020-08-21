@@ -395,7 +395,7 @@ profile: async (req, res) => {
       var select_robots2=JSON.parse(select_robots1)
       }
       else{
-        var select_robots2=""
+        var select_robots2=[]
       }
      // console.log(test12345)
 
@@ -404,7 +404,7 @@ profile: async (req, res) => {
       var select_plc2=JSON.parse(select_plc1)
       }
       else{
-        var select_plc2=""
+        var select_plc2=[]
       }
      // console.log(test12345)
 
