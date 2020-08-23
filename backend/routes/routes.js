@@ -186,6 +186,6 @@ routes.get('/testings',socketFunction.get_typing_list);
 
 
 
-//------------new----------
+//---------------------social link
 routes.post('/social_links/:id',appUsersCtrl.add_social_url);
 module.exports = routes;
