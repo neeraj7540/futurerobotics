@@ -8,7 +8,8 @@ const feedsTable =  db.models.feed;
 const postTable = db.models.post;
 const robotList=db.models.robotlist;
 const plcList=db.models.plclist;
-console.log(plcList);
+const generalList=db.models.general;
+console.log(generalList);
 
 const groupaccessTable = db.models.groupaccess;
 const groups = db.models.groups;
@@ -1375,7 +1376,7 @@ get_all_robots_admin: async (req, res) => {
   try {
      // const id=req.params.id;
          const itemList = await robotList.findAll({
-            attributes: ['robot_id', 'name'],
+            attributes: ['robot_id', 'name','image','count'],
               // raw:true,
                 // where: {
                 //   id: 1,
@@ -1401,7 +1402,7 @@ get_all_plc_admin: async (req, res) => {
   try {
       const id=req.params.id;
          const itemList = await plcList.findAll({
-            attributes: ['plc_id', 'name'],
+            attributes: ['plc_id', 'name','image','count'],
               //  raw:true,
               //  where: {
               //     id: req.params.id,
@@ -1423,6 +1424,31 @@ get_all_plc_admin: async (req, res) => {
     }
 },
 
+get_all_general_admin: async (req, res) => {
+  try {
+      const id=req.params.id;
+         const itemList = await generalList.findAll({
+            attributes: ['general_id', 'name','image','count'],
+              //  raw:true,
+              //  where: {
+              //     id: req.params.id,
+              //   }
+         
+   });
+  // console.log(itemList);
+         
+     if (itemList) {
+        
+          return apiResponseHelper.post(res, true, 'General list',itemList);
+         } else {
+             return apiResponseHelper.post(res, true, 'General list',{});
+ }
+    } catch (e) {
+       
+     return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+         
+    }
+},
 
 
 

@@ -196,4 +196,7 @@ routes.get('/all_robots',appUsersCtrl.get_all_robots_admin);
 
 //-----------All PLC list---------------------------------------
 routes.get('/all_plc',appUsersCtrl.get_all_plc_admin);
+//---------General List--------------------------------
+routes.get('/all_general',appUsersCtrl.get_all_general_admin);
+
 module.exports = routes;
