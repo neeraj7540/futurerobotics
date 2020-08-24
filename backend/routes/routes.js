@@ -188,4 +188,12 @@ routes.get('/testings',socketFunction.get_typing_list);
 
 //---------------------social link
 routes.post('/social_links/:id',appUsersCtrl.add_social_url);
+
+
+//----------------All Robot list--------------------------
+
+routes.get('/all_robots',appUsersCtrl.get_all_robots_admin);
+
+//-----------All PLC list---------------------------------------
+routes.get('/all_plc',appUsersCtrl.get_all_plc_admin);
 module.exports = routes;

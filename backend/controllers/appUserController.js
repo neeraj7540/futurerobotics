@@ -6,6 +6,9 @@ const appusers = db.models.appusers;
 const reportedTable = db.models.reportedfeed;
 const feedsTable =  db.models.feed;
 const postTable = db.models.post;
+const robotList=db.models.robotlist;
+const plcList=db.models.plclist;
+console.log(plcList);
 
 const groupaccessTable = db.models.groupaccess;
 const groups = db.models.groups;
@@ -1368,6 +1371,57 @@ if (user) {
 
 },
 
+get_all_robots_admin: async (req, res) => {
+  try {
+     // const id=req.params.id;
+         const itemList = await robotList.findAll({
+            attributes: ['robot_id', 'name'],
+              // raw:true,
+                // where: {
+                //   id: 1,
+                // }
+         
+   });
+  // console.log(itemList);
+         
+     if (itemList) {
+        
+          return apiResponseHelper.post(res, true, 'Robots list',itemList);
+         } else {
+             return apiResponseHelper.post(res, true, 'Robots list',{});
+ }
+    } catch (e) {
+       
+     return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+         
+    }
+},
+
+get_all_plc_admin: async (req, res) => {
+  try {
+      const id=req.params.id;
+         const itemList = await plcList.findAll({
+            attributes: ['plc_id', 'name'],
+              //  raw:true,
+              //  where: {
+              //     id: req.params.id,
+              //   }
+         
+   });
+  // console.log(itemList);
+         
+     if (itemList) {
+        
+          return apiResponseHelper.post(res, true, 'PLC list',itemList);
+         } else {
+             return apiResponseHelper.post(res, true, 'PLC list',{});
+ }
+    } catch (e) {
+       
+     return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+         
+    }
+},
 
 
 

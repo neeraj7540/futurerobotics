@@ -36,7 +36,9 @@ let modules = [
   require('./constant'),
   require('./blocked_user'),
   require('./online_user'),
-  require('./user_post.js')
+  require('./user_post.js'),
+  require('./robotlist.js'),
+  require('./plclist.js')
   
    
 ];
