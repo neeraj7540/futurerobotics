@@ -199,4 +199,10 @@ routes.get('/all_plc',appUsersCtrl.get_all_plc_admin);
 //---------General List--------------------------------
 routes.get('/all_general',appUsersCtrl.get_all_general_admin);
 
+//----------------Feed Data-----------------------------------------------------------------
+
+routes.post('/add_feed/:id', postCtrl.add_feed);
+
+
+
 module.exports = routes;

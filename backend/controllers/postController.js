@@ -3,6 +3,7 @@ const db = require('../db/db');
 const apiResponseHelper = require('../helpers/apiResponseHelper');
 const postTable = db.models.post;
 const UserPost=db.models.user_post;
+const feedsTable =  db.models.feed;
 console.log(UserPost);
 const filesUpload = require('../helpers/uploadFiles').uploadFile;
 const fs = require('fs');
@@ -339,6 +340,56 @@ postEditAdmin : async (req, res) => {
     
     }
   },
+
+  add_feed: async (req, res) => {
+    
+ try {
+
+        const id=req.params.id;
+        const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+        if (uploadFile) {
+        const item = await appusers.findOne({
+           
+                where: {
+                    id:req.params.id,
+                }
+            });
+            
+            if (item) {
+            
+            var test=uploadFile[0].imageName;
+            var test1='http://34.232.2.249:4100/'+test
+                const data = req.body;
+                data.userId=req.params.id;
+                data.feedCatId=req.body.feedCatId;
+               // data.title=req.body.title;
+                data.description=req.body.description;
+               data.image=test1;
+                data.status = '1'
+                const itemAdded = await feedsTable.create(data);
+                if (itemAdded) {
+                    return apiResponseHelper.post(res, true, 'Post added Successfully!', data);
+                } else {
+                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+                }
+            } else {
+                return apiResponseHelper.onError(res, false,  'User not exists', {});
+            }
+        }
+            else{
+                return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{} );
+
+            }
+
+    } catch (e) {
+
+        console.log(e);
+
+        return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+    
+    }
+  },
+
 
 
 }
