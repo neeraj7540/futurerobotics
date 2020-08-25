@@ -7,6 +7,10 @@ const feedsTable =  db.models.feed;
 console.log(UserPost);
 const filesUpload = require('../helpers/uploadFiles').uploadFile;
 const fs = require('fs');
+const moment=require('moment');
+
+
+
 const appusers = db.models.appusers;
 
 module.exports = {
@@ -346,6 +350,15 @@ postEditAdmin : async (req, res) => {
  try {
 
         const id=req.params.id;
+
+//         var today = new Date();
+// var dd = String(today.getDate()).padStart(2, '0');
+// var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+// var yyyy = today.getFullYear();
+
+//today = dd + '/' + mm + '/' + yyyy;
+
+        
         const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
         if (uploadFile) {
         const item = await appusers.findOne({
@@ -356,6 +369,7 @@ postEditAdmin : async (req, res) => {
             });
             
             if (item) {
+                var datedata=moment().format('MMMM Do YYYY');
             
             var test=uploadFile[0].imageName;
             var test1='http://34.232.2.249:4100/'+test
@@ -366,6 +380,7 @@ postEditAdmin : async (req, res) => {
                 data.description=req.body.description;
                data.image=test1;
                 data.status = '1'
+                data.date=datedata;
                 const itemAdded = await feedsTable.create(data);
                 if (itemAdded) {
                     return apiResponseHelper.post(res, true, 'Post added Successfully!', data);

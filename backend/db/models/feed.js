@@ -49,6 +49,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: common.timestamp()
     },  
+    Date: {
+      type: DataTypes.STRING(60),
+      allowNull: true,
+    },
 
          
 }, {
