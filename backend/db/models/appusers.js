@@ -195,6 +195,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       default: ""
 
+    },
+    phone:{
+      type: DataTypes.STRING(100),
+      default: ""
+
     }
     
          

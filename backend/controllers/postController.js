@@ -380,7 +380,7 @@ postEditAdmin : async (req, res) => {
                 data.description=req.body.description;
                data.image=test1;
                 data.status = '1'
-                data.date=datedata;
+                data.Date=datedata;
                 const itemAdded = await feedsTable.create(data);
                 if (itemAdded) {
                     return apiResponseHelper.post(res, true, 'Post added Successfully!', data);

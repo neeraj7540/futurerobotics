@@ -320,7 +320,7 @@ sign_up: async (req, res) => {
         const item = await appusers.findOne({
             name:req.body.name,
             email:req.body.email,
-         //   password:req.body.password,
+            phone:req.body.phone,
             age:req.body.age,
             location:req.body.location,
             country:req.body.country,
@@ -332,9 +332,17 @@ sign_up: async (req, res) => {
                     email: req.body.email,
                 }
             });
+
+
             if (!item) {
+              var today = new Date();
+              var date=today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear()
+
+
+                
                 const data = req.body;
                 data.status = '1'
+                data.joined_date=date;
                 const pswd = await hashPassword.generatePass(req.body.password);
                             data.password = pswd;
                 const itemAdded = await appusers.create(data);
@@ -652,6 +660,7 @@ edit_profile : async (req, res) => {
      const data = req.body;
      data.image = uploadFile[0].imageName;
      var data1=data.image
+     console.log(data1)
 
      if (req.body.name== "") {
       var name=user.name;
@@ -662,10 +671,16 @@ edit_profile : async (req, res) => {
 if (req.body.image== "") {
       var image=user.image;
     }
+    else if(data1=="public/images/default/main.png"){
+      var image=""
+    }
     else{
       
       var image='http://34.232.2.249:4100/'+data1;
     }
+
+
+
  if (req.body.age== "") {
       var age=user.age;
     }
