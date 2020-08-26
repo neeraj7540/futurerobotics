@@ -336,6 +336,8 @@ sign_up: async (req, res) => {
 
             //console.log(item.email);
             //console.log(item.phone);
+            //console.log(item)
+            //console.log(item.email);
 
 
 
@@ -522,15 +524,16 @@ profile: async (req, res) => {
 
 
         const user = await appusers.findOne({
-            attributes: ['id', 'email', 'password', 'image', 'name','status'],
+            attributes: ['id', 'email', 'password', 'image', 'name','status','emailStatus'],
             where: {
               email: email,
             }
           });
 
-          console.log(user.status)
+         // console.log(user.status)
           if (user) {
             if(user.status==1){
+              if(user.emailStatus=="Y"){
             const getUser = user.toJSON();
             console.log(getUser)
             const match = await hashPassword.comparePass(password, getUser.password);
@@ -571,8 +574,13 @@ profile: async (req, res) => {
 
 
               return apiResponseHelper.post(res, true, 'Login successfully', getUser);
-            }
-            else{
+              }
+              else{
+                return apiResponseHelper.onError(res, false, 'Email Verification pending', {});
+
+              }
+              }
+ else{
               return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
             }
 
@@ -1048,12 +1056,18 @@ const user = await appusers.findOne({
         },
      
 });
+if(!user){
+  return apiResponseHelper.post(res, true, 'Email address not exist.');
+
+}
+
+
 if(user.emailStatus =="Y"){
   return apiResponseHelper.post(res, true, 'your email is already verified.');
 
 }
 else{
-var otp=Math.floor((Math.random() * 100) + 5400);
+var otp=Math.floor((Math.random() * 100) + 5000);
 
 let transporter = nodeMailer.createTransport({
   host: 'smtp.gmail.com',
