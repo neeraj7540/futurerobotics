@@ -725,7 +725,7 @@ if (req.body.image== "") {
       var joined_date=user.joined_date;
     }
     else{
-      var joined_date=req.body.joined_date;
+      var joined_date=user.joined_date;
     }
  if (req.body.occupation== "") {
       var occupation=user.occupation;
