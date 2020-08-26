@@ -345,7 +345,7 @@ sign_up: async (req, res) => {
             var today = new Date();
 
          //   var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-         var date=today.getDate()+''+(today.getMonth()+1)+''+today.getFullYear()
+         //var date=today.getDate()+''+(today.getMonth()+1)+''+today.getFullYear()
 
 
               //var date=new Date().toJSON().slice(0, 10).replace(/-/g, '-');
@@ -354,7 +354,7 @@ sign_up: async (req, res) => {
                 
                 const data = req.body;
                 data.status = '1'
-                data.joined_date=date;
+               // data.joined_date=date;
                 const pswd = await hashPassword.generatePass(req.body.password);
                             data.password = pswd;
                 const itemAdded = await appusers.create(data);

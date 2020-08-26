@@ -192,8 +192,9 @@ module.exports = function(sequelize, DataTypes) {
 
     },
    joined_date:{
-      type: DataTypes.STRING(100),
-      default: ""
+    type: DataTypes.INTEGER(11),
+    allowNull: false,
+    defaultValue: common.timestamp()
 
     },
     phone:{
