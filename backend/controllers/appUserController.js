@@ -320,7 +320,7 @@ sign_up: async (req, res) => {
         const item = await appusers.findOne({
             name:req.body.name,
             email:req.body.email,
-            phone:req.body.phone,
+           // phone:req.body.phone,
             age:req.body.age,
             location:req.body.location,
             country:req.body.country,
@@ -330,13 +330,18 @@ sign_up: async (req, res) => {
 
                 where: {
                     email: req.body.email,
-                }
+                   }
             });
 
 
+            //console.log(item.email);
+            //console.log(item.phone);
+
+
+
             if (!item) {
-              var today = new Date();
-              var date=today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear()
+          //    var today = new Date();
+              var date=new Date().toJSON().slice(0, 10).replace(/-/g, '-');
 
 
                 
@@ -353,7 +358,7 @@ sign_up: async (req, res) => {
                        return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
                 }
             } else {
-                return apiResponseHelper.onError(res, false,  'User already exists', {});
+                return apiResponseHelper.onError(res, false,  'This email is already registered', {});
             }
 
     } catch (e) {
@@ -517,13 +522,15 @@ profile: async (req, res) => {
 
 
         const user = await appusers.findOne({
-            attributes: ['id', 'email', 'password', 'image', 'name'],
+            attributes: ['id', 'email', 'password', 'image', 'name','status'],
             where: {
               email: email,
             }
           });
 
+          console.log(user.status)
           if (user) {
+            if(user.status==1){
             const getUser = user.toJSON();
             console.log(getUser)
             const match = await hashPassword.comparePass(password, getUser.password);
@@ -564,6 +571,10 @@ profile: async (req, res) => {
 
 
               return apiResponseHelper.post(res, true, 'Login successfully', getUser);
+            }
+            else{
+              return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
+            }
 
           }else{
               return apiResponseHelper.onError(res, false, 'Invalid User', {});
@@ -668,11 +679,15 @@ edit_profile : async (req, res) => {
     else{
       var name=req.body.name;
     }
+    var userimage=user.image
+  
+   // console.log(userimage.length())
 if (req.body.image== "") {
       var image=user.image;
     }
+    
     else if(data1=="public/images/default/main.png"){
-      var image=""
+      var image=user.image
     }
     else{
       
@@ -895,12 +910,12 @@ forgotPassword: async (req, res) => {
             }
   
   }else{
-    return apiResponseHelper.onError(res, false, 'Users Not Exists', {});
+    return apiResponseHelper.onError(res, false, 'This email is not registered', {});
   }
 
   }
   catch (e) {
-    return apiResponseHelper.onError(res, false,'User Not Created', {});
+    return apiResponseHelper.onError(res, false,'This email is not registered', {});
      }
 
 },
@@ -1018,12 +1033,8 @@ console.log('Message %s sent: %s', info.messageId, info.response);
 
 
 sendOtp: async (req, res) => {
-
-  
-  try {
-  
-
-  req.checkBody('email', 'email is required in body').notEmpty();
+try {
+   req.checkBody('email', 'email is required in body').notEmpty();
   const error = req.validationErrors();
   const email = req.body.email;
 if (error) {
@@ -1093,7 +1104,7 @@ if(user){
     }
     else{
 
-      return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!',{});
+      return apiResponseHelper.onError(res, false, 'Email ID is not registered!',{});
 
 
     }
