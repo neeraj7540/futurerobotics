@@ -53,6 +53,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(60),
       allowNull: true,
     },
+    
+    title: {
+      type: DataTypes.STRING(200),
+      allowNull: true,
+    },
 
          
 }, {

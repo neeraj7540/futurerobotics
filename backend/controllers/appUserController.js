@@ -342,8 +342,13 @@ sign_up: async (req, res) => {
 
 
             if (!item) {
-          //    var today = new Date();
-              var date=new Date().toJSON().slice(0, 10).replace(/-/g, '-');
+            var today = new Date();
+
+         //   var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+         var date=today.getDate()+''+(today.getMonth()+1)+''+today.getFullYear()
+
+
+              //var date=new Date().toJSON().slice(0, 10).replace(/-/g, '-');
 
 
                 
