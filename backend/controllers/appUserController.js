@@ -52,6 +52,7 @@ module.exports = {
                             data.dateCreated = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
                             const pswd = await hashPassword.generatePass(req.body.password);
                             data.password = pswd;
+                            data.emailStatus="Y"
                             const addSponser = await appusers.create(data);
                             if (addSponser) {
                                   
