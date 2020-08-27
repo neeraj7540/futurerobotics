@@ -19,12 +19,12 @@ module.exports = function(sequelize, DataTypes) {
     },
     like:{
       type: DataTypes.INTEGER(11),
-      allowNull: false,
+      allowNull: true,
 
   },
   deslike:{
     type: DataTypes.INTEGER(11),
-    allowNull: false,
+    allowNull: true,
 
 },
 

@@ -491,6 +491,8 @@ getAllFeeds_data:  async (req, res) => {
        ]
    
 });
+console.log(itemList);
+
 
       if (itemList) {
             
