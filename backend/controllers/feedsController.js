@@ -433,7 +433,165 @@ return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Ag
 }
 
 
-} 
+} ,
+getAllFeeds_data:  async (req, res) => {
+
+
+  try{
+
+    const itemList = await feedsTable.findAll({
+      attributes: ['id','feedCatId','userId','title','description','image','status','createdAt','updatedAt'],
+      include: [
+          {
+            model: appUsersTable,
+            attributes: ['id','name','email','image','status']
+            
+          },
+
+          {
+            model: feeCatTable,
+            attributes: ['id','name','description','status','createdAt','updatedAt']
+           
+          },
+
+          // {
+          //   model: likeDeslikeTable,
+          //   attributes: ['id','feedId','userId','likeDeslike','status','createdAt','updatedAt'],
+          //    include: [
+          //      {
+          //       model: appUsersTable,
+          //       attributes: ['id','name','email','image','status']
+               
+          //      }
+          //    ]
+           
+          // },
+
+          // {
+          //   model: feedCommentTable,
+          //   attributes: ['id','feedId','userId','comment','status','createdAt','updatedAt'],
+          //   include: [
+          //     {
+          //       model: appUsersTable,
+          //       attributes: ['id','name','email','image','status']
+               
+          //     }
+          //   ]
+           
+          // },
+
+
+      ],
+      order :   [
+      ['id', 'DESC']
+       ]
+   
+});
+
+      if (itemList) {
+            
+        return apiResponseHelper.post(res, true, 'Feeds List',itemList);
+      } else {
+          return apiResponseHelper.post(res, true, 'Feeds List',{});
+      }
+
+
+  }catch(e){
+
+
+    console.log(e);
+    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+       
+  }
+
+
+
+
+
+
+
+
+
+
+}  ,
+
+
+getAllLikes_List:  async (req, res) => {
+
+  try{
+
+    const likedeslike = await likeDeslikeTable.findAll({
+      attributes: ['id','feedId','userId','likeDeslike','status','createdAt','updatedAt'],
+      where:{
+        feedId:req.params.id
+      },
+      include: [
+            {
+              model: appUsersTable,
+              attributes: ['id','name','email','image','status']
+             
+            }
+          ]
+
+    })
+
+    if(likedeslike.length>0){
+      return apiResponseHelper.post(res, true, 'details',likedeslike);
+
+    }else{
+      return apiResponseHelper.post(res, true, 'details',{});
+    }
+
+  }
+
+catch (e) {
+ console.log(e);
+
+return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+  
+}
+
+
+},
+
+getAllComments_list:  async (req, res) => {
+
+  try{
+
+    const item = await feedCommentTable.findAll({
+      attributes: ['id','feedId','userId','comment','status','createdAt','like','deslike','updatedAt'],
+      where:{
+        feedId:req.params.id
+      },
+      include: [
+            {
+              model: appUsersTable,
+              attributes: ['id','name','email','image','status']
+             
+            }
+          ]
+
+    })
+
+    if(item.length>0){
+      return apiResponseHelper.post(res, true, 'details',item);
+
+    }else{
+      return apiResponseHelper.post(res, true, 'details',{});
+    }
+
+  }
+
+catch (e) {
+ console.log(e);
+
+return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+  
+}
+
+
+}
+,
 
 
 

@@ -155,7 +155,7 @@ routes.post('/emailVerification',appUsersCtrl.emailVerification);
 
 
 //-----Feed category-------------------------------------------
-routes.get('/community_feed_category_list',feedsCtrl.getAllFeeds);
+//routes.get('/community_feed_category_list',feedsCtrl.getAllFeeds);
 routes.get('/community_feed_post/:id',feedsCtrl.getAllComments);
 
 
@@ -202,6 +202,13 @@ routes.get('/all_general',appUsersCtrl.get_all_general_admin);
 //----------------Feed Data-----------------------------------------------------------------
 
 routes.post('/add_feed/:id', postCtrl.add_feed);
+
+
+//------------------------Feed category-------------------------------------------
+routes.get('/community_feed_category_list',feedsCtrl.getAllFeeds_data);
+
+routes.get('/allikes_list/:id', feedsCtrl.getAllLikes_List);
+routes.get('/allcomments_list/:id', feedsCtrl.getAllComments_list);
 
 
 
