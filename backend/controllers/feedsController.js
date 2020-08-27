@@ -18,9 +18,13 @@ reportedFeedsTable.belongsTo(feedsTable, { foreignKey: 'feedId' });
 reportedFeedsTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 feedsTable.belongsTo(feeCatTable, { foreignKey: 'feedCatId' });
 feedsTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
+//reportedFeedsTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
+
+feedsTable.belongsTo(feedCommentTable, { foreignKey: 'id' });
+feedCommentTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 
 feedCommentTable.belongsTo(feedsTable, { foreignKey: 'feedId' });
-feedCommentTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
+//feedCommentTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 
 
 //likeDeslikeTable.belongsTo(feedsTable, { foreignKey: 'feedId' });
@@ -105,18 +109,18 @@ getAllFeeds:  async (req, res) => {
            
           // },
 
-          // {
-          //   model: feedCommentTable,
-          //   attributes: ['id','feedId','userId','comment','status','createdAt','updatedAt'],
-          //   include: [
-          //     {
-          //       model: appUsersTable,
-          //       attributes: ['id','name','email','image','status']
+          {
+            model: feedCommentTable,
+            attributes: ['id','feedId','userId','comment','status','createdAt','updatedAt'],
+            // include: [
+            //   {
+            //     model: appUsersTable,
+            //     attributes: ['id','name','email','image','status']
                
-          //     }
-          //   ]
+            //   }
+            // ]
            
-          // },
+          },
 
 
       ],
@@ -440,7 +444,7 @@ getAllFeeds_data:  async (req, res) => {
   try{
 
     const itemList = await feedsTable.findAll({
-      attributes: ['id','feedCatId','userId','title','description','image','status','createdAt','updatedAt'],
+      attributes: ['id','feedCatId','userId','title','Date','like','deslike','description','image','status','createdAt','updatedAt'],
       include: [
           {
             model: appUsersTable,
@@ -454,31 +458,31 @@ getAllFeeds_data:  async (req, res) => {
            
           },
 
-          // {
-          //   model: likeDeslikeTable,
-          //   attributes: ['id','feedId','userId','likeDeslike','status','createdAt','updatedAt'],
-          //    include: [
-          //      {
-          //       model: appUsersTable,
-          //       attributes: ['id','name','email','image','status']
+         // {
+            // model: likeDeslikeTable,
+            // attributes: ['id','feedId','userId','likeDeslike','status','createdAt','updatedAt'],
+            // //  include: [
+            //    {
+            //     model: appUsersTable,
+            //     attributes: ['id','name','email','image','status']
                
-          //      }
-          //    ]
+            //    }
+            //  ]
            
-          // },
+        //  },
 
-          // {
-          //   model: feedCommentTable,
-          //   attributes: ['id','feedId','userId','comment','status','createdAt','updatedAt'],
-          //   include: [
-          //     {
-          //       model: appUsersTable,
-          //       attributes: ['id','name','email','image','status']
+          {
+            model: feedCommentTable,
+            attributes: ['id','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+            include: [
+              {
+                model: appUsersTable,
+                attributes: ['id','name','email','image','status']
                
-          //     }
-          //   ]
+              }
+            ]
            
-          // },
+          },
 
 
       ],

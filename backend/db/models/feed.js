@@ -17,6 +17,16 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false,
 
     },
+    like:{
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+
+  },
+  deslike:{
+    type: DataTypes.INTEGER(11),
+    allowNull: false,
+
+},
 
     feedCatId:{
         type: DataTypes.INTEGER(11),

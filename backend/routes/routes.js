@@ -210,7 +210,7 @@ routes.get('/community_feed_category_list',feedsCtrl.getAllFeeds_data);
 routes.get('/allikes_list/:id', feedsCtrl.getAllLikes_List);
 routes.get('/allcomments_list/:id', feedsCtrl.getAllComments_list);
 
-
+routes.post('/addlike_dislike/:id')
 
 
 
