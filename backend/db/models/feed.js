@@ -16,7 +16,13 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.INTEGER(11),
         allowNull: false,
 
-    },
+    }, 
+    comment_count:{
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+
+  },
+
     like:{
       type: DataTypes.INTEGER(11),
       allowNull: true,

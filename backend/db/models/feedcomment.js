@@ -66,6 +66,7 @@ module.exports = function(sequelize, DataTypes) {
          
 }, {
     tableName: 'feedcomment',
-    timestamps: true
+    timestamps: true,
+    defaultValue:""
   });
 };
