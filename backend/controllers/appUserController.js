@@ -429,7 +429,7 @@ profile: async (req, res) => {
 
       const userDetails = await appusers.findOne({
      
-        attributes:['id','name','image','age','location','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+        attributes:['id','name','image','age','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
 
 
         where: {
@@ -482,6 +482,7 @@ profile: async (req, res) => {
         "image":userDetails.image,
         "age":userDetails.age,
         "location":userDetails.location,
+        "country":userDetails.country,
         "joined_date":userDetails.joined_date,
         "occupation":userDetails.occupation,
         "company":userDetails.company,
@@ -716,7 +717,7 @@ edit_profile : async (req, res) => {
   try {
     
       const user = await appusers.findOne({
-        attributes:['id','name','image','age','location','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+        attributes:['id','name','image','age','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
 
            // attributes: ['id', 'name','email', 'status','age','location','country','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me'],
                 where: {
@@ -795,11 +796,20 @@ if (req.body.company== "") {
     else{
       var hireAvailable=req.body.hireAvailable;
     }
+
+    var test12=req.body.select_robots.split(',');
+    console.log(test12);
+
+    var test123=JSON.stringify(test12);
+    console.log(test123)
+     
  if (req.body.select_robots== "") {
       var select_robots=user.select_robots;
+    //  var select_robots=test123;
+      
     }
     else{
-      var select_robots=req.body.select_robots;
+      var select_robots=test123;
     }
  if (req.body.select_plc== "") {
       var select_plc=user.select_plc;
@@ -830,6 +840,15 @@ if (req.body.instagram_url== "") {
       var instagram_url=req.body.instagram_url;
     }
 
+if (req.body.country== "") {
+      var country=user.country;
+    }
+    else{
+      var country=req.body.country;
+    }
+
+
+
       console.log(user.id);
      if (user) {
       const updateEntry =await appusers.update(
@@ -849,6 +868,9 @@ if (req.body.instagram_url== "") {
           facebook_url:facebook_url,
           linkedin_url:linkedin_url,
           instagram_url:instagram_url,
+          country:country
+          
+
            },
             {
                 where: {
@@ -857,7 +879,7 @@ if (req.body.instagram_url== "") {
                 }
             });  
             const userdata1 = await appusers.findOne({
-              attributes:['id','name','image','age','location','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+              attributes:['id','name','image','age','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
 
                       where: {
                         id: user.id
