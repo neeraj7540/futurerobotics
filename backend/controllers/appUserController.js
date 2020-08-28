@@ -35,49 +35,93 @@ groupaccessTable.belongsTo(groups, { foreignKey: 'groupId'});
 
 module.exports = {
 
+  // addUserByAdmin: async (req, res) => {
+    
+  //               try {
+  //                   const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+  //                   if (uploadFile) {
+  //                       const users = await appusers.findOne({
+  //                           where: {
+  //                               email: req.body.email
+  //                           }
+  //                       });
+  //                       if (!users) {
+  //                           const data = req.body;
+  //                           data.image =uploadFile[0].imageName;
+  //                           data.status = '1'
+  //                           data.dateCreated = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
+  //                           const pswd = await hashPassword.generatePass(req.body.password);
+  //                           data.password = pswd;
+  //                           data.emailStatus="Y"
+  //                           const addSponser = await appusers.create(data);
+  //                           if (addSponser) {
+                                  
+  //                                   return apiResponseHelper.post(res, true, 'Users Added Successfully!', {});
+  //                           } else {
+  //                                  return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+  //                           }
+  //                       } else {
+  //                           fs.unlinkSync(uploadFile[0].imageName);
+                           
+  //                           return apiResponseHelper.onError(res, false, 'Exists', 'Users With same email Already Exists');
+                        
+  //                       }
+  //                   }
+  //                   else {
+  //                       return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+                           
+  //                   }
+        
+  //               } catch (e) {
+  //                      console.log(e);
+  //                   return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+                
+  //               }
+  //           },
+
   addUserByAdmin: async (req, res) => {
     
-                try {
-                    const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
-                    if (uploadFile) {
-                        const users = await appusers.findOne({
-                            where: {
-                                email: req.body.email
-                            }
-                        });
-                        if (!users) {
-                            const data = req.body;
-                            data.image = 'http://34.232.2.249:4100/'+uploadFile[0].imageName;
-                            data.status = '1'
-                            data.dateCreated = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
-                            const pswd = await hashPassword.generatePass(req.body.password);
-                            data.password = pswd;
-                            data.emailStatus="Y"
-                            const addSponser = await appusers.create(data);
-                            if (addSponser) {
-                                  
-                                    return apiResponseHelper.post(res, true, 'Users Added Successfully!', {});
-                            } else {
-                                   return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
-                            }
-                        } else {
-                            fs.unlinkSync(uploadFile[0].imageName);
-                           
-                            return apiResponseHelper.onError(res, false, 'Exists', 'Users With same email Already Exists');
-                        
-                        }
-                    }
-                    else {
-                        return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
-                           
-                    }
-        
-                } catch (e) {
-                       console.log(e);
-                    return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
-                
+    try {
+        const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+        if (uploadFile) {
+            const users = await appusers.findOne({
+                where: {
+                    email: req.body.email
                 }
-            },
+            });
+            if (!users) {
+                const data = req.body;
+                data.image = uploadFile[0].imageName;
+                data.status = '1'
+                data.dateCreated = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
+                const pswd = await hashPassword.generatePass(req.body.password);
+                data.password = pswd;
+                data.emailStatus="Y"
+                const addSponser = await appusers.create(data);
+                if (addSponser) {
+                      
+                        return apiResponseHelper.post(res, true, 'Users Added Successfully!', {});
+                } else {
+                       return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+                }
+            } else {
+                fs.unlinkSync(uploadFile[0].imageName);
+               
+                return apiResponseHelper.onError(res, false, 'Exists', 'Users With same email Already Exists');
+            
+            }
+        }
+        else {
+            return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+               
+        }
+
+    } catch (e) {
+           console.log(e);
+        return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+    
+    }
+},
 
  appUserListAdmin: async (req, res) => {
          try {
