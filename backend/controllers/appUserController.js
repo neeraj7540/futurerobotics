@@ -1543,7 +1543,85 @@ get_all_general_admin: async (req, res) => {
 },
 
 
+//----------------------------------28-08-2020--------------
 
+get_all_robots_admim_list: async (req, res) => {
+  try {
+     // const id=req.params.id;
+         const itemList = await groups.findAll({
+           // attributes: ['robot_id', 'name','image','count'],
+              // raw:true,
+                where: {
+                  category:'ROBOT',
+                 }
+         
+   });
+  // console.log(itemList);
+         
+     if (itemList) {
+        
+          return apiResponseHelper.post(res, true, 'Robots list',itemList);
+         } else {
+             return apiResponseHelper.post(res, true, 'Robots list',{});
+ }
+    } catch (e) {
+       
+     return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+         
+    }
+},
+
+get_all_plc_admin_list: async (req, res) => {
+  try {
+      //const id=req.params.id;
+         const itemList = await groups.findAll({
+            //attributes: ['plc_id', 'name','image','count'],
+              //  raw:true,
+                where: {
+                  category:'PLS5'
+                }
+         
+   });
+  // console.log(itemList);
+         
+     if (itemList) {
+        
+          return apiResponseHelper.post(res, true, 'PLC list',itemList);
+         } else {
+             return apiResponseHelper.post(res, true, 'PLC list',{});
+ }
+    } catch (e) {
+       
+     return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+         
+    }
+},
+
+get_all_general_admin_list: async (req, res) => {
+  try {
+     // const id=req.params.id;
+         const itemList = await groups.findAll({
+            //attributes: ['general_id', 'name','image','count'],
+              //  raw:true,
+               where: {
+                category:'GENERAL'
+                }
+         
+   });
+  // console.log(itemList);
+         
+     if (itemList) {
+        
+          return apiResponseHelper.post(res, true, 'General list',itemList);
+         } else {
+             return apiResponseHelper.post(res, true, 'General list',{});
+ }
+    } catch (e) {
+       
+     return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+         
+    }
+},
 
 
 
