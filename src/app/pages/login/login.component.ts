@@ -44,10 +44,12 @@ export class LoginComponent implements OnInit {
     this.spinner = true;
     this.authService.login(this.f.email.value, this.f.password.value).subscribe(
       (response: any) => {
-        this.spinner = false;
         if (response.message === 'User doesn`t exits.') {
+          this.spinner = false;
           this.toast.showToast(NbToastStatus.DANGER, 'Credentials', 'Invalid User!');
+
         } else if (response.message === 'Password is not correct.') {
+          this.spinner = false;
           this.toast.showToast(NbToastStatus.DANGER, 'Credentials', 'Invalid Password!');
         } else if (response.message == 'Login successfully') {
 
