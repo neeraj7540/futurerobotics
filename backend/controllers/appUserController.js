@@ -717,7 +717,7 @@ edit_profile : async (req, res) => {
   try {
     
       const user = await appusers.findOne({
-        attributes:['id','name','image','age','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+        attributes:['id','name','image','age','dob','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
 
            // attributes: ['id', 'name','email', 'status','age','location','country','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me'],
                 where: {
@@ -760,6 +760,12 @@ if (req.body.image== "") {
     }
     else{
       var age=req.body.age;
+    }
+    if (req.body.dob== "") {
+      var dob=user.dob;
+    }
+    else{
+      var dob=req.body.dob;
     }
  if (req.body.location== "") {
       var location=user.location;
@@ -863,6 +869,7 @@ if (req.body.country== "") {
          name:name,
          image:image,
          age:age,
+         dob:dob,
           location:location,
           joined_date:joined_date,
           occupation:occupation,
@@ -886,7 +893,7 @@ if (req.body.country== "") {
                 }
             });  
             const userdata1 = await appusers.findOne({
-              attributes:['id','name','image','age','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+              attributes:['id','name','image','age','dob','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
 
                       where: {
                         id: user.id
