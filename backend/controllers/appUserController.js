@@ -811,11 +811,18 @@ if (req.body.company== "") {
     else{
       var select_robots=test123;
     }
+
+    var test123=req.body.select_plc.split(',');
+    //console.log(test123);
+
+    var test1234=JSON.stringify(test123);
+   // console.log(test123)
+
  if (req.body.select_plc== "") {
       var select_plc=user.select_plc;
     }
     else{
-      var select_plc=req.body.select_plc;
+      var select_plc=test1234;
     }  if (req.body.about_me== "") {
       var about_me=user.about_me;
     }
