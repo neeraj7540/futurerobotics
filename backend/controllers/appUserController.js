@@ -1308,9 +1308,7 @@ const item = await appusers.findOne({
               } else {
                      return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
               }
-          // } else {
-          //     return apiResponseHelper.onError(res, false,  'User already exists', {});
-          // }
+          
              } else if(item){
               const data1 = await appusers.findOne({
                 attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
@@ -1319,6 +1317,10 @@ const item = await appusers.findOne({
                      id: item.id,
                    }
                });
+               if(data1.status ==0){
+
+                return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
+               }
 
                if (data1) {
                     
