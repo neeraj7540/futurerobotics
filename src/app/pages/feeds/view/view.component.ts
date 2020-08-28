@@ -74,7 +74,8 @@ export class ViewComponent implements OnInit {
         title: 'Feed Image',
         type: 'html',
         filter: false,
-        valuePrepareFunction: (image: string) => `<img width="30px" src="${this.imagesUrl}${image}" />`,
+       // valuePrepareFunction: (image: string) => `<img width="30px" src="${this.imagesUrl}${image}" />`,
+        valuePrepareFunction: (image: string) => `<img width="30px" src="${image}" />`,
       },
 
       description:{

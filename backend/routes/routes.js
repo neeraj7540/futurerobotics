@@ -135,10 +135,12 @@ routes.post('/sign_up', appUsersCtrl.sign_up);
 routes.get('/profile/:id',appUsersCtrl.profile);
 routes.post('/userlogin',appUsersCtrl.login);
 routes.post('/userlogout/:id', appUsersCtrl.logout);  
-routes.get('/get_all_post/:id', appUsersCtrl.get_all_post);
-routes.get('/post_detail/:id/:post_id',appUsersCtrl.post_detail);
+//routes.get('/get_all_post/:id', appUsersCtrl.get_all_post);// issue
+routes.get('/get_all_post', appUsersCtrl.get_all_post)
+//routes.get('/post_detail/:id/:post_id',appUsersCtrl.post_detail);// issue
+routes.get('/post_detail/:id',appUsersCtrl.post_detail);
 routes.get('/other_app/:id', otherAppCtrl.other_app);
-routes.post('/add_post/:id', postCtrl.add_post1);
+//routes.post('/add_post/:id', postCtrl.add_post1);
 
 routes.put('/edit_profile/:id',appUsersCtrl.edit_profile);
 

@@ -22,6 +22,8 @@ feedsTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 
 //feedsTable.belongsTo(feedCommentTable, { foreignKey: 'id' });hasOne
 feedsTable.hasOne(feedCommentTable, { foreignKey: 'id' });
+
+//feedCommentTable.hasOne(feedsTable, { foreignKey: 'id' });
 feedCommentTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 
 feedCommentTable.belongsTo(feedsTable, { foreignKey: 'feedId' });
@@ -445,7 +447,7 @@ getAllFeeds_data:  async (req, res) => {
   try{
 
     const itemList = await feedsTable.findAll({
-      attributes: ['id','feedCatId','userId','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
+     attributes: ['id','feedCatId','userId','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
       include: [
           {
             model: appUsersTable,
@@ -459,20 +461,7 @@ getAllFeeds_data:  async (req, res) => {
            
           },
 
-         // {
-            // model: likeDeslikeTable,
-            // attributes: ['id','feedId','userId','likeDeslike','status','createdAt','updatedAt'],
-            // //  include: [
-            //    {
-            //     model: appUsersTable,
-            //     attributes: ['id','name','email','image','status']
-               
-            //    }
-            //  ]
-           
-        //  },
-
-          {
+         {
             model: feedCommentTable,
             attributes: ['id','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
             include: [
@@ -492,15 +481,12 @@ getAllFeeds_data:  async (req, res) => {
        ]
    
 });
-//console.log(itemList);
-if(itemList){
-  var testdata=itemList[0]
-  console.log(testdata);
 
-}
+var testdata=itemList;
+console.log(testdata);
 
 
-      if (itemList) {
+ if (itemList) {
             
         return apiResponseHelper.post(res, true, 'Feeds List',itemList);
       } else {

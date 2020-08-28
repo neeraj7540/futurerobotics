@@ -47,7 +47,7 @@ module.exports = {
                         });
                         if (!users) {
                             const data = req.body;
-                            data.image = uploadFile[0].imageName;
+                            data.image = 'http://34.232.2.249:4100/'+uploadFile[0].imageName;
                             data.status = '1'
                             data.dateCreated = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
                             const pswd = await hashPassword.generatePass(req.body.password);
@@ -388,13 +388,12 @@ profile: async (req, res) => {
         attributes:['id','name','image','age','location','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
 
 
-        // attributes: ['id', 'email', 'name','image','country','about','work','additional','location','status','deviceType','deviceToken','experience','hireAvailable','occupation','company','lat','long'],
         where: {
           id: req.params.id,
         }
       });
 
-    //  console.log(userDetails.select_robots)
+   
 
       //-----------Test-----------------------------------------------
       // function  isJson(item) {
@@ -609,18 +608,19 @@ profile: async (req, res) => {
 
 get_all_post: async (req, res) => {
     try {
-      const id=req.params.id;
+      //const id=req.params.id;
            const itemList = await postTable.findAll({
-              attributes: ['id','post_id' ,'title','status','image','description','createdAt','updatedAt'],
-                 raw:true,
-                 where:{
-                   id:req.params.id
-                 },
+              attributes: ['id' ,'title','status','image','description','createdAt','updatedAt'],
+                // raw:true,
+                //  where:{
+                //    id:req.params.id
+                //  },
              order :   [
                    ['id', 'DESC']
             ]
            
      });
+     //console.log(itemList);
            
        if (itemList) {
           
@@ -639,13 +639,13 @@ get_all_post: async (req, res) => {
 post_detail: async (req, res) => {
     try {
         const id=req.params.id;
-        const post_id=req.params.post_id;
+        //const post_id=req.params.post_id;
            const itemList = await postTable.findOne({
              // attributes: ['id','post_id','title','status','image','description','createdAt','updatedAt'],
                // raw:true,
                  where: {
                     id: req.params.id,
-                    post_id:req.params.post_id,
+                   // post_id:req.params.post_id,
 
                   }
            
