@@ -19,7 +19,7 @@ module.exports = {
                 });
                 if (!item) {
                     const data = req.body;
-                    data.image = uploadFile[0].imageName;
+                    data.image = 'http://34.232.2.249:4100/'+uploadFile[0].imageName;
                     data.status = '1'
                     const itemAdded = await addsTable.create(data);
                     if (itemAdded) {

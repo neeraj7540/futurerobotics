@@ -221,7 +221,9 @@ routes.get('/all_general_list',appUsersCtrl.get_all_general_admin_list);
 
 //-------------------------31-08-2020-------------------------
 
-routes.get('/user_robots_list/:id',appUsersCtrl.get_user_robots);
+routes.get('/all_robots_list/:id',appUsersCtrl.get_user_robots);
+
+routes.get('/all_adds',appUsersCtrl.all_add_list);
 
 
 

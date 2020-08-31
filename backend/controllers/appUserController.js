@@ -6,6 +6,8 @@ const appusers = db.models.appusers;
 const reportedTable = db.models.reportedfeed;
 const feedsTable =  db.models.feed;
 const postTable = db.models.post;
+const addTable=db.models.ads;
+console.log(addTable);
 const robotList=db.models.robotlist;
 const plcList=db.models.plclist;
 const generalList=db.models.general;
@@ -1805,28 +1807,62 @@ get_all_general_admin_list: async (req, res) => {
 get_user_robots: async (req, res) => {
   try {
   const id=req.params.id;
-  const userrobotlist=await appusers.findAll({
+  const userrobotlist=await appusers.findOne({
     attributes:['id','select_robots'],
     where: {
       id:req.params.id
      }
 
   })
-  console.log(userrobotlist)
+ console.log(userrobotlist.select_robots)
     const itemList = await groups.findAll({
+      attributes:['id','name','isChecked'],
            
                 where: {
                   category:'ROBOT',
                  }
          
    });
- 
-         
-     if (itemList) {
+
+   var output1 = itemList.map(user => user.name);
+
+   console.log(itemList[0])
+   if(itemList[0])
+
+
+   if (itemList) {
         
           return apiResponseHelper.post(res, true, 'Robots list',itemList);
          } else {
              return apiResponseHelper.post(res, true, 'Robots list',{});
+ }
+    } catch (e) {
+       
+     return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+         
+    }
+},
+
+
+
+all_add_list: async (req, res) => {
+  try {
+     
+         const itemList = await addTable.findAll({
+            
+              //  raw:true,
+                where: {
+                  status:1
+                }
+         
+   });
+  // console.log(itemList);
+         
+     if (itemList) {
+        
+          return apiResponseHelper.post(res, true, 'Add list',itemList);
+         } else {
+             return apiResponseHelper.post(res, true, 'Add list',{});
  }
     } catch (e) {
        

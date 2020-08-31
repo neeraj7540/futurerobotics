@@ -52,6 +52,14 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: common.timestamp()
     },  
+    
+    isChecked:{
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue:false
+
+    }
+
 
          
 }, {
