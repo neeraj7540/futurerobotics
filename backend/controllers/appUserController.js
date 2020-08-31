@@ -429,7 +429,7 @@ profile: async (req, res) => {
 
       const userDetails = await appusers.findOne({
      
-        attributes:['id','name','image','age','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+        attributes:['id','name','biodesc','image','age','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
 
 
         where: {
@@ -479,6 +479,7 @@ profile: async (req, res) => {
       var userdatas={
         "id" :userDetails.id,
         "name":userDetails.name,
+        "biodesc":userDetails.biodesc,
         "image":userDetails.image,
         "age":userDetails.age,
         "location":userDetails.location,
@@ -717,9 +718,8 @@ edit_profile : async (req, res) => {
   try {
     
       const user = await appusers.findOne({
-        attributes:['id','name','image','age','dob','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+        attributes:['id','name','biodesc','image','age','dob','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
 
-           // attributes: ['id', 'name','email', 'status','age','location','country','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me'],
                 where: {
                   id: req.params.id
                 
@@ -739,8 +739,21 @@ edit_profile : async (req, res) => {
       var name=req.body.name;
     }
     var userimage=user.image
+
+    
+
   
-   // console.log(userimage.length())
+   // console.log(userimage.length())biodesc
+   if (req.body.biodesc== "") {
+    var biodesc=user.biodesc;
+  }
+  else{
+    var biodesc=req.body.biodesc;
+  }
+  var userimage=user.image
+
+
+
 if (req.body.image== "") {
       var image=user.image;
     }
@@ -867,6 +880,7 @@ if (req.body.country== "") {
       const updateEntry =await appusers.update(
             {
          name:name,
+         biodesc:biodesc,
          image:image,
          age:age,
          dob:dob,
@@ -893,7 +907,7 @@ if (req.body.country== "") {
                 }
             });  
             const userdata1 = await appusers.findOne({
-              attributes:['id','name','image','age','dob','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+              attributes:['id','name','biodesc','image','age','dob','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
 
                       where: {
                         id: user.id
@@ -1711,10 +1725,8 @@ get_all_general_admin: async (req, res) => {
 
 get_all_robots_admim_list: async (req, res) => {
   try {
-     // const id=req.params.id;
-         const itemList = await groups.findAll({
-           // attributes: ['robot_id', 'name','image','count'],
-              // raw:true,
+     const itemList = await groups.findAll({
+           
                 where: {
                   category:'ROBOT',
                  }
@@ -1787,6 +1799,41 @@ get_all_general_admin_list: async (req, res) => {
     }
 },
 
+
+
+//------------------------------------------User Robot List----------------------------------
+get_user_robots: async (req, res) => {
+  try {
+  const id=req.params.id;
+  const userrobotlist=await appusers.findAll({
+    attributes:['id','select_robots'],
+    where: {
+      id:req.params.id
+     }
+
+  })
+  console.log(userrobotlist)
+    const itemList = await groups.findAll({
+           
+                where: {
+                  category:'ROBOT',
+                 }
+         
+   });
+ 
+         
+     if (itemList) {
+        
+          return apiResponseHelper.post(res, true, 'Robots list',itemList);
+         } else {
+             return apiResponseHelper.post(res, true, 'Robots list',{});
+ }
+    } catch (e) {
+       
+     return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+         
+    }
+},
 
 
 

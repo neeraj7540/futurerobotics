@@ -20,6 +20,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(60),
       allowNull: true,
     },
+    biodesc : {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+    },
 
     about:{
       type: DataTypes.TEXT(),
