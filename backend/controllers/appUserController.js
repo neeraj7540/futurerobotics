@@ -1486,167 +1486,167 @@ const item = await appusers.findOne({
 
 
 //----------------------------Social Login-------------------
-// socialLogin: async (req, res) => {
+socialLogin1: async (req, res) => {
     
-//   try {
+  try {
 
-//       req.checkBody('social_id', 'social_id is required in body').notEmpty();
-//       req.checkBody('social_type', 'social_type is required in body').notEmpty();
+      req.checkBody('social_id', 'social_id is required in body').notEmpty();
+      req.checkBody('social_type', 'social_type is required in body').notEmpty();
 
-//       const error = req.validationErrors();
-//       const social_id = req.body.social_id;
-//       const social_type = req.body.social_type;
-//   if (error) {
+      const error = req.validationErrors();
+      const social_id = req.body.social_id;
+      const social_type = req.body.social_type;
+  if (error) {
     
-//     return apiResponseHelper.onError(res, false, error[0].msg, {});
+    return apiResponseHelper.onError(res, false, error[0].msg, {});
     
-//   }
+  }
 
 
-//   const logincheck= await appusers.findOne({
-//     attributes:['id','social_id','name','email','deviceType','deviceToken','status','password'],
-//       where: {
-//           email: req.body.email,
-//          }
-//      });
+  const logincheck= await appusers.findOne({
+    attributes:['id','social_id','name','email','deviceType','deviceToken','status','password'],
+      where: {
+          email: req.body.email,
+         }
+     });
 
-//      if(!logincheck){
-//        const item = await appusers.findOne({
-//                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
-//                  name: req.body.name,
-//                  email: req.body.email,
-//                  phone: req.body.phone,
-//                  deviceType: req.body.deviceType,
-//                  deviceToken: req.body.deviceToken,
+     if(!logincheck){
+       const item = await appusers.findOne({
+               attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+                 name: req.body.name,
+                 email: req.body.email,
+                 phone: req.body.phone,
+                 deviceType: req.body.deviceType,
+                 deviceToken: req.body.deviceToken,
       
-//                     where: {
-//                       social_id: req.body.social_id,
-//                     }
-//                 });
+                    where: {
+                      social_id: req.body.social_id,
+                    }
+                });
       
                
       
-//                 if (!item) {
-//                     const data1 = req.body;
-//                     data1.status = '1'
+                if (!item) {
+                    const data1 = req.body;
+                    data1.status = '1'
                    
-//                     const itemAdded = await appusers.create(data1);
-//                     const data = await appusers.findOne({
-//                       attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+                    const itemAdded = await appusers.create(data1);
+                    const data = await appusers.findOne({
+                      attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
                     
-//                          where: {
-//                            id: itemAdded.id,
-//                          }
-//                      });
+                         where: {
+                           id: itemAdded.id,
+                         }
+                     });
       
-//                     // console.log(data);
-//                     if (itemAdded) {
+                    // console.log(data);
+                    if (itemAdded) {
                           
-//                             return apiResponseHelper.post(res, true, 'Log in successfully', data);
-//                     } else {
-//                            return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
-//                     }
+                            return apiResponseHelper.post(res, true, 'Log in successfully', data);
+                    } else {
+                           return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+                    }
                 
-//                    } else if(item){
-//                     const data1 = await appusers.findOne({
-//                       attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+                   } else if(item){
+                    const data1 = await appusers.findOne({
+                      attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
                     
-//                          where: {
-//                            id: item.id,
-//                          }
-//                      });
-//                      if(data1.status ==0){
+                         where: {
+                           id: item.id,
+                         }
+                     });
+                     if(data1.status ==0){
       
-//                       return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
-//                      }
+                      return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
+                     }
       
-//                      if (data1) {
+                     if (data1) {
                           
-//                       return apiResponseHelper.post(res, true, 'Log in successfully', data1);
-//               } else {
-//                      return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
-//               }
+                      return apiResponseHelper.post(res, true, 'Log in successfully', data1);
+              } else {
+                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+              }
       
-//                     return apiResponseHelper.post(res, true, 'Log in successfully', item);
+                    return apiResponseHelper.post(res, true, 'Log in successfully', item);
       
-//                 }
-//                }
+                }
+               }
    
-//     if(logincheck.password){
-//       return apiResponseHelper.onError(res, false, 'This email is already registered', {});
+    if(logincheck.password){
+      return apiResponseHelper.onError(res, false, 'This email is already registered', {});
        
-//      }
-//      else{
+     }
+     else{
 
-// const item = await appusers.findOne({
-//          attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
-//            name: req.body.name,
-//            email: req.body.email,
-//            phone: req.body.phone,
-//            deviceType: req.body.deviceType,
-//            deviceToken: req.body.deviceToken,
+const item = await appusers.findOne({
+         attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+           name: req.body.name,
+           email: req.body.email,
+           phone: req.body.phone,
+           deviceType: req.body.deviceType,
+           deviceToken: req.body.deviceToken,
 
-//               where: {
-//                 social_id: req.body.social_id,
-//               }
-//           });
+              where: {
+                social_id: req.body.social_id,
+              }
+          });
 
          
 
-//           if (!item) {
-//               const data1 = req.body;
-//               data1.status = '1'
+          if (!item) {
+              const data1 = req.body;
+              data1.status = '1'
              
-//               const itemAdded = await appusers.create(data1);
-//               const data = await appusers.findOne({
-//                 attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+              const itemAdded = await appusers.create(data1);
+              const data = await appusers.findOne({
+                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
               
-//                    where: {
-//                      id: itemAdded.id,
-//                    }
-//                });
+                   where: {
+                     id: itemAdded.id,
+                   }
+               });
 
-//               // console.log(data);
-//               if (itemAdded) {
+              // console.log(data);
+              if (itemAdded) {
                     
-//                       return apiResponseHelper.post(res, true, 'Log in successfully', data);
-//               } else {
-//                      return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
-//               }
+                      return apiResponseHelper.post(res, true, 'Log in successfully', data);
+              } else {
+                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+              }
           
-//              } else if(item){
-//               const data1 = await appusers.findOne({
-//                 attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+             } else if(item){
+              const data1 = await appusers.findOne({
+                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
               
-//                    where: {
-//                      id: item.id,
-//                    }
-//                });
-//                if(data1.status ==0){
+                   where: {
+                     id: item.id,
+                   }
+               });
+               if(data1.status ==0){
 
-//                 return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
-//                }
+                return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
+               }
 
-//                if (data1) {
+               if (data1) {
                     
-//                 return apiResponseHelper.post(res, true, 'Log in successfully', data1);
-//         } else {
-//                return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
-//         }
+                return apiResponseHelper.post(res, true, 'Log in successfully', data1);
+        } else {
+               return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+        }
 
-//               return apiResponseHelper.post(res, true, 'Log in successfully', item);
+              return apiResponseHelper.post(res, true, 'Log in successfully', item);
 
-//           }
-//         }
+          }
+        }
 
-//   } catch (e) {
+  } catch (e) {
 
-//       console.log(e);
+      console.log(e);
 
-//       return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+      return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
   
-//   }
-// },
+  }
+},
 
 
 
@@ -1897,13 +1897,15 @@ get_user_robots: async (req, res) => {
 
   })
   var test12=userrobotlist.select_robots
+  //var neeraj=test12[0]
+  
 
   var myArrData = JSON.parse(test12)
-  console.log(myArrData[0])
+  console.log(myArrData)
 
  
  var test123=test12.toString();
- console.log(test123)
+ //console.log(test123)
     const itemList = await groups.findAll({
       attributes:['id','name','isChecked'],
            
@@ -1917,47 +1919,22 @@ get_user_robots: async (req, res) => {
    var output1 = itemList.map(user => user.name);
 
 
+  //  const updateEntry =await appusers.update(
+  //   {
+  //     isChecked:1   
+  // },
+  //   {
+  //       where: {
+  //         name:user.id,
 
- console.log(output1);
+  //       }
 
- if(output1[0]==myArrData[0]){
- var neeraj1= [
-    {
-        "id": 8,
-        "name": "HElllo",
-        "isChecked": false
-    }
-  ]
-
- }
+  //     })
 
 
- if(output1[1]==myArrData[0]){
-  var neeraj2= [
-     {
-         "id": 8,
-         "name": "HElllo",
-         "isChecked": false
-     }
-   ]
+
+
  
-  }
-
- console.log(neeraj2);
-
-
-  
-
-
-
-   
-
-  
-
-
-
-   
-
 
    if (itemList) {
         

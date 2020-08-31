@@ -346,67 +346,128 @@ postEditAdmin : async (req, res) => {
     }
   },
 
+
+
   add_feed: async (req, res) => {
     
- try {
+    try {
+   
+           const id=req.params.id;
+   
+   
+   
+           
+           const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+           if (uploadFile) {
+           const item = await appusers.findOne({
+              
+                   where: {
+                       id:req.params.id,
+                   }
+               });
+               
+               if (item) {
+                   var datedata=moment().format('MMMM Do YYYY');
+               
+               var test=uploadFile[0].imageName;
+               var test1='http://34.232.2.249:4100/'+test
+                   const data = req.body;
+                   data.userId=req.params.id;
+                   data.feedCatId=4;
+                   data.title=req.body.title;
+                   data.description=req.body.description;
+                  data.image=test1;
+                   data.status = '1'
+                   data.Date=datedata;
+                   const itemAdded = await feedsTable.create(data);
+                   if (itemAdded) {
+                       return apiResponseHelper.post(res, true, 'Post added Successfully!', data);
+                   } else {
+                        return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+                   }
+               } else {
+                   return apiResponseHelper.onError(res, false,  'User not exists', {});
+               }
+           }
+               else{
+                   return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{} );
+   
+               }
+   
+       } catch (e) {
+   
+           console.log(e);
+   
+           return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+       
+       }
+     },
 
-        const id=req.params.id;
+
+
+
+
+//   add_feed: async (req, res) => {
+    
+//  try {
+
+//         const id=req.params.id;
 
 
 
         
-        const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
-        if (uploadFile) {
-        const item = await appusers.findOne({
+//         const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+//         if (uploadFile) {
+//         const item = await appusers.findOne({
            
-                where: {
-                    id:req.params.id,
-                }
-            });
+//                 where: {
+//                     id:req.params.id,
+//                 }
+//             });
 
-            const feeddata = await feeCatTable.findOne({
-                attributes:['id'],
-            where: {
-                    name:req.body.title,
-                }
-            });
+//             const feeddata = await feeCatTable.findOne({
+//                 attributes:['id'],
+//             where: {
+//                     name:req.body.title,
+//                 }
+//             });
 
-      if (item) {
-                var datedata=moment().format('MMMM Do YYYY');
+//       if (item) {
+//                 var datedata=moment().format('MMMM Do YYYY');
             
-            var test=uploadFile[0].imageName;
-            var test1='http://34.232.2.249:4100/'+test
-                const data = req.body;
-                data.userId=req.params.id;
-                data.feedCatId=feeddata.id;
-                data.title=req.body.title;
-                data.description=req.body.description;
-               data.image=test1;
-                data.status = '1'
-                data.Date=datedata;
-                const itemAdded = await feedsTable.create(data);
-                if (itemAdded) {
-                    return apiResponseHelper.post(res, true, 'Post added Successfully!', data);
-                } else {
-                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
-                }
-            } else {
-                return apiResponseHelper.onError(res, false,  'User not exists', {});
-            }
-        }
-            else{
-                return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{} );
+//             var test=uploadFile[0].imageName;
+//             var test1='http://34.232.2.249:4100/'+test
+//                 const data = req.body;
+//                 data.userId=req.params.id;
+//                 data.feedCatId=feeddata.id;
+//                 data.title=req.body.title;
+//                 data.description=req.body.description;
+//                data.image=test1;
+//                 data.status = '1'
+//                 data.Date=datedata;
+//                 const itemAdded = await feedsTable.create(data);
+//                 if (itemAdded) {
+//                     return apiResponseHelper.post(res, true, 'Post added Successfully!', data);
+//                 } else {
+//                      return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+//                 }
+//             } else {
+//                 return apiResponseHelper.onError(res, false,  'User not exists', {});
+//             }
+//         }
+//             else{
+//                 return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{} );
 
-            }
+//             }
 
-    } catch (e) {
+//     } catch (e) {
 
-        console.log(e);
+//         console.log(e);
 
-        return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+//         return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
     
-    }
-  },
+//     }
+//   },
 
 
 
