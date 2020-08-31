@@ -225,6 +225,8 @@ routes.get('/all_robots_list/:id',appUsersCtrl.get_user_robots);
 
 routes.get('/all_adds',appUsersCtrl.all_add_list);
 
+routes.get('/all_feed_catg',appUsersCtrl.all_feed_cat_list)
+
 
 
 module.exports = routes;

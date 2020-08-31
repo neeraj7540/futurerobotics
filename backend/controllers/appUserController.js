@@ -11,6 +11,8 @@ console.log(addTable);
 const robotList=db.models.robotlist;
 const plcList=db.models.plclist;
 const generalList=db.models.general;
+const feedsCategory=db.models.feedscategory;
+console.log(feedsCategory)
 
 const groupaccessTable = db.models.groupaccess;
 const groups = db.models.groups;
@@ -366,7 +368,7 @@ sign_up: async (req, res) => {
         const item = await appusers.findOne({
             name:req.body.name,
             email:req.body.email,
-           // phone:req.body.phone,
+           
             age:req.body.age,
             dob:req.body.dob,
             location:req.body.location,
@@ -1871,6 +1873,32 @@ all_add_list: async (req, res) => {
     }
 },
 
+
+all_feed_cat_list: async (req, res) => {
+  try {
+     
+         const itemList = await feedsCategory.findAll({
+            
+              
+                where: {
+                  status:1
+                }
+         
+   });
+  
+         
+     if (itemList) {
+        
+          return apiResponseHelper.post(res, true, 'FeedsCategory list',itemList);
+         } else {
+             return apiResponseHelper.post(res, true, 'FeedsCategory list',{});
+ }
+    } catch (e) {
+       
+     return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+         
+    }
+},
 
 
  }
