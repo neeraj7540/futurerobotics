@@ -4,6 +4,7 @@ const apiResponseHelper = require('../helpers/apiResponseHelper');
 const postTable = db.models.post;
 const UserPost=db.models.user_post;
 const feedsTable =  db.models.feed;
+const feeCatTable = db.models.feedscategory;
 console.log(UserPost);
 const filesUpload = require('../helpers/uploadFiles').uploadFile;
 const fs = require('fs');
@@ -149,7 +150,7 @@ postEditAdmin : async (req, res) => {
                     if(req.body.isImage=="false"){
                        data.image = item.dataValues.image;
                     }else{
-                        data.image = uploadFile[0].imageName;
+                        data.image ='http://34.232.2.249:4100/'+uploadFile[0].imageName;
                     }
 
                       const updateItem =  await postTable.update(
@@ -351,12 +352,7 @@ postEditAdmin : async (req, res) => {
 
         const id=req.params.id;
 
-//         var today = new Date();
-// var dd = String(today.getDate()).padStart(2, '0');
-// var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-// var yyyy = today.getFullYear();
 
-//today = dd + '/' + mm + '/' + yyyy;
 
         
         const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
@@ -367,15 +363,22 @@ postEditAdmin : async (req, res) => {
                     id:req.params.id,
                 }
             });
-            
-            if (item) {
+
+            const feeddata = await feeCatTable.findOne({
+                attributes:['id'],
+            where: {
+                    name:req.body.title,
+                }
+            });
+
+      if (item) {
                 var datedata=moment().format('MMMM Do YYYY');
             
             var test=uploadFile[0].imageName;
             var test1='http://34.232.2.249:4100/'+test
                 const data = req.body;
                 data.userId=req.params.id;
-                data.feedCatId=4;
+                data.feedCatId=feeddata.id;
                 data.title=req.body.title;
                 data.description=req.body.description;
                data.image=test1;

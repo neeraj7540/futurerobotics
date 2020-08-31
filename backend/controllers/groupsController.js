@@ -21,7 +21,7 @@ module.exports = {
                         });
                         if (!group) {
                             const data = req.body;
-                            data.image = uploadFile[0].imageName;
+                            data.image ='http://34.232.2.249:4100/'+uploadFile[0].imageName;
                             data.status = '1'
                             const groupAdded = await groups.create(data);
                             if (groupAdded) {
@@ -169,7 +169,7 @@ groupEditByAdmin : async (req, res) => {
                     if(req.body.isImage=="false"){
                        data.image = group.dataValues.image;
                     }else{
-                        data.image = uploadFile[0].imageName;
+                        data.image ='http://34.232.2.249:4100/'+uploadFile[0].imageName;
                     }
 
                       const updateEntry =  await groups.update(

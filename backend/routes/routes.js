@@ -158,7 +158,7 @@ routes.post('/emailVerification',appUsersCtrl.emailVerification);
 
 //-----Feed category-------------------------------------------
 //routes.get('/community_feed_category_list',feedsCtrl.getAllFeeds);
-routes.get('/community_feed_post/:id',feedsCtrl.getAllComments);
+//routes.get('/community_feed_post/:id',feedsCtrl.getAllComments);
 
 
 
@@ -195,10 +195,7 @@ routes.post('/social_links/:id',appUsersCtrl.add_social_url);
 //----------------All Robot list--------------------------
 
 routes.get('/all_robots',appUsersCtrl.get_all_robots_admin);
-
-//-----------All PLC list---------------------------------------
 routes.get('/all_plc',appUsersCtrl.get_all_plc_admin);
-//---------General List--------------------------------
 routes.get('/all_general',appUsersCtrl.get_all_general_admin);
 
 //----------------Feed Data New-----------------------------------------------------------------
@@ -213,7 +210,7 @@ routes.get('/community_feed_category_list',feedsCtrl.getAllFeeds_data);
 routes.get('/allikes_list/:id', feedsCtrl.getAllLikes_List);
 routes.get('/allcomments_list/:id', feedsCtrl.getAllComments_list);
 
-routes.post('/addlike_dislike/:id')
+//routes.post('/addlike_dislike/:id')
 
 
 //-----------------------28-08-2020--------------------------Correct

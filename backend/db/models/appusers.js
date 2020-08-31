@@ -157,7 +157,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       default: ""
     },
-
+    email_check : {
+      type: DataTypes.STRING(20),
+      allowNull: true,
+      default: ""
+    },
 
 
     resetLink:{

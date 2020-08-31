@@ -9,7 +9,6 @@ const postTable = db.models.post;
 const robotList=db.models.robotlist;
 const plcList=db.models.plclist;
 const generalList=db.models.general;
-console.log(generalList);
 
 const groupaccessTable = db.models.groupaccess;
 const groups = db.models.groups;
@@ -367,6 +366,7 @@ sign_up: async (req, res) => {
             email:req.body.email,
            // phone:req.body.phone,
             age:req.body.age,
+            dob:req.body.dob,
             location:req.body.location,
             country:req.body.country,
            // lat:req.body.lat,
@@ -656,10 +656,10 @@ get_all_post: async (req, res) => {
       //const id=req.params.id;
            const itemList = await postTable.findAll({
               attributes: ['id' ,'title','status','image','description','createdAt','updatedAt'],
-                // raw:true,
-                //  where:{
-                //    id:req.params.id
-                //  },
+                raw:true,
+                 where:{
+                  status:1
+                 },
              order :   [
                    ['id', 'DESC']
             ]
@@ -937,18 +937,23 @@ forgotPassword: async (req, res) => {
 
 
      const user = await appusers.findOne({
-             attributes: ['id', 'name','email', 'status'],
+             attributes: ['id', 'name','email', 'status','social_id'],
                 where: {
                   email: req.body.email
                  },
               
      });
-     console.log(user.id);
+     console.log(user.social_id);
+     if(user.social_id){
+      return apiResponseHelper.onError(res, false,'this account login with Social account', {});
+     }
+     else{
+     
      const token=jwt.sign({_id:user._id},config.jwtToken,{expiresIn:'2m'});
      console.log(token);
      
      if (user) {
-      const updateEntry =await appusers.update({resetLink:token },
+      const updateEntry =await appusers.update({resetLink:token,email_check:'Y'},
             {
                 where: {
                 id:user.id,
@@ -1007,19 +1012,27 @@ forgotPassword: async (req, res) => {
     return apiResponseHelper.onError(res, false, 'This email is not registered', {});
   }
 
+     }
+
   }
   catch (e) {
-    return apiResponseHelper.onError(res, false,'This email is not registered', {});
+    return apiResponseHelper.onError(res, false,'This email is not registereds', {});
      }
 
 },
 resetPassword: async (req, res) => {
-  const resetLink=req.params.resetLink
-
+try{
+const resetLink=req.params.resetLink;
+  const user = await appusers.findOne({
+    attributes: ['id', 'name','email','social_id'],
+       where: {
+        resetLink:req.params.resetLink
+        },
+     
+});
  
-  //G:\CompanyProject\JustInMind\justinmind\backend\public\changepassword1.html
-
-
+//console.log(user)
+if(user){
   fs.readFile("../backend/public/changepassword1.html", function (error, data) {  
     console.log("its working");  
     if (error) {  
@@ -1033,7 +1046,24 @@ resetPassword: async (req, res) => {
     res.end();  
 }); 
 
+}
+else{
+  return apiResponseHelper.onError(res,'The link you followed has expired.');
 
+}
+ 
+
+
+ 
+
+
+
+}
+catch (e) {
+  //return  res.write('Contents you are looking are Not Found'); 
+  return apiResponseHelper.onError(res,'The link you followed has expired.');
+ // return res.JSON('The link you followed has expired.')
+   }
 
 
 },
@@ -1048,14 +1078,30 @@ setpasswordResponsemail: async (req, res) => {
     const password=pswd;
   const resetLink=req.params.resetLink;
   const user = await appusers.findOne({
-    attributes: ['id', 'name','email', 'status'],
+    attributes: ['id', 'name','email', 'status','email_check'],
        where: {
         resetLink: req.params.resetLink
         },
      
 });
+//console.log(user.email_check);
+if(user.email_check =='N'){
+  const updateEntry =await appusers.update(
+    {
+      resetLink:'12345675'
+    },
+    {
+        where: {
+          resetLink:req.params.resetLink,
 
+        }
+    });  
+  return apiResponseHelper.post(res, true, 'You already update the password.');
 
+ 
+
+}
+else{
 let transporter = nodeMailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
@@ -1080,6 +1126,8 @@ console.log(password);
   const updateEntry =await appusers.update(
     {
       password:password,
+      email_check:'N',
+     // resetLink:'12345675'
     },
     {
         where: {
@@ -1088,7 +1136,7 @@ console.log(password);
         }
     });  
    
-   console.log(updateEntry);
+   // console.log(updateEntry);
    const test=req.body.Password;
    
       if (test.length>5) {
@@ -1113,6 +1161,7 @@ console.log('Message %s sent: %s', info.messageId, info.response);
         return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!Sonu',{});
     }
 
+  }
 
   }
 
@@ -1355,6 +1404,82 @@ socialLogin: async (req, res) => {
     
   }
 
+
+  const logincheck= await appusers.findOne({
+    attributes:['id','social_id','name','email','deviceType','deviceToken','status','password'],
+      where: {
+          email: req.body.email,
+         }
+     });
+
+     if(!logincheck){
+       const item = await appusers.findOne({
+               attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+                 name: req.body.name,
+                 email: req.body.email,
+                 phone: req.body.phone,
+                 deviceType: req.body.deviceType,
+                 deviceToken: req.body.deviceToken,
+      
+                    where: {
+                      social_id: req.body.social_id,
+                    }
+                });
+      
+               
+      
+                if (!item) {
+                    const data1 = req.body;
+                    data1.status = '1'
+                   
+                    const itemAdded = await appusers.create(data1);
+                    const data = await appusers.findOne({
+                      attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+                    
+                         where: {
+                           id: itemAdded.id,
+                         }
+                     });
+      
+                    // console.log(data);
+                    if (itemAdded) {
+                          
+                            return apiResponseHelper.post(res, true, 'Log in successfully', data);
+                    } else {
+                           return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+                    }
+                
+                   } else if(item){
+                    const data1 = await appusers.findOne({
+                      attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+                    
+                         where: {
+                           id: item.id,
+                         }
+                     });
+                     if(data1.status ==0){
+      
+                      return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
+                     }
+      
+                     if (data1) {
+                          
+                      return apiResponseHelper.post(res, true, 'Log in successfully', data1);
+              } else {
+                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+              }
+      
+                    return apiResponseHelper.post(res, true, 'Log in successfully', item);
+      
+                }
+               }
+   
+    if(logincheck.password){
+      return apiResponseHelper.onError(res, false, 'This email is already registered', {});
+       
+     }
+     else{
+
 const item = await appusers.findOne({
          attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
            name: req.body.name,
@@ -1367,11 +1492,13 @@ const item = await appusers.findOne({
                 social_id: req.body.social_id,
               }
           });
+
+         
+
           if (!item) {
               const data1 = req.body;
               data1.status = '1'
-              // const pswd = await hashPassword.generatePass(req.body.password);
-              //             data.password = pswd;
+             
               const itemAdded = await appusers.create(data1);
               const data = await appusers.findOne({
                 attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
@@ -1412,6 +1539,7 @@ const item = await appusers.findOne({
               return apiResponseHelper.post(res, true, 'Log in successfully', item);
 
           }
+        }
 
   } catch (e) {
 
