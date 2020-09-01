@@ -1724,7 +1724,7 @@ socialLogin: async (req, res) => {
                }
               console.log(logincheck.password.length)
    
-    if(logincheck.password.length>8){
+    if(logincheck.password.length !==0){
       return apiResponseHelper.onError(res, false, 'This email is already registered', {});
        
      }
