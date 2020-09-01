@@ -1001,14 +1001,14 @@ if (req.body.company== "") {
 
     var test123=req.body.select_plc.split(',');
 
-    var array = test123.map(function (el) {
-      return el.trim();
-    });
+    // var array = test123.map(function (el) {
+    //   return el.trim();
+    // });
 
-    console.log(array);
+    // console.log(array);
     
 
-    var test1234=JSON.stringify(array);
+    var test1234=JSON.stringify(test123);
    
 
  if (req.body.select_plc== "") {
@@ -2102,10 +2102,10 @@ else{
   var test1=userrobotlist.select_robots
 
 
- var array= test1.map(function (el) {
-    return el.trim();
-  });
-  var myArrData = JSON.parse(array)
+//  var array= test1.map(function (el) {
+//     return el.trim();
+//   });
+  var myArrData = JSON.parse(test1)
   //var myArrData = JSON.parse(test1)
 
 }
