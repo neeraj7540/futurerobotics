@@ -347,6 +347,157 @@ deleteAppUserByAdmin: async (req, res) => {
 
 //-----------------------------------31-07-2020-----------------------------------------------------
 
+sign_up_data: async (req, res) => {
+    
+  try {
+
+      req.checkBody('email', 'email is required in body').notEmpty();
+      req.checkBody('password', 'password is required in body').notEmpty();
+
+      const error = req.validationErrors();
+      const password = req.body.password;
+      const email = req.body.email;
+  if (error) {
+    
+    return apiResponseHelper.onError(res, false, error[0].msg, {});
+    
+  }
+
+
+
+      const item = await appusers.findOne({
+          name:req.body.name,
+          email:req.body.email,
+         
+          age:req.body.age,
+          dob:req.body.dob,
+          location:req.body.location,
+          country:req.body.country,
+         
+
+
+              where: {
+                  email: req.body.email,
+                 }
+          });//emailStatus
+        //  console.log(item.emailStatus);
+
+         if(item !==null){
+          if(item.emailStatus !==0){
+            if(item.emailStatus =='Y'){
+
+              if(req.body.email){
+                get_data = await appusers.findOne({
+                  attributes: ['id','email'],
+                  where: {
+                    email: req.body.email,
+                  }
+                })
+                if (get_data) {
+                  return apiResponseHelper.onError(res, false,  'This email is already registered', {});
+                }
+              }
+ }
+ }
+}
+
+
+var udate= await appusers.findOne({
+  attributes: ['id'],
+  where: {
+    email: req.body.email,
+   
+  }
+
+ });
+
+ 
+
+ if(udate){
+  const pswd = await hashPassword.generatePass(req.body.password);
+  const password = pswd;
+  create_signup_user1 = await appusers.update({ 
+    name:req.body.name,
+    email:req.body.email,
+   
+    age:req.body.age,
+    dob:req.body.dob,
+    location:req.body.location,
+    country:req.body.country,
+    status:'1',
+    password:password
+},
+  {
+    where: {
+  id:udate.id
+ }
+  });
+  get_signup_data = await appusers.findOne({
+where: {
+    id:udate.id
+    }
+  });
+ return apiResponseHelper.post(res, true, 'Sign_up Successfully!', get_signup_data);
+}
+else{
+  var today = new Date();
+  const data = req.body;
+       data.status = '1'
+      
+       const pswd = await hashPassword.generatePass(req.body.password);
+                   data.password = pswd;
+       const itemAdded = await appusers.create(data);
+       if (itemAdded) {
+             
+               return apiResponseHelper.post(res, true, 'Sign_up Successfully!', {data});
+       } else {
+              return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+       }
+}
+
+            //   if (!item) {
+        //   var today = new Date();
+        //  const data = req.body;
+        //       data.status = '1'
+             
+        //       const pswd = await hashPassword.generatePass(req.body.password);
+        //                   data.password = pswd;
+        //       const itemAdded = await appusers.create(data);
+        //       if (itemAdded) {
+                    
+        //               return apiResponseHelper.post(res, true, 'Sign_up Successfully!', {data});
+        //       } else {
+        //              return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+        //       }
+        //   } else {
+        //       return apiResponseHelper.onError(res, false,  'This email is already registered', {});
+        //   }
+
+  } catch (e) {
+
+      console.log(e);
+
+      return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+  
+  }
+},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 sign_up: async (req, res) => {
     
     try {
@@ -955,7 +1106,7 @@ forgotPassword: async (req, res) => {
      });
      console.log(user.social_id);
      if(user.social_id){
-      return apiResponseHelper.onError(res, false,'this account login with Social account', {});
+      return apiResponseHelper.onError(res, false,'Please use Social login', {});
      }
      else{
      
@@ -1398,95 +1549,95 @@ get_all_plc: async (req, res) => {
 
 
 
-socialLogin: async (req, res) => {
+// socialLogin: async (req, res) => {
     
-  try {
+//   try {
 
-      req.checkBody('social_id', 'social_id is required in body').notEmpty();
-      req.checkBody('social_type', 'social_type is required in body').notEmpty();
+//       req.checkBody('social_id', 'social_id is required in body').notEmpty();
+//       req.checkBody('social_type', 'social_type is required in body').notEmpty();
 
-      const error = req.validationErrors();
-      const social_id = req.body.social_id;
-      const social_type = req.body.social_type;
-  if (error) {
+//       const error = req.validationErrors();
+//       const social_id = req.body.social_id;
+//       const social_type = req.body.social_type;
+//   if (error) {
     
-    return apiResponseHelper.onError(res, false, error[0].msg, {});
+//     return apiResponseHelper.onError(res, false, error[0].msg, {});
     
-  }
+//   }
 
-const item = await appusers.findOne({
-         attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
-           name: req.body.name,
-           email: req.body.email,
-           phone: req.body.phone,
-           deviceType: req.body.deviceType,
-           deviceToken: req.body.deviceToken,
+// const item = await appusers.findOne({
+//          attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+//            name: req.body.name,
+//            email: req.body.email,
+//            phone: req.body.phone,
+//            deviceType: req.body.deviceType,
+//            deviceToken: req.body.deviceToken,
 
-              where: {
-                social_id: req.body.social_id,
-              }
-          });
-          if (!item) {
-              const data1 = req.body;
-              data1.status = '1'
-              // const pswd = await hashPassword.generatePass(req.body.password);
-              //             data.password = pswd;
-              const itemAdded = await appusers.create(data1);
-              const data = await appusers.findOne({
-                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+//               where: {
+//                 social_id: req.body.social_id,
+//               }
+//           });
+//           if (!item) {
+//               const data1 = req.body;
+//               data1.status = '1'
+//               // const pswd = await hashPassword.generatePass(req.body.password);
+//               //             data.password = pswd;
+//               const itemAdded = await appusers.create(data1);
+//               const data = await appusers.findOne({
+//                 attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
               
-                   where: {
-                     id: itemAdded.id,
-                   }
-               });
+//                    where: {
+//                      id: itemAdded.id,
+//                    }
+//                });
 
-              // console.log(data);
-              if (itemAdded) {
+//               // console.log(data);
+//               if (itemAdded) {
                     
-                      return apiResponseHelper.post(res, true, 'Log in successfully', data);
-              } else {
-                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
-              }
+//                       return apiResponseHelper.post(res, true, 'Log in successfully', data);
+//               } else {
+//                      return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+//               }
           
-             } else if(item){
-              const data1 = await appusers.findOne({
-                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+//              } else if(item){
+//               const data1 = await appusers.findOne({
+//                 attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
               
-                   where: {
-                     id: item.id,
-                   }
-               });
-               if(data1.status ==0){
+//                    where: {
+//                      id: item.id,
+//                    }
+//                });
+//                if(data1.status ==0){
 
-                return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
-               }
+//                 return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
+//                }
 
-               if (data1) {
+//                if (data1) {
                     
-                return apiResponseHelper.post(res, true, 'Log in successfully', data1);
-        } else {
-               return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
-        }
+//                 return apiResponseHelper.post(res, true, 'Log in successfully', data1);
+//         } else {
+//                return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+//         }
 
-              return apiResponseHelper.post(res, true, 'Log in successfully', item);
+//               return apiResponseHelper.post(res, true, 'Log in successfully', item);
 
-          }
+//           }
 
-  } catch (e) {
+//   } catch (e) {
 
-      console.log(e);
+//       console.log(e);
 
-      return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+//       return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
   
-  }
-},
+//   }
+// },
 
 
 
 
 
 //----------------------------Social Login-------------------
-socialLogin1: async (req, res) => {
+socialLogin: async (req, res) => {
     
   try {
 
@@ -1571,8 +1722,9 @@ socialLogin1: async (req, res) => {
       
                 }
                }
+              console.log(logincheck.password.length)
    
-    if(logincheck.password){
+    if(logincheck.password.length>8){
       return apiResponseHelper.onError(res, false, 'This email is already registered', {});
        
      }
@@ -1896,49 +2048,359 @@ get_user_robots: async (req, res) => {
      }
 
   })
-  var test12=userrobotlist.select_robots
-  //var neeraj=test12[0]
-  
+  if(!userrobotlist){
+    return apiResponseHelper.post(res, true, 'User Not Exits',{});
 
-  var myArrData = JSON.parse(test12)
-  console.log(myArrData)
-
+  }
+if(!userrobotlist.select_robots){
+  const itemList1 = await groups.findAll({
+    attributes:['id','name','isChecked'],
+         
+              where: {
+                category:'ROBOT'
+               }
+       
+ });
+ if (itemList1) {
+        
+  return apiResponseHelper.post(res, true, 'Robots list',itemList1);
+ } else {
+     return apiResponseHelper.post(res, true, 'Robots list',{});
+}
  
- var test123=test12.toString();
- //console.log(test123)
+
+}
+
+else{
+  var test1=userrobotlist.select_robots
+  var myArrData = JSON.parse(test1)
+
+}
+
+
     const itemList = await groups.findAll({
       attributes:['id','name','isChecked'],
            
                 where: {
-                  category:'ROBOT',
+                  category:'ROBOT'
                  }
          
    });
 
-
    var output1 = itemList.map(user => user.name);
+  
+  
+   
+
+//-------------------------Testing
+
+function intersect1(a, b) {
+  var t;
+  if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+ return a.filter(function (e) {
+      return b.indexOf(e) > -1;
+  });
+}
 
 
-  //  const updateEntry =await appusers.update(
-  //   {
-  //     isChecked:1   
-  // },
-  //   {
-  //       where: {
-  //         name:user.id,
+ var neerajTest=intersect1(output1, myArrData);
 
-  //       }
+ //------------True Data---------------------------------
+ if(neerajTest[0]){
+  var truedata1=[{
+     "id": 11,
+    "name": neerajTest[0],
+    "isChecked": true
+  }
 
-  //     })
+  ]
+}
+else{
+var truedata1=[]
+}
 
+if(neerajTest[1]){
+  var truedata2=[{
+     "id": 12,
+    "name": neerajTest[1],
+    "isChecked": true
+  }
 
+  ]
+}
+else{
+var truedata2=[]
+}
+
+if(neerajTest[2]){
+  var truedata3=[{
+     "id": 13,
+    "name": neerajTest[2],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata3=[]
+}
+
+if(neerajTest[3]){
+  var truedata4=[{
+     "id": 14,
+    "name": neerajTest[3],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata4=[]
+}
+if(neerajTest[4]){
+  var truedata5=[{
+     "id": 15,
+    "name": neerajTest[4],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata5=[]
+}
+
+if(neerajTest[5]){
+  var truedata6=[{
+     "id": 16,
+    "name": neerajTest[5],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata6=[]
+}
+
+if(neerajTest[6]){
+  var truedata7=[{
+     "id": 17,
+    "name": neerajTest[6],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata7=[]
+}
+
+if(neerajTest[7]){
+  var truedata8=[{
+     "id": 18,
+    "name": neerajTest[7],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata8=[]
+}
+
+if(neerajTest[8]){
+  var truedata9=[{
+     "id": 19,
+    "name": neerajTest[8],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata9=[]
+}
+
+if(neerajTest[9]){
+  var truedata10=[{
+     "id": 20,
+    "name": neerajTest[9],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata10=[]
+}
 
 
  
 
+
+ //--------------True Data--------------------------------
+ function arr_diff (a1, a2) {
+
+  var a = [], diff = [];
+
+  for (var i = 0; i < a1.length; i++) {
+      a[a1[i]] = true;
+  }
+
+  for (var i = 0; i < a2.length; i++) {
+      if (a[a2[i]]) {
+          delete a[a2[i]];
+      } else {
+          a[a2[i]] = true;
+      }
+  }
+
+  for (var k in a) {
+      diff.push(k);
+  }
+
+  return diff;
+}
+
+//var  myArr=arr_diff(output,myArrData)
+//----------False Data------------------------------
+var myArr=arr_diff(output1, myArrData);
+if(myArr[0]){
+  var new1=[{
+     "id": 1,
+    "name": myArr[0],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new1=[]
+}
+
+if(myArr[1]){
+  var new2=[{
+     "id": 2,
+    "name": myArr[1],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new2=[]
+}
+
+if(myArr[2]){
+  var new3=[{
+     "id": 3,
+    "name": myArr[2],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new3=[]
+}
+
+if(myArr[3]){
+  var new4=[{
+     "id": 4,
+    "name": myArr[3],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new4=[]
+}
+if(myArr[4]){
+  var new5=[{
+     "id": 5,
+    "name": myArr[4],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new5=[]
+}
+
+if(myArr[5]){
+  var new6=[{
+     "id": 6,
+    "name": myArr[5],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new6=[]
+}
+
+if(myArr[6]){
+  var new7=[{
+     "id": 7,
+    "name": myArr[6],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new7=[]
+}
+
+if(myArr[7]){
+  var new8=[{
+     "id": 8,
+    "name": myArr[7],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new8=[]
+}
+
+if(myArr[8]){
+  var new9=[{
+     "id": 9,
+    "name": myArr[8],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new9=[]
+}
+
+if(myArr[9]){
+  var new10=[{
+     "id": 10,
+    "name": myArr[9],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new10=[]
+}
+
+//---------------------------------
+var alldata=new1.concat(new2,new3,new4,new5,new6,new7,new8,new9,new10,truedata1,truedata2,truedata3,truedata4,truedata5,truedata6,truedata7,truedata8,truedata9,truedata10);
+console.log(alldata);
    if (itemList) {
         
-          return apiResponseHelper.post(res, true, 'Robots list',itemList);
+          return apiResponseHelper.post(res, true, 'Robots list',alldata);
          } else {
              return apiResponseHelper.post(res, true, 'Robots list',{});
  }
@@ -1953,13 +2415,44 @@ get_user_plc: async (req, res) => {
   try {
   const id=req.params.id;
   const userrobotlist=await appusers.findOne({
-    attributes:['id','select_robots'],
+    attributes:['id','select_plc'],
     where: {
       id:req.params.id
      }
 
   })
- console.log(userrobotlist.select_robots)
+
+  if(!userrobotlist){
+    return apiResponseHelper.post(res, true, 'User Not Exits',{});
+
+  }
+ 
+if(!userrobotlist.select_plc){
+  const itemList1 = await groups.findAll({
+    attributes:['id','name','isChecked'],
+         
+              where: {
+                category:'PLS5'
+               }
+       
+ });
+ if (itemList1) {
+        
+  return apiResponseHelper.post(res, true, 'PLC list',itemList1);
+ } else {
+     return apiResponseHelper.post(res, true, 'PLC list',{});
+}
+ 
+
+}
+
+else{
+  var test1=userrobotlist.select_plc
+  var myArrData = JSON.parse(test1)
+
+}
+
+
     const itemList = await groups.findAll({
       attributes:['id','name','isChecked'],
            
@@ -1970,15 +2463,321 @@ get_user_plc: async (req, res) => {
    });
 
    var output1 = itemList.map(user => user.name);
-
+  
+  
    
 
+//-------------------------Testing
 
+function intersect1(a, b) {
+  var t;
+  if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+ return a.filter(function (e) {
+      return b.indexOf(e) > -1;
+  });
+}
+
+
+ var neerajTest=intersect1(output1, myArrData);
+
+ //------------True Data---------------------------------
+ if(neerajTest[0]){
+  var truedata1=[{
+     "id": 11,
+    "name": neerajTest[0],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata1=[]
+}
+
+if(neerajTest[1]){
+  var truedata2=[{
+     "id": 12,
+    "name": neerajTest[1],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata2=[]
+}
+
+if(neerajTest[2]){
+  var truedata3=[{
+     "id": 13,
+    "name": neerajTest[2],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata3=[]
+}
+
+if(neerajTest[3]){
+  var truedata4=[{
+     "id": 14,
+    "name": neerajTest[3],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata4=[]
+}
+if(neerajTest[4]){
+  var truedata5=[{
+     "id": 15,
+    "name": neerajTest[4],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata5=[]
+}
+
+if(neerajTest[5]){
+  var truedata6=[{
+     "id": 16,
+    "name": neerajTest[5],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata6=[]
+}
+
+if(neerajTest[6]){
+  var truedata7=[{
+     "id": 17,
+    "name": neerajTest[6],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata7=[]
+}
+
+if(neerajTest[7]){
+  var truedata8=[{
+     "id": 18,
+    "name": neerajTest[7],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata8=[]
+}
+
+if(neerajTest[8]){
+  var truedata9=[{
+     "id": 19,
+    "name": neerajTest[8],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata9=[]
+}
+
+if(neerajTest[9]){
+  var truedata10=[{
+     "id": 20,
+    "name": neerajTest[9],
+    "isChecked": true
+  }
+
+  ]
+}
+else{
+var truedata10=[]
+}
+
+
+ 
+
+
+ //--------------True Data--------------------------------
+ function arr_diff (a1, a2) {
+
+  var a = [], diff = [];
+
+  for (var i = 0; i < a1.length; i++) {
+      a[a1[i]] = true;
+  }
+
+  for (var i = 0; i < a2.length; i++) {
+      if (a[a2[i]]) {
+          delete a[a2[i]];
+      } else {
+          a[a2[i]] = true;
+      }
+  }
+
+  for (var k in a) {
+      diff.push(k);
+  }
+
+  return diff;
+}
+
+//var  myArr=arr_diff(output,myArrData)
+//----------False Data------------------------------
+var myArr=arr_diff(output1, myArrData);
+if(myArr[0]){
+  var new1=[{
+     "id": 1,
+    "name": myArr[0],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new1=[]
+}
+
+if(myArr[1]){
+  var new2=[{
+     "id": 2,
+    "name": myArr[1],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new2=[]
+}
+
+if(myArr[2]){
+  var new3=[{
+     "id": 3,
+    "name": myArr[2],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new3=[]
+}
+
+if(myArr[3]){
+  var new4=[{
+     "id": 4,
+    "name": myArr[3],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new4=[]
+}
+if(myArr[4]){
+  var new5=[{
+     "id": 5,
+    "name": myArr[4],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new5=[]
+}
+
+if(myArr[5]){
+  var new6=[{
+     "id": 6,
+    "name": myArr[5],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new6=[]
+}
+
+if(myArr[6]){
+  var new7=[{
+     "id": 7,
+    "name": myArr[6],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new7=[]
+}
+
+if(myArr[7]){
+  var new8=[{
+     "id": 8,
+    "name": myArr[7],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new8=[]
+}
+
+if(myArr[8]){
+  var new9=[{
+     "id": 9,
+    "name": myArr[8],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new9=[]
+}
+
+if(myArr[9]){
+  var new10=[{
+     "id": 10,
+    "name": myArr[9],
+    "isChecked": false
+  }
+
+  ]
+}
+else{
+var new10=[]
+}
+
+//---------------------------------
+var alldata=new1.concat(new2,new3,new4,new5,new6,new7,new8,new9,new10,truedata1,truedata2,truedata3,truedata4,truedata5,truedata6,truedata7,truedata8,truedata9,truedata10);
+console.log(alldata);
    if (itemList) {
         
-          return apiResponseHelper.post(res, true, 'Robots list',itemList);
+          return apiResponseHelper.post(res, true, 'PLC list',alldata);
          } else {
-             return apiResponseHelper.post(res, true, 'Robots list',{});
+             return apiResponseHelper.post(res, true, 'PLC list',{});
  }
     } catch (e) {
        

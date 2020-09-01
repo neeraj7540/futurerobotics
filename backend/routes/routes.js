@@ -131,7 +131,7 @@ routes.put('/addstatusupdate',passport.authenticate('admin', { session: false })
 
 //---New User--31-07-2020---------------------------------------------------------------------------
 
-routes.post('/sign_up', appUsersCtrl.sign_up);
+//routes.post('/sign_up', appUsersCtrl.sign_up);//Testing
 routes.get('/profile/:id',appUsersCtrl.profile);
 routes.post('/userlogin',appUsersCtrl.login);
 routes.post('/userlogout/:id', appUsersCtrl.logout);  
@@ -226,7 +226,12 @@ routes.get('/all_plc_list/:id',appUsersCtrl.get_user_plc);
 
 routes.get('/all_adds',appUsersCtrl.all_add_list);
 
-routes.get('/all_feed_catg',appUsersCtrl.all_feed_cat_list)
+routes.get('/all_feed_catg',appUsersCtrl.all_feed_cat_list);
+
+
+//------------------------Test
+
+routes.post('/sign_up', appUsersCtrl.sign_up_data);
 
 
 
