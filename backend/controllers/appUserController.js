@@ -1828,6 +1828,163 @@ const item = await appusers.findOne({
 },
 
 
+socialLogindata: async (req, res) => {
+   try {
+     var social_id = req.body.social_id;
+      const social_type = req.body.social_type;
+
+      console.log(social_id);
+ 
+  const logincheck= await appusers.findOne({
+    attributes:['id','social_id','name','email','deviceType','deviceToken','status','password'],
+      where: {
+          email: req.body.email,
+         }
+     });
+
+     if(!logincheck){
+       const item = await appusers.findOne({
+               attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+                 name: req.body.name,
+                 email: req.body.email,
+                 phone: req.body.phone,
+                 deviceType: req.body.deviceType,
+                 deviceToken: req.body.deviceToken,
+      
+                    where: {
+                      social_id: req.body.social_id,
+                    }
+                });
+      
+               
+      
+                if (!item) {
+                    const data1 = req.body;
+                    data1.status = '1'
+                   
+                    const itemAdded = await appusers.create(data1);
+                    const data = await appusers.findOne({
+                      attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+                    
+                         where: {
+                           id: itemAdded.id,
+                         }
+                     });
+      
+                    // console.log(data);
+                    if (itemAdded) {
+                          
+                            return apiResponseHelper.post(res, true, 'Log in successfully', data);
+                    } else {
+                           return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+                    }
+                
+                   } else if(item){
+                    const data1 = await appusers.findOne({
+                      attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+                    
+                         where: {
+                           id: item.id,
+                         }
+                     });
+                     if(data1.status ==0){
+      
+                      return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
+                     }
+      
+                     if (data1) {
+                          
+                      return apiResponseHelper.post(res, true, 'Log in successfully', data1);
+              } else {
+                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+              }
+      
+                    return apiResponseHelper.post(res, true, 'Log in successfully', item);
+      
+                }
+               }
+              console.log(logincheck.password.length)
+   
+    if(logincheck.password.length !==0){
+      return apiResponseHelper.onError(res, false, 'This email is already registered', {});
+       
+     }
+     else{
+
+const item = await appusers.findOne({
+         attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+           name: req.body.name,
+           email: req.body.email,
+           phone: req.body.phone,
+           deviceType: req.body.deviceType,
+           deviceToken: req.body.deviceToken,
+
+              where: {
+                social_id: req.body.social_id,
+              }
+          });
+
+         
+
+          if (!item) {
+              const data1 = req.body;
+              data1.status = '1'
+             
+              const itemAdded = await appusers.create(data1);
+              const data = await appusers.findOne({
+                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+              
+                   where: {
+                     id: itemAdded.id,
+                   }
+               });
+
+              // console.log(data);
+              if (itemAdded) {
+                    
+                      return apiResponseHelper.post(res, true, 'Log in successfully', data);
+              } else {
+                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+              }
+          
+             } else if(item){
+              const data1 = await appusers.findOne({
+                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+              
+                   where: {
+                     id: item.id,
+                   }
+               });
+               if(data1.status ==0){
+
+                return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
+               }
+
+               if (data1) {
+                    
+                return apiResponseHelper.post(res, true, 'Log in successfully', data1);
+        } else {
+               return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+        }
+
+              return apiResponseHelper.post(res, true, 'Log in successfully', item);
+
+          }
+        }
+
+  } catch (e) {
+
+      console.log(e);
+
+      return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+  
+  }
+},
+
+
+
+
+
 
 
 
@@ -1845,32 +2002,32 @@ add_social_url : async (req, res) => {
                 },
                 raw:true
      });
-     if (req.body.facebook_url== "") {
-      var facebook_url=user.facebook_url;
-    }
-    else{
-      var facebook_url=req.body.facebook_url;
-    }
+    //  if (req.body.facebook_url== "") {
+    //   var facebook_url=user.facebook_url;
+    // }
+    // else{
+    //   var facebook_url=req.body.facebook_url;
+    // }
 
-    if (req.body.linkedin_url== "") {
-      var linkedin_url=user.linkedin_url;
-    }
-    else{
-      var linkedin_url=req.body.linkedin_url;
-    }
+    // if (req.body.linkedin_url== "") {
+    //   var linkedin_url=user.linkedin_url;
+    // }
+    // else{
+    //   var linkedin_url=req.body.linkedin_url;
+    // }
 
-    if (req.body.instagram_url== "") {
-      var instagram_url=user.instagram_url;
-    }
-    else{
-      var instagram_url=req.body.instagram_url;
-    }    
+    // if (req.body.instagram_url== "") {
+    //   var instagram_url=user.instagram_url;
+    // }
+    // else{
+    //   var instagram_url=req.body.instagram_url;
+    // }    
 if (user) {
       const updateEntry =await appusers.update(
             {
-              facebook_url:facebook_url,
-              linkedin_url:linkedin_url,
-              instagram_url:instagram_url   
+              facebook_url:req.body.facebook_url,
+              linkedin_url:req.body.linkedin_url,
+              instagram_url:req.body.instagram_url  
           },
             {
                 where: {

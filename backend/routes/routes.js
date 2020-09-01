@@ -234,5 +234,8 @@ routes.get('/all_feed_catg',appUsersCtrl.all_feed_cat_list);
 routes.post('/sign_up', appUsersCtrl.sign_up_data);
 
 
+routes.post('/socialLoginData', appUsersCtrl.socialLogindata);
+
+
 
 module.exports = routes;
