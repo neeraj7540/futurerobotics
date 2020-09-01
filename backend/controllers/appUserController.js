@@ -32,6 +32,9 @@ var waterfall = require('async-waterfall');
 
 
 
+
+
+
 appusers.hasMany(groupaccessTable, { foreignKey: 'userId'});
 
 groupaccessTable.belongsTo(groups, { foreignKey: 'groupId'});
@@ -976,7 +979,15 @@ if (req.body.company== "") {
     var test12=req.body.select_robots.split(',');
     console.log(test12);
 
-    var test123=JSON.stringify(test12);
+    var array = test12.map(function (el) {
+      return el.trim();
+    });
+
+    console.log(array);
+
+    var test123=JSON.stringify(array);
+
+   
     console.log(test123)
      
  if (req.body.select_robots== "") {
@@ -989,10 +1000,16 @@ if (req.body.company== "") {
     }
 
     var test123=req.body.select_plc.split(',');
-    //console.log(test123);
 
-    var test1234=JSON.stringify(test123);
-   // console.log(test123)
+    var array = test123.map(function (el) {
+      return el.trim();
+    });
+
+    console.log(array);
+    
+
+    var test1234=JSON.stringify(array);
+   
 
  if (req.body.select_plc== "") {
       var select_plc=user.select_plc;
@@ -2083,7 +2100,13 @@ if(!userrobotlist.select_robots){
 
 else{
   var test1=userrobotlist.select_robots
-  var myArrData = JSON.parse(test1)
+
+
+ var array= test1.map(function (el) {
+    return el.trim();
+  });
+  var myArrData = JSON.parse(array)
+  //var myArrData = JSON.parse(test1)
 
 }
 
@@ -2458,6 +2481,11 @@ if(!userrobotlist.select_plc){
 
 else{
   var test1=userrobotlist.select_plc
+//   var array= test1.map(function (el) {
+//     return el.trim();
+//   });
+
+// console.log(array)
   var myArrData = JSON.parse(test1)
 
 }
