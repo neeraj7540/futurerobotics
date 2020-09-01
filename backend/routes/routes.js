@@ -144,8 +144,8 @@ routes.get('/other_app/:id', otherAppCtrl.other_app);
 
 routes.put('/edit_profile/:id',appUsersCtrl.edit_profile);
 
-//------------------Forgot Password------------------------------------------------------------------------- ----
 
+//----------------------------------------
 routes.put('/forgot-password',appUsersCtrl.forgotPassword);
 routes.get('/reset-password/:resetLink',appUsersCtrl.resetPassword);
 

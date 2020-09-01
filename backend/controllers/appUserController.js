@@ -1005,7 +1005,7 @@ if (req.body.company== "") {
       return el.trim();
     });
 
-    //console.log(array);
+    console.log(array);
     
 
     var test1234=JSON.stringify(array);
