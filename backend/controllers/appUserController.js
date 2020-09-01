@@ -379,8 +379,11 @@ sign_up_data: async (req, res) => {
               where: {
                   email: req.body.email,
                  }
-          });//emailStatus
-        //  console.log(item.emailStatus);
+          });
+
+     
+
+
 
          if(item !==null){
           if(item.emailStatus !==0){
@@ -432,12 +435,13 @@ var udate= await appusers.findOne({
   id:udate.id
  }
   });
-  get_signup_data = await appusers.findOne({
+  data = await appusers.findOne({
+    attributes:['name','email','password','location','country','age','status'],
 where: {
     id:udate.id
     }
   });
- return apiResponseHelper.post(res, true, 'Sign_up Successfully!', get_signup_data);
+ return apiResponseHelper.post(res, true, 'Sign_up Successfully!',{data});
 }
 else{
   var today = new Date();
