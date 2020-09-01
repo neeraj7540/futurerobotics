@@ -381,11 +381,17 @@ sign_up_data: async (req, res) => {
                  }
           });
 
+
+          if(item !==null){
+            
+            if(item.social_id.length>3){
+
+              return apiResponseHelper.onError(res, false,  'This email is already registered with socialId', {});
+}
+
+}
      
-
-
-
-         if(item !==null){
+if(item !==null){
           if(item.emailStatus !==0){
             if(item.emailStatus =='Y'){
 
@@ -783,7 +789,7 @@ profile: async (req, res) => {
               }
               }
  else{
-              return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
+              return apiResponseHelper.onError(res, false, 'Your account is deactivated', {});
             }
 
           }else{
