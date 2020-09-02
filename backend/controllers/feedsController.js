@@ -772,6 +772,83 @@ return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Ag
 },
 
 
+get_id_data:  async (req, res) => {
+
+
+  try{
+
+    const feed_id=req.params.feed_id;
+    const itemList = await feedsTable.findAll({
+     attributes: ['id','feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
+     where:{
+      feed_id:req.params.feed_id
+    },
+      include: [
+          {
+            model: appUsersTable,
+            attributes: ['id','name','email','image','status']
+            
+          },
+
+          {
+            model: feeCatTable,
+            attributes: ['id','name','description','status','createdAt','updatedAt']
+           
+          },
+
+         {
+            model: feedCommentTable,
+            attributes: ['id','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+            include: [
+              {
+                model: appUsersTable,
+                attributes: ['id','name','email','image','status']
+               
+              }
+            ]
+           
+          },
+
+
+      ],
+      order :   [
+      ['id', 'DESC']
+       ]
+   
+});
+
+//var testdata=itemList;
+//console.log(testdata);
+
+
+ if (itemList) {
+            
+        return apiResponseHelper.post(res, true, 'Feeds Category Wise List',itemList);
+      } else {
+          return apiResponseHelper.post(res, true, 'Feeds Category Wise List',{});
+      }
+
+
+  }catch(e){
+
+
+    console.log(e);
+    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+       
+  }
+
+
+
+
+
+
+
+
+
+
+}  ,
+
+
 
 
 
