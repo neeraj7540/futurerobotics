@@ -21,8 +21,8 @@ feedsTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 //reportedFeedsTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 
 //feedsTable.belongsTo(feedCommentTable, { foreignKey: 'id' });hasOne
-feedsTable.hasOne(feedCommentTable, { foreignKey: 'id' });
-
+//feedsTable.hasOne(feedCommentTable, { foreignKey: 'id' }); //test
+feedsTable.hasOne(feedCommentTable, { foreignKey: 'userId' });
 //feedCommentTable.hasOne(feedsTable, { foreignKey: 'id' });
 feedCommentTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 
@@ -734,6 +734,42 @@ get_cat_data:  async (req, res) => {
 
 
 }  ,
+
+feedcomment :  async (req, res) => {
+  try{
+
+    req.checkBody('comment', 'comment required').notEmpty();
+   const error = req.validationErrors();
+  const comment=req.body.comment;
+
+    if (error) {
+       return apiResponseHelper.onError(res, false, 'Error', error[0].msg);
+         
+      }
+     const data1 = req.body;
+      data1.feedId = req.params.feed_id;
+      data1.userId=req.params.id;
+      data1.comment=req.body.comment;
+      data1.status = '1'
+    
+      const itemAdded = await feedCommentTable.create(data1);
+      if (itemAdded) {
+                      
+        return apiResponseHelper.post(res, true, 'New Comment Add', itemAdded);
+      } else {
+       return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+}
+
+ }
+
+catch (e) {
+ console.log(e);
+
+return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+  
+}
+
+},
 
 
 
