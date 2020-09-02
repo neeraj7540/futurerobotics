@@ -180,8 +180,10 @@ routes.get('/get_all_plc/:id',appUsersCtrl.get_all_plc);
 //----------------notification----------------------------
 routes.get('/notification_listing/:id',addsCtrl.notification);
 
-//-----------------S_login--------------------
-routes.post('/socialLogin',appUsersCtrl.socialLogin);
+//-----------------S_login-------------------- socialLogin_final
+//routes.post('/socialLogin',appUsersCtrl.socialLogin);//old
+
+routes.post('/socialLogin',appUsersCtrl.socialLogin_final);
 
 //----------------socketio-------------------------------------------
 routes.get('/testings',socketFunction.get_typing_list);
@@ -234,7 +236,9 @@ routes.get('/all_feed_catg',appUsersCtrl.all_feed_cat_list);
 routes.post('/sign_up', appUsersCtrl.sign_up_data);
 
 
-routes.post('/socialLoginData', appUsersCtrl.socialLogindata);
+//routes.post('/socialLoginData', appUsersCtrl.social_login_neeraj);
+
+//routes.post('/testing',appUsersCtrl.socialLogin_final);
 
 
 

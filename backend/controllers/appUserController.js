@@ -1663,7 +1663,7 @@ get_all_plc: async (req, res) => {
 
 
 
-//----------------------------Social Login-------------------
+//----------------------------Social Login-------------------Correct
 socialLogin: async (req, res) => {
     
   try {
@@ -1828,158 +1828,10 @@ const item = await appusers.findOne({
 },
 
 
-socialLogindata: async (req, res) => {
-   try {
-     var social_id = req.body.social_id;
-      const social_type = req.body.social_type;
 
-      console.log(social_id);
- 
-  const logincheck= await appusers.findOne({
-    attributes:['id','social_id','name','email','deviceType','deviceToken','status','password'],
-      where: {
-          email: req.body.email,
-         }
-     });
 
-     if(!logincheck){
-       const item = await appusers.findOne({
-               attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
-                 name: req.body.name,
-                 email: req.body.email,
-                 phone: req.body.phone,
-                 deviceType: req.body.deviceType,
-                 deviceToken: req.body.deviceToken,
-      
-                    where: {
-                      social_id: req.body.social_id,
-                    }
-                });
-      
-               
-      
-                if (!item) {
-                    const data1 = req.body;
-                    data1.status = '1'
-                   
-                    const itemAdded = await appusers.create(data1);
-                    const data = await appusers.findOne({
-                      attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
-                    
-                         where: {
-                           id: itemAdded.id,
-                         }
-                     });
-      
-                    // console.log(data);
-                    if (itemAdded) {
-                          
-                            return apiResponseHelper.post(res, true, 'Log in successfully', data);
-                    } else {
-                           return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
-                    }
-                
-                   } else if(item){
-                    const data1 = await appusers.findOne({
-                      attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
-                    
-                         where: {
-                           id: item.id,
-                         }
-                     });
-                     if(data1.status ==0){
-      
-                      return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
-                     }
-      
-                     if (data1) {
-                          
-                      return apiResponseHelper.post(res, true, 'Log in successfully', data1);
-              } else {
-                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
-              }
-      
-                    return apiResponseHelper.post(res, true, 'Log in successfully', item);
-      
-                }
-               }
-              console.log(logincheck.password.length)
-   
-    if(logincheck.password.length !==0){
-      return apiResponseHelper.onError(res, false, 'This email is already registered', {});
-       
-     }
-     else{
 
-const item = await appusers.findOne({
-         attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
-           name: req.body.name,
-           email: req.body.email,
-           phone: req.body.phone,
-           deviceType: req.body.deviceType,
-           deviceToken: req.body.deviceToken,
 
-              where: {
-                social_id: req.body.social_id,
-              }
-          });
-
-         
-
-          if (!item) {
-              const data1 = req.body;
-              data1.status = '1'
-             
-              const itemAdded = await appusers.create(data1);
-              const data = await appusers.findOne({
-                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
-              
-                   where: {
-                     id: itemAdded.id,
-                   }
-               });
-
-              // console.log(data);
-              if (itemAdded) {
-                    
-                      return apiResponseHelper.post(res, true, 'Log in successfully', data);
-              } else {
-                     return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
-              }
-          
-             } else if(item){
-              const data1 = await appusers.findOne({
-                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
-              
-                   where: {
-                     id: item.id,
-                   }
-               });
-               if(data1.status ==0){
-
-                return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
-               }
-
-               if (data1) {
-                    
-                return apiResponseHelper.post(res, true, 'Log in successfully', data1);
-        } else {
-               return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
-        }
-
-              return apiResponseHelper.post(res, true, 'Log in successfully', item);
-
-          }
-        }
-
-  } catch (e) {
-
-      console.log(e);
-
-      return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
-  
-  }
-},
 
 
 
@@ -2149,10 +2001,11 @@ get_all_robots_admim_list: async (req, res) => {
            
                 where: {
                   category:'ROBOT',
+                  status:'1'
                  }
          
    });
-  // console.log(itemList);
+  
          
      if (itemList) {
         
@@ -2174,7 +2027,9 @@ get_all_plc_admin_list: async (req, res) => {
             //attributes: ['plc_id', 'name','image','count'],
               //  raw:true,
                 where: {
-                  category:'PLS5'
+                  category:'PLS5',
+                  status:'1'
+
                 }
          
    });
@@ -2200,7 +2055,8 @@ get_all_general_admin_list: async (req, res) => {
             //attributes: ['general_id', 'name','image','count'],
               //  raw:true,
                where: {
-                category:'GENERAL'
+                category:'GENERAL',
+                status:'1'
                 }
          
    });
@@ -2241,7 +2097,8 @@ if(!userrobotlist.select_robots){
     attributes:['id','name','isChecked'],
          
               where: {
-                category:'ROBOT'
+                category:'ROBOT',
+                status:'1'
                }
        
  });
@@ -2272,7 +2129,9 @@ else{
       attributes:['id','name','isChecked'],
            
                 where: {
-                  category:'ROBOT'
+                  category:'ROBOT',
+                  status:'1'
+
                  }
          
    });
@@ -2454,8 +2313,12 @@ var truedata10=[]
 }
 
 //var  myArr=arr_diff(output,myArrData)
-//----------False Data------------------------------
-var myArr=arr_diff(output1, myArrData);
+//----------False Data------------------------------neerajTest
+//var myArr=arr_diff(output1, myArrData);//correct
+var myArr=arr_diff(output1, neerajTest);
+
+
+console.log(myArr)
 if(myArr[0]){
   var new1=[{
      "id": 1,
@@ -2622,7 +2485,8 @@ if(!userrobotlist.select_plc){
     attributes:['id','name','isChecked'],
          
               where: {
-                category:'PLS5'
+                category:'PLS5',
+                status:'1'
                }
        
  });
@@ -2652,7 +2516,8 @@ else{
       attributes:['id','name','isChecked'],
            
                 where: {
-                  category:'PLS5'
+                  category:'PLS5',
+                  status:'1'
                  }
          
    });
@@ -2834,8 +2699,10 @@ var truedata10=[]
 }
 
 //var  myArr=arr_diff(output,myArrData)
-//----------False Data------------------------------
-var myArr=arr_diff(output1, myArrData);
+//----------False Data------------------------------neerajTest
+//var myArr=arr_diff(output1, myArrData);//correct
+var myArr=arr_diff(output1, neerajTest);
+
 if(myArr[0]){
   var new1=[{
      "id": 1,
@@ -3035,6 +2902,172 @@ all_feed_cat_list: async (req, res) => {
          
     }
 },
+ 
+//----------------Final Data--------------------------------
+  socialLogin_final: async (req, res) => {
+    
+    try {
+      const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+  
+        req.checkBody('social_id', 'social_id is required in body').notEmpty();
+        req.checkBody('social_type', 'social_type is required in body').notEmpty();
+  
+        const error = req.validationErrors();
+        const social_id = req.body.social_id;
+        const social_type = req.body.social_type;
+    if (error) {
+      
+      return apiResponseHelper.onError(res, false, error[0].msg, {});
+      
+    }
+  
+  
+    const logincheck= await appusers.findOne({
+      attributes:['id','social_id','name','image','email','deviceType','deviceToken','status','password'],
+        where: {
+            email: req.body.email,
+           }
+       });
+  
+       if(!logincheck){
+         const item = await appusers.findOne({
+                 attributes:['id','social_id','name','image','email','deviceType','deviceToken','status'],
+                   name: req.body.name,
+                   email: req.body.email,
+                   phone: req.body.phone,
+                   deviceType: req.body.deviceType,
+                   deviceToken: req.body.deviceToken,
+        
+                      where: {
+                        social_id: req.body.social_id,
+                      }
+                  });
+        
+                 
+        
+                  if (!item) {
+                      const data1 = req.body;
+                      data1.status = '1'
+                      data1.image = 'http://34.232.2.249:4100/'+uploadFile[0].imageName;
+                     
+                      const itemAdded = await appusers.create(data1);
+                      const data = await appusers.findOne({
+                        attributes:['id','social_id','name','image','email','deviceType','deviceToken','status'],
+                      
+                           where: {
+                             id: itemAdded.id,
+                           }
+                       });
+        
+                      // console.log(data);
+                      if (itemAdded) {
+                            
+                              return apiResponseHelper.post(res, true, 'Log in successfully', data);
+                      } else {
+                             return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+                      }
+                  
+                     } else if(item){
+                      const data1 = await appusers.findOne({
+                        attributes:['id','social_id','name','image','email','deviceType','deviceToken','status'],
+                      
+                           where: {
+                             id: item.id,
+                           }
+                       });
+                       if(data1.status ==0){
+        
+                        return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
+                       }
+        
+                       if (data1) {
+                            
+                        return apiResponseHelper.post(res, true, 'Log in successfully', data1);
+                } else {
+                       return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+                }
+        
+                      return apiResponseHelper.post(res, true, 'Log in successfully', item);
+        
+                  }
+                 }
+                console.log(logincheck.password.length)
+     
+      if(logincheck.password.length !==0){
+        return apiResponseHelper.onError(res, false, 'This email is already registered', {});
+         
+       }
+       else{
+  
+  const item = await appusers.findOne({
+           attributes:['id','social_id','name','image','email','deviceType','deviceToken','status'],
+             name: req.body.name,
+             email: req.body.email,
+             phone: req.body.phone,
+             deviceType: req.body.deviceType,
+             deviceToken: req.body.deviceToken,
+  
+                where: {
+                  social_id: req.body.social_id,
+                }
+            });
+  
+           
+  
+            if (!item) {
+                const data1 = req.body;
+                data1.status = '1'
+                data1.image = 'http://34.232.2.249:4100/'+uploadFile[0].imageName;
+                const itemAdded = await appusers.create(data1);
+                const data = await appusers.findOne({
+                  attributes:['id','social_id','name','image','email','deviceType','deviceToken','status'],
+                
+                     where: {
+                       id: itemAdded.id,
+                     }
+                 });
+  
+                // console.log(data);
+                if (itemAdded) {
+                      
+                        return apiResponseHelper.post(res, true, 'Log in successfully', data);
+                } else {
+                       return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+                }
+            
+               } else if(item){
+                const data1 = await appusers.findOne({
+                  attributes:['id','social_id','name','image','email','deviceType','deviceToken','status'],
+                
+                     where: {
+                       id: item.id,
+                     }
+                 });
+                 if(data1.status ==0){
+  
+                  return apiResponseHelper.onError(res, false, 'Deactivate Your Account ', {});
+                 }
+  
+                 if (data1) {
+                      
+                  return apiResponseHelper.post(res, true, 'Log in successfully', data1);
+          } else {
+                 return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+          }
+  
+                return apiResponseHelper.post(res, true, 'Log in successfully', item);
+  
+            }
+          }
+  
+    } catch (e) {
+  
+        console.log(e);
+  
+        return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+    
+    }
+  },
 
 
  }
