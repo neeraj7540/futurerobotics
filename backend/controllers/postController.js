@@ -9,6 +9,7 @@ console.log(UserPost);
 const filesUpload = require('../helpers/uploadFiles').uploadFile;
 const fs = require('fs');
 const moment=require('moment');
+const { Console } = require('console');
 
 
 
@@ -446,6 +447,20 @@ postEditAdmin : async (req, res) => {
                 data.status = '1'
                 data.Date=datedata;
                 const itemAdded = await feedsTable.create(data);
+               // console.log(itemAdded.id);
+                const updateEntry =    await feedsTable.update(
+                    {
+                    feed_id:itemAdded.id,
+                    
+                  },
+                    {
+                        where: {
+                        id: itemAdded.id,
+      
+                        }
+                    }); 
+
+
                 if (itemAdded) {
                     return apiResponseHelper.post(res, true, 'Post added Successfully!', data);
                 } else {

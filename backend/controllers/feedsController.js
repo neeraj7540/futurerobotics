@@ -447,7 +447,7 @@ getAllFeeds_data:  async (req, res) => {
   try{
 
     const itemList = await feedsTable.findAll({
-     attributes: ['id','feedCatId','userId','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
+     attributes: ['id','feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
       include: [
           {
             model: appUsersTable,
@@ -629,7 +629,7 @@ get_cat_data:  async (req, res) => {
 
     const title=req.params.title;
     const itemList = await feedsTable.findAll({
-     attributes: ['id','feedCatId','userId','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
+     attributes: ['id','feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
      where:{
       title:req.params.title
     },

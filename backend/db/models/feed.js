@@ -16,7 +16,12 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.INTEGER(11),
         allowNull: false,
 
-    }, 
+    },
+    feed_id:{
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+
+  }, 
     comment_count:{
       type: DataTypes.INTEGER(11),
       allowNull: true,
