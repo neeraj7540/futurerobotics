@@ -237,7 +237,7 @@ routes.get('/community_feed_category_list',feedsCtrl.getAllFeeds_data);
 
 routes.get('/community_feed_wise_list/:title',feedsCtrl.get_cat_data);
 
-routes.post('/feed_like_deslike',feedsCtrl.like_deslike);
+routes.post('/feed_like_deslike/:id/:feed_id',feedsCtrl.like_deslike);
 
 
 

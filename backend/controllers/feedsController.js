@@ -594,21 +594,58 @@ return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Ag
 like_deslike :  async (req, res) => {
   try{
     const id=req.params.id;
+    const feed_id=req.params.feed_id;
+    //const likeDeslike=req.body.likeDeslike;
 
-    const likedeslike = await likeDeslikeTable.findAll({
-      attributes: ['id','feedId','userId','likeDeslike','status','createdAt','updatedAt'],
+    const likedeslike = await likeDeslikeTable.findOne({
+     // attributes: ['id','feedId','userId','likeDeslike','status','createdAt','updatedAt'],
       where:{
-        feedId:req.params.id
+        feedId:req.params.feed_id,
+        userId:req.params.id,
+     
       },
     }) 
+    console.log(likedeslike)
+
+    if(!likedeslike){
+      const data1 = req.body;
+      data1.feedId = req.params.feed_id;
+      data1.userId=req.params.id;
+      data1.likeDeslike=req.body.likeDeslike;
+      data1.status = '1'
+    
+      const itemAdded = await likeDeslikeTable.create(data1);
+      if (itemAdded) {
+                      
+        return apiResponseHelper.post(res, true, 'New Like/Deslike Add', itemAdded);
+      } else {
+       return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+}
 
 
+    }
+   
+      const data1 = req.body;
+      data1.feedId = req.params.feed_id;
+      data1.userId=req.params.id;
+      data1.likeDeslike=req.body.likeDeslike;
+      const updateEntry =  await likeDeslikeTable.update(
+        data1,
+        {
+            where: {
+            id:likedeslike.id,
+    
+            }
+        });
+        
+        if (updateEntry) {
+                      
+          return apiResponseHelper.post(res, true, 'New Like/Deslike Update', data1);
+        } else {
+         return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+  }
 
-
-
-
-
-
+    
   }
 
 catch (e) {
