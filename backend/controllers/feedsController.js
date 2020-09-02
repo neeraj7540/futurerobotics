@@ -591,6 +591,113 @@ return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Ag
 }
 ,
 
+like_deslike :  async (req, res) => {
+  try{
+    const id=req.params.id;
+
+    const likedeslike = await likeDeslikeTable.findAll({
+      attributes: ['id','feedId','userId','likeDeslike','status','createdAt','updatedAt'],
+      where:{
+        feedId:req.params.id
+      },
+    }) 
+
+
+
+
+
+
+
+
+  }
+
+catch (e) {
+ console.log(e);
+
+return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+  
+}
+
+},
+
+
+
+get_cat_data:  async (req, res) => {
+
+
+  try{
+
+    const title=req.params.title;
+    const itemList = await feedsTable.findAll({
+     attributes: ['id','feedCatId','userId','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
+     where:{
+      title:req.params.title
+    },
+      include: [
+          {
+            model: appUsersTable,
+            attributes: ['id','name','email','image','status']
+            
+          },
+
+          {
+            model: feeCatTable,
+            attributes: ['id','name','description','status','createdAt','updatedAt']
+           
+          },
+
+         {
+            model: feedCommentTable,
+            attributes: ['id','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+            include: [
+              {
+                model: appUsersTable,
+                attributes: ['id','name','email','image','status']
+               
+              }
+            ]
+           
+          },
+
+
+      ],
+      order :   [
+      ['id', 'DESC']
+       ]
+   
+});
+
+//var testdata=itemList;
+//console.log(testdata);
+
+
+ if (itemList) {
+            
+        return apiResponseHelper.post(res, true, 'Feeds Category Wise List',itemList);
+      } else {
+          return apiResponseHelper.post(res, true, 'Feeds Category Wise List',{});
+      }
+
+
+  }catch(e){
+
+
+    console.log(e);
+    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+       
+  }
+
+
+
+
+
+
+
+
+
+
+}  ,
+
 
 
 

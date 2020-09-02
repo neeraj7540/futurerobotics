@@ -203,11 +203,11 @@ routes.get('/all_general',appUsersCtrl.get_all_general_admin);
 //----------------Feed Data New-----------------------------------------------------------------
 //--------------New Data------------------------
 
-routes.post('/add_feed/:id', postCtrl.add_feed);
+
 
 
 //------------------------Feed category-------------------------------------------
-routes.get('/community_feed_category_list',feedsCtrl.getAllFeeds_data);
+
 
 routes.get('/allikes_list/:id', feedsCtrl.getAllLikes_List);
 routes.get('/allcomments_list/:id', feedsCtrl.getAllComments_list);
@@ -228,7 +228,16 @@ routes.get('/all_plc_list/:id',appUsersCtrl.get_user_plc);
 
 routes.get('/all_adds',appUsersCtrl.all_add_list);
 
+
+
+//----------------------------Feed Module-----------------------------------------------------  
+routes.post('/add_feed/:id', postCtrl.add_feed);
 routes.get('/all_feed_catg',appUsersCtrl.all_feed_cat_list);
+routes.get('/community_feed_category_list',feedsCtrl.getAllFeeds_data);
+
+routes.get('/community_feed_wise_list/:title',feedsCtrl.get_cat_data);
+
+routes.post('/feed_like_deslike',feedsCtrl.like_deslike);
 
 
 
