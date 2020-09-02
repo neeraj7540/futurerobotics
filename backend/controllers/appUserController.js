@@ -2881,9 +2881,7 @@ all_feed_cat_list: async (req, res) => {
   try {
      
          const itemList = await feedsCategory.findAll({
-            
-              
-                where: {
+            where: {
                   status:1
                 }
          
