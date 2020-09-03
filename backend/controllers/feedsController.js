@@ -22,7 +22,10 @@ feedsTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 
 //feedsTable.belongsTo(feedCommentTable, { foreignKey: 'id' });hasOne
 //feedsTable.hasOne(feedCommentTable, { foreignKey: 'id' }); //test
-feedsTable.hasOne(feedCommentTable, { foreignKey: 'userId' });
+//feedsTable.hasOne(feedCommentTable, { foreignKey: 'userId' });//correct
+
+feedsTable.hasOne(feedCommentTable, { foreignKey: 'feedId' });
+
 //feedCommentTable.hasOne(feedsTable, { foreignKey: 'id' });
 feedCommentTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 
@@ -735,7 +738,7 @@ get_cat_data:  async (req, res) => {
 
 }  ,
 
-feedcomment :  async (req, res) => {
+feed_comment_data :  async (req, res) => {
   try{
 
     req.checkBody('comment', 'comment required').notEmpty();
@@ -776,41 +779,54 @@ get_id_data:  async (req, res) => {
 
 
   try{
-
-    const feed_id=req.params.feed_id;
-    const itemList = await feedsTable.findAll({
+const feed_id=req.params.feed_id;
+    const itemList = await feedsTable.findAll ({
      attributes: ['id','feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
      where:{
       feed_id:req.params.feed_id
     },
-      include: [
+      include: [ 
           {
             model: appUsersTable,
             attributes: ['id','name','email','image','status']
             
           },
-
-          {
-            model: feeCatTable,
-            attributes: ['id','name','description','status','createdAt','updatedAt']
-           
-          },
-
-         {
-            model: feedCommentTable,
-            attributes: ['id','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
-            include: [
-              {
-                model: appUsersTable,
-                attributes: ['id','name','email','image','status']
+         
+          //  {
+          //   model: feedCommentTable,
+          //   attributes: ['id','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+          //   include: [
+          //     {
+          //       model: appUsersTable,
+          //       attributes: ['id','name','email','image','status']
                
-              }
-            ]
+          //     }
+          //   ]
            
-          },
+          // },
 
 
       ],
+      
+      // include: [ 
+      //    {
+      //       model: feedCommentTable,
+      //       attributes: ['id','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+      //       where:{
+      //         feedId:1
+      //       },
+      //       include: [
+      //         {
+      //           model: appUsersTable,
+      //           attributes: ['id','name','email','image','status']
+               
+      //         }
+      //       ]
+           
+      //     },
+
+      // ],
+     
       order :   [
       ['id', 'DESC']
        ]
@@ -823,9 +839,9 @@ get_id_data:  async (req, res) => {
 
  if (itemList) {
             
-        return apiResponseHelper.post(res, true, 'Feeds Category Wise List',itemList);
+        return apiResponseHelper.post(res, true, 'Feeds Profile Data',itemList);
       } else {
-          return apiResponseHelper.post(res, true, 'Feeds Category Wise List',{});
+          return apiResponseHelper.post(res, true, 'Feeds Profile Data',{});
       }
 
 
@@ -849,6 +865,58 @@ get_id_data:  async (req, res) => {
 }  ,
 
 
+get_coment_data:  async (req, res) => {
+ try{
+const feed_id=req.params.feed_id;
+    const itemList = await feedCommentTable.findAll ({
+      attributes: ['id','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+      where:{
+        feedId:req.params.feed_id
+    },
+      include: [ 
+          {
+            model: appUsersTable,
+            attributes: ['id','name','email','image','status']
+            
+          },
+         
+    ],
+      
+     order :   [
+      ['id', 'DESC']
+       ]
+   
+});
+
+
+
+
+ if (itemList) {
+            
+        return apiResponseHelper.post(res, true, 'Feeds Comment Data',itemList);
+      } else {
+          return apiResponseHelper.post(res, true, 'Feeds Comment Data',{});
+      }
+
+
+  }catch(e){
+
+
+    console.log(e);
+    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+       
+  }
+
+
+
+
+
+
+
+
+
+
+}  ,
 
 
 

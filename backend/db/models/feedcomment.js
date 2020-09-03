@@ -38,7 +38,7 @@ module.exports = function(sequelize, DataTypes) {
 
       like : {
         type: DataTypes.INTEGER(11),
-        allowNull: false,
+        allowNull: true,
         default: 0
         
        }
@@ -47,7 +47,7 @@ module.exports = function(sequelize, DataTypes) {
 
    deslike : {
     type: DataTypes.INTEGER(11),
-    allowNull: false,
+    allowNull: true,
     default: 0
     
    },

@@ -236,11 +236,16 @@ routes.get('/all_feed_catg',appUsersCtrl.all_feed_cat_list);
 routes.get('/community_feed_category_list',feedsCtrl.getAllFeeds_data);
 
 routes.get('/community_feed_wise_list/:title',feedsCtrl.get_cat_data);
+
+//-----------------Profile data-----------------------------
 routes.get('/community_id_wise_list/:feed_id',feedsCtrl.get_id_data);
+//--------------Comment data---------------------------------------
+
+routes.get('/community_comment_list/:feed_id',feedsCtrl.get_coment_data);
 
 routes.post('/feed_like_deslike/:id/:feed_id',feedsCtrl.like_deslike);
 
-routes.post('/feed_comment/:id/:feed_id',feedsCtrl.feedcomment);
+routes.post('/feed_comment/:id/:feed_id',feedsCtrl.feed_comment_data);
 
 
 
