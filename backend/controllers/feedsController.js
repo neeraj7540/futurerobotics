@@ -780,7 +780,7 @@ get_id_data:  async (req, res) => {
 
   try{
 const feed_id=req.params.feed_id;
-    const itemList = await feedsTable.findAll ({
+    const itemList = await feedsTable.findOne({
      attributes: ['id','feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
      where:{
       feed_id:req.params.feed_id
