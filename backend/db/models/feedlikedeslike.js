@@ -49,6 +49,17 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: common.timestamp()
     },  
 
+    like_count:{
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+
+  },
+  deslike_count:{
+    type: DataTypes.INTEGER(11),
+    allowNull: true,
+
+},
+
          
 }, {
     tableName: 'feedlikedeslike',

@@ -608,7 +608,7 @@ like_deslike :  async (req, res) => {
      
       },
     }) 
-    console.log(likedeslike)
+   // console.log(likedeslike)
 
     if(!likedeslike){
       const data1 = req.body;
@@ -618,9 +618,53 @@ like_deslike :  async (req, res) => {
       data1.status = '1'
     
       const itemAdded = await likeDeslikeTable.create(data1);
+
+
+      const get_available_data1 = await likeDeslikeTable.count({
+        where:{
+            feedId:req.params.feed_id,
+          likeDeslike:'1'
+         },
+          }) 
+       var test1=get_available_data1;
+       console.log(test1);
+        const get_available_data2 = await likeDeslikeTable.count({
+         where:{
+             feedId:req.params.feed_id,
+           likeDeslike:'0'
+          },
+           }) 
+         var test2=get_available_data2;
+         console.log(test2)
+
+         let data = {
+          like_count:test1,
+          deslike_count:test2
+
+        }
+
+         const updateEntry =  await likeDeslikeTable.update(
+          data,
+          {
+              where: {
+                feedId:req.params.feed_id,
+      
+              }
+          });
+
+          const countdata = await likeDeslikeTable.findOne({
+            attributes: ['id','like_count','deslike_count'],
+              where:{
+                feedId:req.params.feed_id,
+                //userId:req.params.id,
+             
+              },
+            }) 
+
+
       if (itemAdded) {
                       
-        return apiResponseHelper.post(res, true, 'New Like/Deslike Add', itemAdded);
+        return apiResponseHelper.post(res, true, 'New Like/Deslike Add', countdata);
       } else {
        return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
 }
@@ -640,10 +684,53 @@ like_deslike :  async (req, res) => {
     
             }
         });
+
+        const get_available_data1 = await likeDeslikeTable.count({
+          where:{
+              feedId:req.params.feed_id,
+            likeDeslike:'1'
+           },
+            }) 
+         var test1=get_available_data1;
+         console.log(test1);
+          const get_available_data2 = await likeDeslikeTable.count({
+           where:{
+               feedId:req.params.feed_id,
+             likeDeslike:'0'
+            },
+             }) 
+           var test2=get_available_data2;
+           console.log(test2)
+  
+           let data = {
+            like_count:test1,
+            deslike_count:test2
+  
+          }
+  
+          const updateEntry1 =  await likeDeslikeTable.update(
+            data,
+            {
+                where: {
+                  feedId:req.params.feed_id,
+        
+                }
+            });
+
+            const countdata = await likeDeslikeTable.findOne({
+             attributes: ['id','like_count','deslike_count'],
+               where:{
+                 feedId:req.params.feed_id,
+                 //userId:req.params.id,
+              
+               },
+             }) 
+  
+
         
         if (updateEntry) {
                       
-          return apiResponseHelper.post(res, true, 'New Like/Deslike Update', data1);
+          return apiResponseHelper.post(res, true, 'New Like/Deslike Update', countdata);
         } else {
          return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
   }
