@@ -247,6 +247,10 @@ routes.post('/feed_like_deslike/:id/:feed_id',feedsCtrl.like_deslike);
 
 routes.post('/feed_comment/:id/:feed_id',feedsCtrl.feed_comment_data);
 
+//--------------------------Feed Details Id Wise------------------------------------
+
+routes.get('/community_feed_details/:feed_id',feedsCtrl.community_feed_details);
+
 
 
 

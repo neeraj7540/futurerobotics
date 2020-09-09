@@ -17,6 +17,10 @@ const feedCommentTable = db.models.feedcomment;
 reportedFeedsTable.belongsTo(feedsTable, { foreignKey: 'feedId' });
 reportedFeedsTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 feedsTable.belongsTo(feeCatTable, { foreignKey: 'feedCatId' });
+//feedsTable.belongsTo(feeCatTable, { foreignKey: 'id' });
+
+
+
 feedsTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 //reportedFeedsTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 
@@ -24,7 +28,7 @@ feedsTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 //feedsTable.hasOne(feedCommentTable, { foreignKey: 'id' }); //test
 //feedsTable.hasOne(feedCommentTable, { foreignKey: 'userId' });//correct
 
-feedsTable.hasOne(feedCommentTable, { foreignKey: 'feedId' });
+feedsTable.hasMany(feedCommentTable, { foreignKey: 'feedId' });
 
 //feedCommentTable.hasOne(feedsTable, { foreignKey: 'id' });
 feedCommentTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
@@ -1004,6 +1008,80 @@ const feed_id=req.params.feed_id;
 
 
 }  ,
+
+
+community_feed_details:  async (req, res) => {
+
+
+  try{
+const feed_id=req.params.feed_id;
+    const itemList = await feedsTable.findOne({
+     attributes: ['id','feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
+    include: [ 
+          {
+            model: appUsersTable,
+            attributes: ['id','name','email','image','status']
+            
+          },
+         
+           {
+            model: feedCommentTable,
+            attributes: ['id','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+            required: false,
+            include: [
+              {
+                model: appUsersTable,
+                attributes: ['id','name','email','image','status']
+               
+              }
+            ]
+           
+          },
+
+
+      ],
+      where:{
+        feed_id:req.params.feed_id
+      },
+    order :   [
+      ['id', 'DESC']
+       ]
+   
+});
+
+
+
+
+ if (itemList) {
+            
+        return apiResponseHelper.post(res, true, 'Feeds Profile Data',itemList);
+      } else {
+          return apiResponseHelper.post(res, true, 'Feeds Profile Data',{});
+      }
+
+
+  }catch(e){
+
+
+    console.log(e);
+    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+       
+  }
+
+
+
+
+
+
+
+
+
+
+}  ,
+
+
+
+
 
 
 
