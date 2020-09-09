@@ -657,7 +657,7 @@ like_deslike :  async (req, res) => {
           });
 
           const countdata = await likeDeslikeTable.findOne({
-            attributes: ['id','like_count','deslike_count'],
+            attributes: ['id','feedId','like_count','deslike_count'],
               where:{
                 feedId:req.params.feed_id,
                 //userId:req.params.id,
@@ -722,7 +722,7 @@ like_deslike :  async (req, res) => {
             });
 
             const countdata = await likeDeslikeTable.findOne({
-             attributes: ['id','like_count','deslike_count'],
+             attributes: ['id','feedId','like_count','deslike_count'],
                where:{
                  feedId:req.params.feed_id,
                  //userId:req.params.id,
