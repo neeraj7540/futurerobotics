@@ -14,6 +14,8 @@ const likeDeslikeTable = db.models.feedlikedeslike
 
 const feedCommentTable = db.models.feedcomment;
 
+//const feedCommentTable1 = db.models.feedcomment;
+
 const commentLikedeslike=db.models.comment_likedeslike;
 console.log(commentLikedeslike);
 
@@ -29,7 +31,7 @@ feedsTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 
 //feedsTable.belongsTo(feedCommentTable, { foreignKey: 'id' });hasOne
 //feedsTable.hasOne(feedCommentTable, { foreignKey: 'id' }); //test
-//feedsTable.hasOne(feedCommentTable, { foreignKey: 'userId' });//correct
+//feedsTable.hasOne(feedCommentTable1, { foreignKey: 'feedId' });//correct
 
 feedsTable.hasMany(feedCommentTable, { foreignKey: 'feedId' });
 
@@ -480,15 +482,19 @@ getAllFeeds_data:  async (req, res) => {
                 attributes: ['id','name','email','image','status']
                
               }
-            ]
-           
-          },
+            ],
+
+        limit: 1,
+          
+           order :   [
+              ['id', 'DESC']
+               ]
+           },
 
 
       ],
-      order :   [
-      ['id', 'DESC']
-       ]
+      //limit: 1,
+      
    
 });
 
