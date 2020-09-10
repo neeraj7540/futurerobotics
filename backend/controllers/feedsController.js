@@ -473,7 +473,7 @@ getAllFeeds_data:  async (req, res) => {
 
          {
             model: feedCommentTable,
-            attributes: ['id','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+            attributes: ['id','commentId','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
             include: [
               {
                 model: appUsersTable,
@@ -605,10 +605,10 @@ like_deslike :  async (req, res) => {
   try{
     const id=req.params.id;
     const feed_id=req.params.feed_id;
-    //const likeDeslike=req.body.likeDeslike;
+  
 
     const likedeslike = await likeDeslikeTable.findOne({
-     // attributes: ['id','feedId','userId','likeDeslike','status','createdAt','updatedAt'],
+   
       where:{
         feedId:req.params.feed_id,
         userId:req.params.id,
@@ -643,6 +643,29 @@ like_deslike :  async (req, res) => {
            }) 
          var test2=get_available_data2;
          console.log(test2)
+//---------------------------------------------------------------
+
+let data2 = {
+  like:test1,
+  deslike:test2
+
+}
+
+ const updateEntry =  await feedsTable.update(
+  data2,
+  {
+      where: {
+        feed_id:req.params.feed_id,
+
+      }
+  });
+
+
+
+
+
+
+//----------------------------------------------------------------------
 
          let data = {
           like_count:test1,
@@ -650,7 +673,7 @@ like_deslike :  async (req, res) => {
 
         }
 
-         const updateEntry =  await likeDeslikeTable.update(
+         const updateEntry12345 =  await likeDeslikeTable.update(
           data,
           {
               where: {
@@ -714,7 +737,27 @@ like_deslike :  async (req, res) => {
             deslike_count:test2
   
           }
-  
+//---------------------------------------------------------------------
+let data3= {
+  like:test1,
+  deslike:test2
+
+}
+
+ const updateEntry12 =  await feedsTable.update(
+  data3,
+  {
+      where: {
+        feed_id:req.params.feed_id,
+
+      }
+  });
+
+
+
+
+
+//----------------------------------------------------------------------------------------------  
           const updateEntry1 =  await likeDeslikeTable.update(
             data,
             {
@@ -1052,7 +1095,7 @@ const feed_id=req.params.feed_id;
             model: feedCommentTable,
             attributes: ['commentId','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
             required: false,
-            include: [
+            include: [ 
               {
                 model: appUsersTable,
                 attributes: ['id','name','email','image','status']
@@ -1154,7 +1197,26 @@ comment_like_deslike :  async (req, res) => {
           deslike_count:test2
 
         }
+//-----------------------------------------------------
+let data2 = {
+  like:test1,
+  deslike:test2
 
+}
+
+
+const updateEntry2 =  await feedCommentTable.update(
+  data2,
+  {
+      where: {
+        commentId:req.params.commentId,
+
+      }
+  });
+
+
+
+//-------------------------------------------------------
          const updateEntry =  await commentLikedeslike.update(
           data,
           {
@@ -1219,7 +1281,30 @@ comment_like_deslike :  async (req, res) => {
             deslike_count:test2
   
           }
+          let data3 = {
+            like:test1,
+            deslike:test2
   
+          }
+
+
+//--------------------------------------
+const updateEntry2 =  await feedCommentTable.update(
+  data3,
+  {
+      where: {
+        commentId:req.params.commentId,
+
+      }
+  });
+
+
+
+
+
+
+
+ //----------------------------------------------------- 
           const updateEntry1 =  await commentLikedeslike.update(
             data,
             {
