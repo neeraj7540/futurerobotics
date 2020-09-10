@@ -1040,7 +1040,7 @@ community_feed_details:  async (req, res) => {
   try{
 const feed_id=req.params.feed_id;
     const itemList = await feedsTable.findOne({
-     attributes: ['id','feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
+     attributes: ['feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
     include: [ 
           {
             model: appUsersTable,
@@ -1050,7 +1050,7 @@ const feed_id=req.params.feed_id;
          
            {
             model: feedCommentTable,
-            attributes: ['id','commentId','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+            attributes: ['commentId','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
             required: false,
             include: [
               {
