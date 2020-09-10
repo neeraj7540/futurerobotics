@@ -238,18 +238,27 @@ routes.get('/community_feed_category_list',feedsCtrl.getAllFeeds_data);
 routes.get('/community_feed_wise_list/:title',feedsCtrl.get_cat_data);
 
 //-----------------Profile data-----------------------------
-routes.get('/community_id_wise_list/:feed_id',feedsCtrl.get_id_data);
+//routes.get('/community_id_wise_list/:feed_id',feedsCtrl.get_id_data);
 //--------------Comment data---------------------------------------
 
-routes.get('/community_comment_list/:feed_id',feedsCtrl.get_coment_data);
+//routes.get('/community_comment_list/:feed_id',feedsCtrl.get_coment_data);
+
+//-----------------------Feed Like Or Deslike-------------------------------
 
 routes.post('/feed_like_deslike/:id/:feed_id',feedsCtrl.like_deslike);
 
-routes.post('/feed_comment/:id/:feed_id',feedsCtrl.feed_comment_data);
+
 
 //--------------------------Feed Details Id Wise------------------------------------
 
 routes.get('/community_feed_details/:feed_id',feedsCtrl.community_feed_details);
+
+
+
+//-----------------------------10-09-2020-------------------------------------
+routes.post('/feed_comment/:id/:feed_id',feedsCtrl.feed_comment_data);
+
+routes.post('/comment_like_deslike/:id/:commentId',feedsCtrl.comment_like_deslike);
 
 
 

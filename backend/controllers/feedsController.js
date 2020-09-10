@@ -14,6 +14,9 @@ const likeDeslikeTable = db.models.feedlikedeslike
 
 const feedCommentTable = db.models.feedcomment;
 
+const commentLikedeslike=db.models.comment_likedeslike;
+console.log(commentLikedeslike);
+
 reportedFeedsTable.belongsTo(feedsTable, { foreignKey: 'feedId' });
 reportedFeedsTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
 feedsTable.belongsTo(feeCatTable, { foreignKey: 'feedCatId' });
@@ -832,24 +835,45 @@ get_cat_data:  async (req, res) => {
 feed_comment_data :  async (req, res) => {
   try{
 
-    req.checkBody('comment', 'comment required').notEmpty();
-   const error = req.validationErrors();
-  const comment=req.body.comment;
+ 
+  const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
 
-    if (error) {
-       return apiResponseHelper.onError(res, false, 'Error', error[0].msg);
-         
-      }
+
      const data1 = req.body;
       data1.feedId = req.params.feed_id;
       data1.userId=req.params.id;
+      data1.comment_image = 'http://34.232.2.249:4100/'+uploadFile[0].imageName;
       data1.comment=req.body.comment;
       data1.status = '1'
     
       const itemAdded = await feedCommentTable.create(data1);
+     // console.log(itemAdded.dataValues.id)
+
+      
+      const upadete=await feedCommentTable.update(
+        {
+        commentId:itemAdded.dataValues.id,
+        },
+        {
+        where:{
+          id:itemAdded.dataValues.id
+        }
+      
+    })
+     const dataget1=await feedCommentTable.findOne({
+      attributes:['id','commentId','feedId','userId','comment','comment_image','createdAt','updatedAt'],
+        
+      where:{
+        id:itemAdded.dataValues.id
+      }
+
+    })
+
+     
+      //console.log(itemAdded)
       if (itemAdded) {
                       
-        return apiResponseHelper.post(res, true, 'New Comment Add', itemAdded);
+        return apiResponseHelper.post(res, true, 'New Comment Add', dataget1);
       } else {
        return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
 }
@@ -1026,7 +1050,7 @@ const feed_id=req.params.feed_id;
          
            {
             model: feedCommentTable,
-            attributes: ['id','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+            attributes: ['id','commentId','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
             required: false,
             include: [
               {
@@ -1078,6 +1102,162 @@ const feed_id=req.params.feed_id;
 
 
 }  ,
+
+
+
+//---------------------Comment Like or deslike-----------------------------------------------
+comment_like_deslike :  async (req, res) => {
+  try{
+    const id=req.params.id;
+    const commentId=req.params.commentId;
+    
+
+    const likedeslike = await commentLikedeslike.findOne({
+     
+      where:{
+        commentId:req.params.commentId,
+        userId:req.params.id,
+     
+      },
+    }) 
+   // console.log(likedeslike)
+
+    if(!likedeslike){
+      const data1 = req.body;
+      data1.commentId = req.params.commentId;
+      data1.userId=req.params.id;
+      data1.likeDeslike=req.body.likeDeslike;
+      data1.status = '1'
+    
+      const itemAdded = await commentLikedeslike.create(data1);
+
+
+      const get_available_data1 = await commentLikedeslike.count({
+        where:{
+          commentId:req.params.commentId,
+          likeDeslike:'1'
+         },
+          }) 
+       var test1=get_available_data1;
+       console.log(test1);
+        const get_available_data2 = await commentLikedeslike.count({
+         where:{
+          commentId:req.params.commentId,
+           likeDeslike:'0'
+          },
+           }) 
+         var test2=get_available_data2;
+         console.log(test2)
+
+         let data = {
+          like_count:test1,
+          deslike_count:test2
+
+        }
+
+         const updateEntry =  await commentLikedeslike.update(
+          data,
+          {
+              where: {
+                commentId:req.params.commentId,
+      
+              }
+          });
+
+          const countdata = await commentLikedeslike.findOne({
+            attributes: ['id','commentId','like_count','deslike_count'],
+              where:{
+                commentId:req.params.commentId,
+                //userId:req.params.id,
+             
+              },
+            }) 
+
+
+      if (itemAdded) {
+                      
+        return apiResponseHelper.post(res, true, 'New Like/Deslike Add', countdata);
+      } else {
+       return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+}
+
+
+    }
+   
+      const data1 = req.body;
+      data1.commentId = req.params.commentId;
+      data1.userId=req.params.id;
+      data1.likeDeslike=req.body.likeDeslike;
+      const updateEntry =  await commentLikedeslike.update(
+        data1,
+        {
+            where: {
+            id:likedeslike.id,
+    
+            }
+        });
+
+        const get_available_data1 = await commentLikedeslike.count({
+          where:{
+            commentId:req.params.commentId,
+            likeDeslike:'1'
+           },
+            }) 
+         var test1=get_available_data1;
+         console.log(test1);
+          const get_available_data2 = await commentLikedeslike.count({
+           where:{
+            commentId:req.params.commentId,
+             likeDeslike:'0'
+            },
+             }) 
+           var test2=get_available_data2;
+           console.log(test2)
+  
+           let data = {
+            like_count:test1,
+            deslike_count:test2
+  
+          }
+  
+          const updateEntry1 =  await commentLikedeslike.update(
+            data,
+            {
+                where: {
+                  commentId:req.params.commentId,
+        
+                }
+            });
+
+            const countdata = await commentLikedeslike.findOne({
+             attributes: ['id','commentId','like_count','deslike_count'],
+               where:{
+                commentId:req.params.commentId,
+                 //userId:req.params.id,
+              
+               },
+             }) 
+  
+
+        
+        if (updateEntry) {
+                      
+          return apiResponseHelper.post(res, true, 'New Like/Deslike Update', countdata);
+        } else {
+         return apiResponseHelper.onError(res, false,  'Something Went Wrong.Please Try Again',{});
+  }
+
+    
+  }
+
+catch (e) {
+ console.log(e);
+
+return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+  
+}
+
+},
 
 
 

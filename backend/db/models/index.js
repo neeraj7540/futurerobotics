@@ -39,7 +39,8 @@ let modules = [
   require('./user_post.js'),
   require('./robotlist.js'),
   require('./plclist.js'),
-  require('./general.js')
+  require('./general.js'),
+  require('./comment_likedeslike.js')
   
    
 ];

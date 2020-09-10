@@ -7,24 +7,27 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-  
+  commentId:{
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+},
 
-    userId:{
+userId:{
         type: DataTypes.INTEGER(11),
-        allowNull: false,
+        allowNull: true,
 
     },
 
        feedId:{
         type: DataTypes.INTEGER(11),
-        allowNull: false,
+        allowNull: true,
 
     },
 
   
     status : {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
+      allowNull: true,
       default: 0
       
      }
@@ -32,7 +35,11 @@ module.exports = function(sequelize, DataTypes) {
     ,
     comment : {
         type: DataTypes.TEXT(),
-        allowNull: false,
+        allowNull: true,
+       } ,
+     comment_image : {
+        type: DataTypes.TEXT(),
+        allowNull: true,
        }
       ,
 
