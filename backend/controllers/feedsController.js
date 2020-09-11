@@ -1501,6 +1501,115 @@ return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Ag
 },
 
 
+edit_post :  async (req, res) => {
+  try{
+    const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+    const data = req.body;
+    data.image = uploadFile[0].imageName;
+    var data1=data.image
+    //data.userId=req.body.userId;
+    //data.feed_id=req.body.feed_id;
+    //data.title=req.body.title;
+    //data.description=req.body.description;
+    
+   // console.log(data1)
+      
+ 
+  const updateEntrys=  await feedsTable.findOne(
+    {
+       where: {
+         userId:req.body.userId,
+         feed_id:req.body.feed_id
+    }
+   });
+
+   //console.log(updateEntrys.title);
+      if(updateEntrys){
+
+        if (req.body.title== "") {
+          var title=updateEntrys.title;
+        }
+        else{
+          var title=req.body.title;
+        }
+        //console.log(title)
+        if (req.body.description== "") {
+          var description=updateEntrys.description;
+        }
+        else{
+          var description=req.body.description;
+        }
+
+        if (req.body.image== "") {
+          var image=updateEntrys.image;
+        }
+        
+        else if(data1=="public/images/default/main.png"){
+          var image=updateEntrys.image
+        }
+        else{
+          
+          var image='http://34.232.2.249:4100/'+data1;
+        }
+
+        //console.log(image)
+        const feedupdate =await feedsTable.update(
+          {
+            title:title,
+            description:description,
+            image:image
+          },{
+            where: {
+                    userId:req.body.userId,
+                    feed_id:req.body.feed_id
+                      }
+ }
+)
+
+
+if(feedupdate){
+  const Entrys=  await feedsTable.findOne(
+    {
+       where: {
+         userId:req.body.userId,
+         feed_id:req.body.feed_id
+    }
+   });
+
+ return apiResponseHelper.post(res, true, 'Post Updated Successfully', Entrys);
+}
+else{
+  return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+}
+
+     }
+      else{
+
+        return apiResponseHelper.onError(res, false, 'Data Not Found',{});
+
+       }
+      
+
+
+
+
+ 
+    
+
+     
+ 
+
+ }
+
+catch (e) {
+ console.log(e);
+
+return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+  
+}
+
+},
+
 
 
 
