@@ -885,13 +885,31 @@ feed_comment_data :  async (req, res) => {
   try{
 
  
-  const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+    const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+    const data = req.body;
+    data.image = uploadFile[0].imageName;
+    var data2=data.image
+
+    if (req.body.image== "") {
+      var image="";
+    }
+    
+    else if(data2=="public/images/default/main.png"){
+      var image=""
+    }
+    else{
+      
+      var image='http://34.232.2.249:4100/'+data2;
+    }
+
+
 
 
      const data1 = req.body;
       data1.feedId = req.params.feed_id;
       data1.userId=req.params.id;
-      data1.comment_image = 'http://34.232.2.249:4100/'+uploadFile[0].imageName;
+      data1.comment_image =image;
+     // data1.comment_image = 'http://34.232.2.249:4100/'+uploadFile[0].imageName;
       data1.comment=req.body.comment;
       data1.status = '1'
     
