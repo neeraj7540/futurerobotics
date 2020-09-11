@@ -1351,6 +1351,84 @@ return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Ag
 },
 
 
+delete_post :  async (req, res) => {
+  try{
+     req.checkBody('userId', 'userId is required in body').notEmpty();
+      req.checkBody('feed_id', 'feed_id is required in body').notEmpty();
+
+      const error = req.validationErrors();
+      const userId=req.body.userId;
+      const feed_id=req.body.feed_id;
+  if (error) {
+    
+    return apiResponseHelper.onError(res, false, error[0].msg, {});
+    
+  }
+  const updateEntrys=  await feedsTable.findOne(
+    {
+       where: {
+         userId:req.body.userId,
+         feed_id:req.body.feed_id
+    }
+   });
+
+   if(updateEntrys){
+
+const updateEntry=  await feedsTable.destroy(
+       {
+          where: {
+            userId:req.body.userId,
+            feed_id:req.body.feed_id
+       }
+      });
+
+      const updateEntry1=  await feedCommentTable.destroy(
+        {
+           where: {
+             //userId:req.body.userId,
+             feedId:req.body.feed_id
+        }
+       });
+
+       const updateEntry2=  await likeDeslikeTable.destroy(
+        {
+           where: {
+             //userId:req.body.userId,
+             feedId:req.body.feed_id
+        }
+       });
+
+       return apiResponseHelper.post(res, true, 'Post Delete successfully', updateEntry);
+
+      }
+      else{
+
+        return apiResponseHelper.onError(res, false, 'Data Not Found',{});
+
+      }
+      
+
+
+
+
+ 
+    
+
+     
+ 
+
+ }
+
+catch (e) {
+ console.log(e);
+
+return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+  
+}
+
+},
+
+
 
 
 
