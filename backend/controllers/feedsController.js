@@ -1429,6 +1429,77 @@ return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Ag
 },
 
 
+delete_comment :  async (req, res) => {
+  try{
+     req.checkBody('userId', 'userId is required in body').notEmpty();
+      req.checkBody('commentId', 'commentId is required in body').notEmpty();
+
+      const error = req.validationErrors();
+      const userId=req.body.userId;
+      const commentId=req.body.commentId;
+  if (error) {
+    
+    return apiResponseHelper.onError(res, false, error[0].msg, {});
+    
+  }
+  const updateEntrys=  await feedCommentTable.findOne(
+    {
+       where: {
+        userId:req.body.userId,
+        commentId:req.body.commentId
+    }
+   });
+
+   if(updateEntrys){
+
+
+
+      const updateEntry1=  await feedCommentTable.destroy(
+        {
+           where: {
+            
+             commentId:req.body.commentId
+        }
+       });
+
+       const updateEntry2=  await commentLikedeslike.destroy(
+        {
+           where: {
+            
+             commentId:req.body.commentId
+        }
+       });
+
+       return apiResponseHelper.post(res, true, 'Comment Delete successfully', updateEntry1);
+
+      }
+      else{
+
+        return apiResponseHelper.onError(res, false, 'Data Not Found',{});
+
+      }
+      
+
+
+
+
+ 
+    
+
+     
+ 
+
+ }
+
+catch (e) {
+ console.log(e);
+
+return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+  
+}
+
+},
+
 
 
 

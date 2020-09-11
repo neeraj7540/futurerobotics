@@ -261,9 +261,13 @@ routes.post('/feed_comment/:id/:feed_id',feedsCtrl.feed_comment_data);
 routes.post('/comment_like_deslike/:id/:commentId',feedsCtrl.comment_like_deslike);
 
 
-//-----------------------------11-09-2020-------------------------------------------------delete_post
+//-----------------------------11-09-2020-------------------------------------------------Delete comment 
 
 routes.post('/delete_post',feedsCtrl.delete_post);
+
+routes.post('/delete_comment',feedsCtrl.delete_comment);
+
+
 
 
 
