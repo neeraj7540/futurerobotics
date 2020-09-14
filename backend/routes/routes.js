@@ -261,13 +261,16 @@ routes.post('/feed_comment/:id/:feed_id',feedsCtrl.feed_comment_data);
 routes.post('/comment_like_deslike/:id/:commentId',feedsCtrl.comment_like_deslike);
 
 
-//-----------------------------11-09-2020-------------------------------------------------Edit Post
+//-----------------------------11-09-2020-------------------------------------------------search Community Feed Post 
 
 routes.post('/delete_post',feedsCtrl.delete_post);
 
 routes.post('/delete_comment',feedsCtrl.delete_comment);
 
 routes.post('/edit_post',feedsCtrl.edit_post);
+
+routes.post('/search_feed',feedsCtrl.search_feed);
+
 
 
 

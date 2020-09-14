@@ -811,7 +811,10 @@ get_cat_data:  async (req, res) => {
   try{
 
     const title=req.params.title;
-    const itemList = await feedsTable.findAll({
+    console.log(title)
+    if(title !=='All Post'){
+      //console.log('Neeraj kumar')
+ const itemList = await feedsTable.findAll({
      attributes: ['id','feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
      where:{
       title:req.params.title
@@ -842,24 +845,66 @@ get_cat_data:  async (req, res) => {
            
           },
 
-
-      ],
+],
       order :   [
       ['id', 'DESC']
        ]
    
 });
-
-//var testdata=itemList;
-//console.log(testdata);
-
-
- if (itemList) {
+if (itemList) {
             
-        return apiResponseHelper.post(res, true, 'Feeds Category Wise List',itemList);
-      } else {
-          return apiResponseHelper.post(res, true, 'Feeds Category Wise List',{});
-      }
+  return apiResponseHelper.post(res, true, 'Feeds Category Wise List',itemList);
+} else {
+    return apiResponseHelper.post(res, true, 'Feeds Category Wise List',{});
+}
+    
+    }
+    else{
+      const itemList = await feedsTable.findAll({
+        attributes: ['id','feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
+         include: [
+             {
+               model: appUsersTable,
+               attributes: ['id','name','email','image','status']
+               },
+             {
+               model: feeCatTable,
+               attributes: ['id','name','description','status','createdAt','updatedAt']
+               },
+              {
+               model: feedCommentTable,
+               attributes: ['id','commentId','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+               include: [
+                 {
+                   model: appUsersTable,
+                   attributes: ['id','name','email','image','status']
+                   }
+               ],
+   
+          
+              },
+   
+   
+         ],
+         order :   [
+          ['id', 'DESC']
+           ]
+         
+         
+      
+   });
+  
+   if (itemList) {
+            
+    return apiResponseHelper.post(res, true, 'Feeds Category Wise List',itemList);
+  } else {
+      return apiResponseHelper.post(res, true, 'Feeds Category Wise List',{});
+  }
+
+    }
+
+
+ 
 
 
   }catch(e){
@@ -1627,6 +1672,101 @@ return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Ag
 }
 
 },
+
+
+search_feed:  async (req, res) => {
+try{
+  req.checkBody('title', 'title is required in body').notEmpty();
+  
+
+  const error = req.validationErrors();
+  const title = req.body.title;
+  
+
+if (error) {
+
+return apiResponseHelper.onError(res, false, error[0].msg, {});
+
+}
+
+var Sequelize=require('Sequelize');
+const Op = Sequelize.Op
+
+ const itemList = await feedsTable.findAll({
+    where: {
+      title: {
+        [Op.like]: '%' + req.body.title + '%'
+      }
+    },
+
+      include: [
+          {
+            model: appUsersTable,
+            attributes: ['id','name','email','image','status']
+            
+          },
+
+          {
+            model: feeCatTable,
+            attributes: ['id','name','description','status','createdAt','updatedAt']
+           
+          },
+
+         {
+            model: feedCommentTable,
+            attributes: ['id','commentId','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+            include: [
+              {
+                model: appUsersTable,
+                attributes: ['id','name','email','image','status']
+               
+              }
+            ],
+
+        limit: 1,
+          
+           order :   [
+              ['id', 'DESC']
+               ]
+           },
+
+
+      ],
+      //limit: 1,
+      
+   
+});
+
+var testdata=itemList;
+console.log(testdata);
+
+
+ if (itemList) {
+            
+        return apiResponseHelper.post(res, true, ' Search Feeds List',itemList);
+      } else {
+          return apiResponseHelper.post(res, true, 'Search Feeds List',{});
+      }
+
+
+  }catch(e){
+
+
+    console.log(e);
+    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+       
+  }
+
+
+
+
+
+
+
+
+
+
+}  ,
 
 
 
