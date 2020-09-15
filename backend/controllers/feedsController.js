@@ -1714,7 +1714,7 @@ const Op = Sequelize.Op
 
          {
             model: feedCommentTable,
-            attributes: ['id','commentId','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+            attributes: ['id','commentId','feedId','userId','comment','comment_image','status','like','deslike','createdAt','updatedAt'],
             include: [
               {
                 model: appUsersTable,
