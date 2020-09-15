@@ -272,6 +272,9 @@ routes.post('/edit_post',feedsCtrl.edit_post);
 routes.post('/search_feed',feedsCtrl.search_feed);
 
 
+//-------------------------15-09-2020--------------------------------------------------------------------------
+routes.post('/general_profile_edit/:id',appUsersCtrl.general_profile_edit);
+
 
 
 

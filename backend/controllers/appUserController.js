@@ -3067,6 +3067,142 @@ all_feed_cat_list: async (req, res) => {
     }
   },
 
+   
+
+  general_profile_edit : async (req, res) => {
+
+    try {
+      
+        const user = await appusers.findOne({
+          attributes:['id','name','biodesc','image','age','dob','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+  
+                  where: {
+                    id: req.params.id
+                  
+                  },
+                  raw:true
+       });
+       const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+       const data = req.body;
+       data.image = uploadFile[0].imageName;
+       var data1=data.image
+       console.log(data1)
+  
+       if (req.body.name== "") {
+        var name=user.name;
+      }
+      else{
+        var name=req.body.name;
+      }
+      var userimage=user.image
+  
+       if (req.body.biodesc== "") {
+      var biodesc=user.biodesc;
+    }
+    else{
+      var biodesc=req.body.biodesc;
+    }
+    var userimage=user.image
+  
+  
+  
+  if (req.body.image== "") {
+        var image=user.image;
+      }
+      
+      else if(data1=="public/images/default/main.png"){
+        var image=user.image
+      }
+      else{
+        
+        var image='http://34.232.2.249:4100/'+data1;
+      }
+  
+  
+  
+   if (req.body.age== "") {
+        var age=user.age;
+      }
+      else{
+        var age=req.body.age;
+      }
+      if (req.body.dob== "") {
+        var dob=user.dob;
+      }
+      else{
+        var dob=req.body.dob;
+      }
+   if (req.body.location== "") {
+        var location=user.location;
+      }
+      else{
+        var location=req.body.location;
+      }
+   if (req.body.joined_date== "") {
+        var joined_date=user.joined_date;
+      }
+      else{
+        var joined_date=user.joined_date;
+      }
+  
+   if (req.body.country== "") {
+        var country=user.country;
+      }
+      else{
+        var country=req.body.country;
+      }
+  
+  
+  
+       // console.log(user.id);
+       if (user) {
+        const updateEntry =await appusers.update(
+              {
+           name:name,
+           biodesc:biodesc,
+           image:image,
+           age:age,
+           dob:dob,
+          location:location,
+          joined_date:joined_date,
+          country:country
+            
+  
+             },
+              {
+                  where: {
+                  id:user.id,
+  
+                  }
+              });  
+              const userdata1 = await appusers.findOne({
+                attributes:['id','name','biodesc','image','age','dob','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+  
+                        where: {
+                          id: user.id
+                        
+                        },
+                       // raw:true
+             });
+  
+              
+      if (updateEntry) {
+        return apiResponseHelper.post(res, true, 'Profile updated Successfully!',userdata1);
+      } else {
+       
+          return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!',{});
+      }
+    }else{
+      return apiResponseHelper.onError(res, false, 'Users Not Exists', {});
+    }
+  
+    }
+    catch (e) {
+      return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!', {});
+       }
+  
+  },
+
 
  }
 
