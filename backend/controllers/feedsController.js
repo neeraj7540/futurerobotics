@@ -1689,7 +1689,7 @@ return apiResponseHelper.onError(res, false, error[0].msg, {});
 
 }
 
-var Sequelize=require('Sequelize');
+var Sequelize=require('sequelize');
 const Op = Sequelize.Op
 
  const itemList = await feedsTable.findAll({
