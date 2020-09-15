@@ -269,7 +269,7 @@ routes.post('/delete_comment',feedsCtrl.delete_comment);
 
 routes.post('/edit_post',feedsCtrl.edit_post);
 
-//routes.post('/search_feed',feedsCtrl.search_feed);
+routes.post('/search_feed',feedsCtrl.search_feed);
 
 
 
