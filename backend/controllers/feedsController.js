@@ -475,7 +475,7 @@ getAllFeeds_data:  async (req, res) => {
 
          {
             model: feedCommentTable,
-            attributes: ['id','commentId','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+            attributes: ['id','commentId','feedId','userId','comment','comment_image','status','like','deslike','createdAt','updatedAt'],
             include: [
               {
                 model: appUsersTable,
@@ -1162,7 +1162,7 @@ const feed_id=req.params.feed_id;
          
            {
             model: feedCommentTable,
-            attributes: ['commentId','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+            attributes: ['commentId','feedId','userId','comment','comment_image','status','like','deslike','createdAt','updatedAt'],
             required: false,
             include: [ 
               {
