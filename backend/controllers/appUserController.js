@@ -690,6 +690,15 @@ var finaldeslike=testdata.dataValues.deslike
 var finaldeslike1=parseInt(finaldeslike)
 
 var totallike=finallike1-finaldeslike1
+
+
+
+if(totallike <0){
+
+  var ranking='New User'
+}
+
+
 if(totallike ==0){
 
   var ranking='New User'
