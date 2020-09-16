@@ -223,6 +223,10 @@ module.exports = function(sequelize, DataTypes) {
   default: 0
   
  },
+ ranking_name: {
+  type: DataTypes.STRING(1000),
+  default: ""
+}
     
          
 }, {

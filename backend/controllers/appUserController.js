@@ -741,8 +741,18 @@ if (totallike >= 7501 && totallike <= 7500000000) {
 
 
 
+const rankingupdate=await appusers.update({
+  ranking_name:ranking,
+  //deslike:total_des_like
+},{
+  where:{
+    id:req.params.id
+  }
+}
+)
 
-console.log(ranking)
+
+//console.log(ranking)
 
 
 
