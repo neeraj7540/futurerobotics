@@ -698,7 +698,7 @@ if(totallike <0){
   var ranking='New User'
 }
 
-
+//console.log(ranking)
 if(totallike ==0){
 
   var ranking='New User'
@@ -1867,7 +1867,7 @@ socialLogin: async (req, res) => {
 
 
   const logincheck= await appusers.findOne({
-    attributes:['id','social_id','name','email','deviceType','deviceToken','status','password'],
+    attributes:['id','social_id','image','name','email','deviceType','deviceToken','status','password'],
       where: {
           email: req.body.email,
          }
@@ -1876,6 +1876,7 @@ socialLogin: async (req, res) => {
      if(!logincheck){
        const item = await appusers.findOne({
                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+                 image:req.body.image,
                  name: req.body.name,
                  email: req.body.email,
                  phone: req.body.phone,
@@ -1895,7 +1896,7 @@ socialLogin: async (req, res) => {
                    
                     const itemAdded = await appusers.create(data1);
                     const data = await appusers.findOne({
-                      attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+                      attributes:['id','social_id','image','name','email','deviceType','deviceToken','status'],
                     
                          where: {
                            id: itemAdded.id,
@@ -1944,6 +1945,7 @@ socialLogin: async (req, res) => {
 
 const item = await appusers.findOne({
          attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+           image:req.body.image,
            name: req.body.name,
            email: req.body.email,
            phone: req.body.phone,
@@ -1963,7 +1965,7 @@ const item = await appusers.findOne({
              
               const itemAdded = await appusers.create(data1);
               const data = await appusers.findOne({
-                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+                attributes:['id','social_id','image','name','email','deviceType','deviceToken','status'],
               
                    where: {
                      id: itemAdded.id,
@@ -1980,7 +1982,7 @@ const item = await appusers.findOne({
           
              } else if(item){
               const data1 = await appusers.findOne({
-                attributes:['id','social_id','name','email','deviceType','deviceToken','status'],
+                attributes:['id','social_id','image','name','email','deviceType','deviceToken','status'],
               
                    where: {
                      id: item.id,
