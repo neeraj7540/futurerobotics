@@ -201,7 +201,7 @@ module.exports = function(sequelize, DataTypes) {
     },
    joined_date:{
     type: DataTypes.INTEGER(11),
-    allowNull: false,
+    allowNull: true,
     defaultValue: common.timestamp()
 
     },
@@ -209,7 +209,20 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       default: ""
 
-    }
+    },
+    like : {
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+      default: 0
+      
+     },
+
+ deslike : {
+  type: DataTypes.INTEGER(11),
+  allowNull: true,
+  default: 0
+  
+ },
     
          
 }, {

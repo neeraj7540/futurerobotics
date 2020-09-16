@@ -591,13 +591,10 @@ profile: async (req, res) => {
         const userDetails1 = await feedsTable.findAll({
          attributes: [[sequelize.fn('sum', sequelize.col('like')), 'total']],
        where:{
-        //userId: req.params.id,
-        userId:10000
+        userId: req.params.id,
+        
        }
-      
-
-
-})
+      })
 if(userDetails1[0].dataValues.total !==null){
 var feedcount1=userDetails1[0].dataValues.total
 
@@ -611,9 +608,7 @@ const userDetails2 = await feedCommentTable.findAll({
   attributes: [[sequelize.fn('sum', sequelize.col('like')), 'total']],
 where:{
   userId: req.params.id,
-  //userId:100
 }
-
 })
 
 if(userDetails2[0].dataValues.total !==null){
@@ -630,10 +625,130 @@ else{
 var total_like_count=feedcount2+coumentcount2
 
 console.log(total_like_count)
+
+
+const feeddeslike = await feedsTable.findAll({
+  attributes: [[sequelize.fn('sum', sequelize.col('deslike')), 'total']],
+where:{
+ userId: req.params.id,
+ 
+}
+})
+if(feeddeslike[0].dataValues.total !==null){
+var feeddeslike1=feeddeslike[0].dataValues.total
+
+var feeddesdeslike2=parseInt(feeddeslike1)
+}
+else{
+var feeddesdeslike2=0
+}
+
+
+const feedcoment_deslike = await feedCommentTable.findAll({
+  attributes: [[sequelize.fn('sum', sequelize.col('deslike')), 'total']],
+where:{
+  userId: req.params.id,
+}
+})
+
+if(feedcoment_deslike[0].dataValues.total !==null){
+var feedcoment_deslike1=feedcoment_deslike[0].dataValues.total
+var feedcoment_deslike23=parseInt(feedcoment_deslike1)
+
+}
+else{
+  var feedcoment_deslike23=0
+}
         
 
+var total_des_like=feeddesdeslike2+feedcoment_deslike23
+
+console.log(total_des_like)
+console.log(total_like_count)
+
+const userDataUpdate=await appusers.update({
+  like:total_like_count,
+  deslike:total_des_like
+},{
+  where:{
+    id:req.params.id
+  }
+}
+)
+
+const testdata = await appusers.findOne({
+     where: {
+    id: req.params.id,
+  }
+});
+
+var finallike=testdata.dataValues.like
+var finallike1=parseInt(finallike)
+
+var finaldeslike=testdata.dataValues.deslike
+
+var finaldeslike1=parseInt(finaldeslike)
+
+var totallike=finallike1-finaldeslike1
+if(totallike ==0){
+
+  var ranking='New User'
+}
+
+if (totallike >= 1 && totallike <= 10) {
+  var ranking='Reular User'
+}
+
+if (totallike >= 11 && totallike <= 25) {
+  var ranking='Junior member'
+}
+
+if (totallike >= 26 && totallike <= 50) {
+  var ranking='Helping hand'
+}
+
+if (totallike >= 50 && totallike <= 100) {
+  var ranking='Senior Member'
+}
+
+if (totallike >= 101 && totallike <= 200) {
+  var ranking='Programmer'
+}
+
+if (totallike >= 201 && totallike <= 500) {
+  var ranking='Senior Programmer'
+}
+
+if (totallike >= 501 && totallike <= 1000) {
+  var ranking='PRO Programmer'
+}
+
+if (totallike >= 1001 && totallike <= 2500) {
+  var ranking='Programming Expert'
+}
+
+if (totallike >= 2501 && totallike <= 5000) {
+  var ranking='Programming Freak'
+}
+
+if (totallike >= 5001 && totallike <= 7500) {
+  var ranking='Programming Veteran'
+}
+
+if (totallike >= 7501 && totallike <= 7500000000) {
+  var ranking='Programming Master'
+}
 
 
+
+
+console.log(ranking)
+
+
+
+
+
+console.log(userDataUpdate)
 
 
 

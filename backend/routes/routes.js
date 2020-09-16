@@ -181,9 +181,9 @@ routes.get('/get_all_plc/:id',appUsersCtrl.get_all_plc);
 routes.get('/notification_listing/:id',addsCtrl.notification);
 
 //-----------------S_login-------------------- socialLogin_final
-routes.post('/socialLogin',appUsersCtrl.socialLogin);//old
+//routes.post('/socialLogin',appUsersCtrl.socialLogin);//old
 
-//routes.post('/socialLogin',appUsersCtrl.socialLogin_final);
+routes.post('/socialLogin',appUsersCtrl.socialLogin_final);
 
 //----------------socketio-------------------------------------------
 routes.get('/testings',socketFunction.get_typing_list);
