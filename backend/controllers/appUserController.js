@@ -27,6 +27,7 @@ const fs = require('fs');
 const  path = require('path');
 const nodeMailer = require('nodemailer');
 var waterfall = require('async-waterfall');
+const e = require('express');
 
 
 
@@ -586,6 +587,55 @@ sign_up: async (req, res) => {
 profile: async (req, res) => {
     try {
         const id=req.params.id;
+        var sequelize=require('sequelize');
+        const userDetails1 = await feedsTable.findAll({
+         attributes: [[sequelize.fn('sum', sequelize.col('like')), 'total']],
+       where:{
+        //userId: req.params.id,
+        userId:10000
+       }
+      
+
+
+})
+if(userDetails1[0].dataValues.total !==null){
+var feedcount1=userDetails1[0].dataValues.total
+
+var feedcount2=parseInt(feedcount1)
+}
+else{
+  var feedcount2=0
+}
+
+const userDetails2 = await feedCommentTable.findAll({
+  attributes: [[sequelize.fn('sum', sequelize.col('like')), 'total']],
+where:{
+  userId: req.params.id,
+  //userId:100
+}
+
+})
+
+if(userDetails2[0].dataValues.total !==null){
+var coumentcount1=userDetails2[0].dataValues.total
+var coumentcount2=parseInt(coumentcount1)
+
+
+}
+else{
+  var coumentcount1=userDetails2[0].dataValues.total
+  var coumentcount2=0
+}
+
+var total_like_count=feedcount2+coumentcount2
+
+console.log(total_like_count)
+        
+
+
+
+
+
 
       const userDetails = await appusers.findOne({
      
@@ -3169,6 +3219,271 @@ all_feed_cat_list: async (req, res) => {
             
   
              },
+              {
+                  where: {
+                  id:user.id,
+  
+                  }
+              });  
+              const userdata1 = await appusers.findOne({
+                attributes:['id','name','biodesc','image','age','dob','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+  
+                        where: {
+                          id: user.id
+                        
+                        },
+                       // raw:true
+             });
+  
+              
+      if (updateEntry) {
+        return apiResponseHelper.post(res, true, 'Profile updated Successfully!',userdata1);
+      } else {
+       
+          return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!',{});
+      }
+    }else{
+      return apiResponseHelper.onError(res, false, 'Users Not Exists', {});
+    }
+  
+    }
+    catch (e) {
+      return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!', {});
+       }
+  
+  },
+
+
+  //-------------------------------------------
+  Work_profile : async (req, res) => {
+
+    try {
+      
+        const user = await appusers.findOne({
+          attributes:['id','name','biodesc','image','age','dob','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+  
+                  where: {
+                    id: req.params.id
+                  
+                  },
+                  raw:true
+       });
+       const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+       const data = req.body;
+       data.image = uploadFile[0].imageName;
+       var data1=data.image
+       console.log(data1)
+  
+       if (req.body.name== "") {
+        var name=user.name;
+      }
+      else{
+        var name=req.body.name;
+      }
+      var userimage=user.image
+  
+      
+  if (req.body.biodesc== "") {
+      var biodesc=user.biodesc;
+    }
+    else{
+      var biodesc=req.body.biodesc;
+    }
+    var userimage=user.image
+  
+  
+  
+  if (req.body.image== "") {
+        var image=user.image;
+      }
+      
+      else if(data1=="public/images/default/main.png"){
+        var image=user.image
+      }
+      else{
+        
+        var image='http://34.232.2.249:4100/'+data1;
+      }
+  
+     if (req.body.occupation== "") {
+        var occupation=user.occupation;
+      }
+      else{
+        var occupation=req.body.occupation;
+      }
+  if (req.body.company== "") {
+        var company=user.company;
+      }
+      else{
+        var company=req.body.company;
+      }
+    if (req.body.experience== "") {
+        var experience=user.experience;
+      }
+      else{
+        var experience=req.body.experience;
+      } if (req.body.hireAvailable== "") {
+        var hireAvailable=user.hireAvailable;
+      }
+      else{
+        var hireAvailable=req.body.hireAvailable;
+      }
+  
+      var test12=req.body.select_robots.split(',');
+      console.log(test12);
+  
+      var array = test12.map(function (el) {
+        return el.trim();
+      });
+  
+      console.log(array);
+  
+      var test123=JSON.stringify(array);
+  
+     
+      console.log(test123)
+       
+   if (req.body.select_robots== "") {
+        var select_robots=user.select_robots;
+      //  var select_robots=test123;
+        
+      }
+      else{
+        var select_robots=test123;
+      }
+  
+      var test123=req.body.select_plc.split(',');
+  
+      var array = test123.map(function (el) {
+        return el.trim();
+      });
+  
+      console.log(array);
+      
+  
+      var test1234=JSON.stringify(array);
+     
+  
+   if (req.body.select_plc== "") {
+        var select_plc=user.select_plc;
+      }
+      else{
+        var select_plc=test1234;
+       }
+       console.log(user.id);
+       if (user) {
+        const updateEntry =await appusers.update(
+              {
+           name:name,
+           biodesc:biodesc,
+           occupation:occupation,
+            company:company,
+            experience:experience,
+            hireAvailable:hireAvailable,
+            select_robots:select_robots,
+            select_plc:select_plc,
+            },
+              {
+                  where: {
+                  id:user.id,
+  
+                  }
+              });  
+              const userdata1 = await appusers.findOne({
+                attributes:['id','name','biodesc','image','age','dob','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+  
+                        where: {
+                          id: user.id
+                        
+                        },
+                       // raw:true
+             });
+  
+              
+      if (updateEntry) {
+        return apiResponseHelper.post(res, true, 'Profile updated Successfully!',userdata1);
+      } else {
+       
+          return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!',{});
+      }
+    }else{
+      return apiResponseHelper.onError(res, false, 'Users Not Exists', {});
+    }
+  
+    }
+    catch (e) {
+      return apiResponseHelper.onError(res, false,'Something Went Wrong.Please Try Again!', {});
+       }
+  
+  },
+
+ additional_profile : async (req, res) => {
+
+    try {
+      
+        const user = await appusers.findOne({
+          attributes:['id','name','biodesc','image','age','dob','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+  
+                  where: {
+                    id: req.params.id
+                  
+                  },
+                  raw:true
+       });
+       const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+       const data = req.body;
+       data.image = uploadFile[0].imageName;
+       var data1=data.image
+       console.log(data1)
+  
+       if (req.body.name== "") {
+        var name=user.name;
+      }
+      else{
+        var name=req.body.name;
+      }
+      var userimage=user.image
+  
+      
+  
+    
+     // console.log(userimage.length())biodesc
+     if (req.body.biodesc== "") {
+      var biodesc=user.biodesc;
+    }
+    else{
+      var biodesc=req.body.biodesc;
+    }
+    var userimage=user.image
+  
+  
+  
+  if (req.body.image== "") {
+        var image=user.image;
+      }
+      
+      else if(data1=="public/images/default/main.png"){
+        var image=user.image
+      }
+      else{
+        
+        var image='http://34.232.2.249:4100/'+data1;
+      }
+   if (req.body.about_me== "") {
+        var about_me=user.about_me;
+      }
+      else{
+        var about_me=req.body.about_me;
+      }
+     
+ if (user) {
+        const updateEntry =await appusers.update(
+              {
+           name:name,
+           biodesc:biodesc,
+           image:image,
+           about_me:about_me,
+            },
               {
                   where: {
                   id:user.id,
