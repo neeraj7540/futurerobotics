@@ -764,7 +764,7 @@ console.log(userDataUpdate)
 
       const userDetails = await appusers.findOne({
      
-        attributes:['id','name','biodesc','image','age','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url'],
+        attributes:['id','name','biodesc','image','age','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url','ranking_name'],
 
 
         where: {
@@ -829,7 +829,8 @@ console.log(userDataUpdate)
         "about_me":userDetails.about_me,
         "facebook_url":userDetails.facebook_url,
         "linkedin_url":userDetails.linkedin_url,
-        "instagram_url":userDetails.instagram_url
+        "instagram_url":userDetails.instagram_url,
+        "ranking_name":userDetails.ranking_name
 
 
 
