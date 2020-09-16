@@ -748,10 +748,16 @@ if (totallike >= 7501 && totallike <= 7500000000) {
   var ranking='Programming Master'
 }
 
+if(totallike <0){
+
+  var totallike=0
+}
 
 
 const rankingupdate=await appusers.update({
+  
   ranking_name:ranking,
+  ranking:totallike
   //deslike:total_des_like
 },{
   where:{
@@ -773,7 +779,7 @@ console.log(userDataUpdate)
 
       const userDetails = await appusers.findOne({
      
-        attributes:['id','name','biodesc','image','age','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url','ranking_name'],
+        attributes:['id','name','biodesc','image','age','location','country','joined_date','occupation','company','experience','hireAvailable','select_robots','select_plc','about_me','facebook_url','linkedin_url','instagram_url','ranking_name','ranking'],
 
 
         where: {
@@ -839,7 +845,8 @@ console.log(userDataUpdate)
         "facebook_url":userDetails.facebook_url,
         "linkedin_url":userDetails.linkedin_url,
         "instagram_url":userDetails.instagram_url,
-        "ranking_name":userDetails.ranking_name
+        "ranking_name":userDetails.ranking_name,
+        "ranking":userDetails.ranking
 
 
 
@@ -1887,6 +1894,7 @@ socialLogin: async (req, res) => {
                       social_id: req.body.social_id,
                     }
                 });
+
       
                
       
@@ -1956,6 +1964,23 @@ const item = await appusers.findOne({
                 social_id: req.body.social_id,
               }
           });
+
+          
+          const item1 = await appusers.update({
+            
+              image:req.body.image,
+              name: req.body.name,
+              email: req.body.email,
+              phone: req.body.phone,
+              deviceType: req.body.deviceType,
+              deviceToken: req.body.deviceToken,
+          },{
+                 where: {
+                   social_id: req.body.social_id,
+                 }
+                }
+             );
+             console.log("hjscvsdjkvdjkasfll"+item1)
 
          
 

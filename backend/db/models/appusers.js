@@ -226,7 +226,12 @@ module.exports = function(sequelize, DataTypes) {
  ranking_name: {
   type: DataTypes.STRING(1000),
   default: ""
-}
+},
+ranking:{
+  type: DataTypes.INTEGER(11),
+  allowNull: true,
+  default: 0
+  },
     
          
 }, {
