@@ -40,7 +40,7 @@ module.exports = {
       senderProfileImage: get_data.senderProfileImage,
       receiverName: get_data.receiverName,
       RecieverProfileImage: get_data.RecieverProfileImage,
-     // created: await this.create_time_stamp(),
+     created: await this.create_time_stamp(),
 
     }
     return final_array;

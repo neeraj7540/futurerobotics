@@ -280,6 +280,10 @@ routes.post('/Work_profile/:id',appUsersCtrl.Work_profile);
 routes.post('/additional_profile/:id',appUsersCtrl.additional_profile);
 
 
+//--------------------------------17-09-2020---------------------------------------------------
+
+routes.get('/GetChat',socketFunction.GetChat);
+
 
 
 

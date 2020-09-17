@@ -587,6 +587,17 @@ sign_up: async (req, res) => {
 profile: async (req, res) => {
     try {
         const id=req.params.id;
+
+
+        const userDetails11 = await feedsTable.findAll({
+           where:{
+         userId: req.params.id,
+         
+        }
+       })
+
+
+
         var sequelize=require('sequelize');
         const userDetails1 = await feedsTable.findAll({
          attributes: [[sequelize.fn('sum', sequelize.col('like')), 'total']],
