@@ -14,16 +14,12 @@ const routes = require('./routes/routes');
 const checkConn = require('./helpers/checkConn');
 //var io = require('socket.io')(server);
 
-const socket = require('socket.io')
-const io = socket(server)
-
-
+var io = require('socket.io')(server);
 console.log(io)
 
-app.use((req, res, next) => {
-  res.io = io
-  next()
-});
+
+
+
 
 
 
@@ -60,7 +56,8 @@ require('./passport')(passport);
 app.use('/api', routes);
 
 //------New Add-------------------------------
-//require('./socket')(io);
+require('./socket')(io);
+
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/build', express.static(path.join(__dirname, 'build')));

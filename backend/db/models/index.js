@@ -40,7 +40,8 @@ let modules = [
   require('./robotlist.js'),
   require('./plclist.js'),
   require('./general.js'),
-  require('./comment_likedeslike.js')
+  require('./comment_likedeslike.js'),
+  require('./socket_user.js')
   
    
 ];
