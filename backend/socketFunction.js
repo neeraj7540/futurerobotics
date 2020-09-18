@@ -52,12 +52,26 @@ module.exports = {
             userId: connect_listener.userId,
             socketId: socket_id,
             isOnline: 1,
-            created: await this.create_time_stamp(),
-            updated: await this.create_time_stamp()
+            createdAt: await this.create_time_stamp(),
+            updatedAt: await this.create_time_stamp()
           })
         }
         return create_socket_user;
     
+      },
+      socket_disconnect: async function (socket_id) {
+        console.log(socket_id,"socket_id") 
+        let disconnect_socket_user = await socket_user.update({
+          isOnline: 0,
+          updatedAt: await this.create_time_stamp()
+        },
+          {
+            where: {
+              socketId: socket_id
+            }
+          }
+        );
+        return disconnect_socket_user
       }
 
 

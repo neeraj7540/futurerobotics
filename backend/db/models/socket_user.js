@@ -30,12 +30,12 @@ isOnline: {
   createdAt: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      defaultValue: common.timestamp()
+     // defaultValue: common.timestamp()
     },
     updatedAt: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      defaultValue: common.timestamp()
+     // defaultValue: common.timestamp()
     },  
 
          

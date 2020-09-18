@@ -29,6 +29,14 @@ module.exports = function (io) {
       }
     });
 
+    socket.on('disconnect', async function () {
+      let socket_id = socket.id
+      console.log("jgscjasvjksh"+socket.id)
+      let socket_disconnect = await my_function.socket_disconnect(socket_id)
+
+      console.log('socket user disconnected');
+    });
+
 
 
 
