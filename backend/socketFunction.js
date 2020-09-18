@@ -2,9 +2,15 @@ const config = require('config');
 const sequelize = require('sequelize');
 
 const db = require('./db/db');
-console.log(db)
+
+const socket_user =db.models.socket_user;
+console.log(socket_user)
+//console.log(db)
 const apiResponseHelper = require('./helpers/apiResponseHelper');
-const socket_user = db.models.socketUser
+
+
+const fs = require('fs');
+const  path = require('path');
 
 
 

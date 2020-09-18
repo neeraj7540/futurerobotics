@@ -5,6 +5,8 @@ const addsTable = db.models.ads;
 const notificationTable=db.models.notification; 
 const filesUpload = require('../helpers/uploadFiles').uploadFile;
 const fs = require('fs');
+const socket_user = db.models.socket_user
+//console.log(socket_user)
 module.exports = {
 
     addAddAdmin: async (req, res) => {

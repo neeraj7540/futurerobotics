@@ -15,7 +15,7 @@ const checkConn = require('./helpers/checkConn');
 //var io = require('socket.io')(server);
 
 var io = require('socket.io')(server);
-console.log(io)
+//console.log(io)
 
 
 
