@@ -230,7 +230,7 @@ routes.get('/all_adds',appUsersCtrl.all_add_list);
 
 
 
-//----------------------------Feed Module-----------------------------------------------------  
+//----------------------------Feed Module----------------------------------------------------------  
 routes.post('/add_feed/:id', postCtrl.add_feed);
 routes.get('/all_feed_catg',appUsersCtrl.all_feed_cat_list);
 routes.get('/community_feed_category_list',feedsCtrl.getAllFeeds_data);
