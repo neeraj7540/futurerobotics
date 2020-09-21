@@ -344,7 +344,7 @@ module.exports = {
   },
   get_message: async function (get_msg_data) {
    console.log(get_msg_data,"from get=======");
-   console.log(get_msg_data.senderId)
+   //console.log(get_msg_data.senderId)
     get_user_status = await appusers.findOne({
       where: {
         id: get_msg_data.senderId
@@ -352,8 +352,8 @@ module.exports = {
     });
     //console.log(get_user_status);
     if (get_user_status.dataValues.status = 1) {
-     get_msg_data.receiverId=2 // Testing data Neeraj
-     get_msg_data.offset=0 //Tetsing Data Neeraj
+    // get_msg_data.receiverId=2 // Testing data Neeraj
+    // get_msg_data.offset=0 //Tetsing Data Neeraj
 
      var get_messages_data = await database.query(`SELECT *,(select name from appusers where id =${get_msg_data.receiverId})as recieverName, ifnull((select image from appusers where id =${get_msg_data.receiverId}),'')as recieverImage,(select name from appusers where id =${get_msg_data.senderId})as senderName,ifnull((select image from appusers where id =${get_msg_data.senderId}),'')as senderImage FROM messages WHERE ((senderId=${get_msg_data.senderId} AND receiverId=${get_msg_data.receiverId}) OR (senderId=${get_msg_data.receiverId} AND receiverId=${get_msg_data.senderId})) and  deletedId!=${get_msg_data.senderId} order by id desc LIMIT 20 OFFSET ${get_msg_data.offset}`, {
 
