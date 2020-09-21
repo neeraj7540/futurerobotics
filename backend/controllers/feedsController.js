@@ -14,6 +14,8 @@ const likeDeslikeTable = db.models.feedlikedeslike
 
 const feedCommentTable = db.models.feedcomment;
 
+const messages=db.models.messages;
+
 //const feedCommentTable1 = db.models.feedcomment;
 
 const commentLikedeslike=db.models.comment_likedeslike;
@@ -44,6 +46,10 @@ feedCommentTable.belongsTo(feedsTable, { foreignKey: 'feedId' });
 
 //likeDeslikeTable.belongsTo(feedsTable, { foreignKey: 'feedId' });
 likeDeslikeTable.belongsTo(appUsersTable, { foreignKey: 'userId' });
+
+
+//--------------
+appUsersTable.hasMany(messages, { foreignKey: 'receiverId' });
 
 
 const filesUpload = require('../helpers/uploadFiles').uploadFile;
@@ -1767,6 +1773,70 @@ console.log(testdata);
 
 
 }  ,
+
+
+
+
+userlist:  async (req, res) => {
+
+
+  try{
+
+    const itemList = await appUsersTable.findAll({
+      include: [
+          {
+            model: messages,
+           // attributes: ['id','name','email','image','status']
+           where: {
+            receiverId:req.params.id
+          },
+            
+           limit: 1,
+          
+          order :   [
+             ['id', 'DESC']
+              ]
+      
+          },
+        ]
+     
+      
+      
+   
+});
+
+var testdata=itemList;
+console.log(testdata);
+
+
+ if (itemList) {
+            
+        return apiResponseHelper.post(res, true, 'User List',itemList);
+      } else {
+          return apiResponseHelper.post(res, true, 'User List',{});
+      }
+
+
+  }catch(e){
+
+
+    console.log(e);
+    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+       
+  }
+
+
+
+
+
+
+
+
+
+
+}  ,
+
+
 
 
 

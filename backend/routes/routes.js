@@ -284,7 +284,9 @@ routes.post('/additional_profile/:id',appUsersCtrl.additional_profile);
 
 routes.get('/GetChat',socketFunction.GetChat);
 
+//-----------------------------------21-09-2020------------------------------------------------------------
 
+routes.get('/userlist/:id',feedsCtrl.userlist);
 
 
 
