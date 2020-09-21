@@ -41,7 +41,11 @@ let modules = [
   require('./plclist.js'),
   require('./general.js'),
   require('./comment_likedeslike.js'),
-  require('./socket_user.js')
+  require('./socket_user.js'),
+  require('./userblocks.js'),
+  require('./chat_constants.js'),
+  require('./messages.js'),
+  require('./chat_block.js')
   
    
 ];
