@@ -15,6 +15,7 @@ const messages=db.models.messages;
 const appusers = db.models.appusers;
 const database = require('./db/db');
 const chatBlock = db.models.chatBlock
+const FCM = require('fcm-node');
 
 //messages
 
@@ -53,7 +54,7 @@ module.exports = {
   send_push_notification: function (get_message, device_token, device_type, title, data_to_send) {
 
     if (device_token != '' && device_token != null) {
-      var serverKey = ''; //put your server key here
+      var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
       var fcm = new FCM(serverKey);
       if (device_type == 1) {
         var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
@@ -296,11 +297,12 @@ module.exports = {
   get_reciever_device_token: async function (get_data) {
     // console.log(get_data,"=======check data")
     get_reciever_token = await appusers.findOne({
-      atrributes: ['id', 'deviceToken', 'deviceType', 'isNotification'],
+     // atrributes: ['id', 'deviceToken', 'deviceType', 'isNotification'],
+      atrributes: ['id', 'deviceToken', 'deviceType'],//, 'isNotification'],
       where: {
         id: get_data.receiverId,
         // role: 2,
-        isNotification: 1
+        //isNotification: 1
       }
     });
 

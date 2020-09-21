@@ -77,16 +77,20 @@ module.exports = function (io) {
             }
           }
 
-          // let get_reciever_device_token = await my_function.get_reciever_device_token(get_data)
+           let get_reciever_device_token = await my_function.get_reciever_device_token(get_data)
+          // get_reciever_device_token.dataValues.deviceToken='deUAAwWyQ42mz3vplOvOna:APA91bHfosYaHG0fK8XWmtmR_5_nT0NpvaBT0fi2tml5j5RmLA7Am_gSdCMkPSpcmcfkjzjqHKHeHgms8KVwf3KkVM_fxw-kfhkJ9gcDDRm5fUr9Mp8B30TfjTVn2KFPQXrqrUtc4oZc'
+           get_reciever_device_token.dataValues.device_type=1
 
-          // if (get_reciever_device_token && get_data.message!='') {
-          //   /*  console.log("innnnnnnnnnndata"); */
-          //   message = get_data.senderName + ' Sent You a Message'
-          //   device_token = get_reciever_device_token.dataValues.deviceToken
-          //   device_type = get_reciever_device_token.dataValues.device_type
-          //   title = 'Butterfly'
-          //   let send_push_to_reciever = await my_function.send_push_notification(message, device_token, device_type, title, data_to_send)
-          // }
+           console.log('Neeraj Kumar')
+
+          if (get_reciever_device_token && get_data.message!='') {
+             console.log("innnnnnnnnnndata"); 
+            message = get_data.senderName + ' Sent You a Message'
+            device_token = get_reciever_device_token.dataValues.deviceToken
+            device_type = get_reciever_device_token.dataValues.device_type
+            title = 'Future Robotics'
+            let send_push_to_reciever = await my_function.send_push_notification(message, device_token, device_type, title, data_to_send)
+          }
         
 
       } catch (error) {
