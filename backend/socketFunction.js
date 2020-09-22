@@ -829,6 +829,209 @@ module.exports = {
   
     },
 
+    send_message1: async function (get_data) {
+
+
+      var user_data = await chatConstants.findOne({
+        where: {
+  
+          [Op.or]: [
+            { senderId: get_data.senderId, receiverId: get_data.receiverId },
+            { receiverId: get_data.senderId, senderId: get_data.receiverId }
+  
+          ]
+        }
+      });
+  
+      if (user_data) {
+  //------------------Testing-----------Dump-------------------
+  //  get_data.senderId=1
+  //   get_data.receiverId=2
+  //      get_data.messageType=1
+       //  get_data.message="Love you jan"
+  
+  
+  //------------------------------------------
+        create_message = await groupMessages.create({
+          senderId: get_data.senderId,
+          //receiverId: get_data.receiverId,
+          messageType: get_data.messageType,
+          message: get_data.message,
+          groupId:get_data.groupId,
+          chatConstantId: user_data.dataValues.id,
+          created: await this.create_time_stamp(),
+          updated: await this.create_time_stamp(),
+        });
+  
+        let update_last_message = await chatConstants.update({
+  
+          lastMessageId: create_message.dataValues.id,
+          deletedId: 0
+        },
+          {
+            where: {
+              id: user_data.dataValues.id
+            }
+          }
+        );
+  
+        var senduserdata = await appusers.findOne({
+          where: {
+            id: get_data.senderId,
+          }
+        });
+  
+        // var senddata = senduserdata.dataValues.name;
+        // var senderIdData = get_data.senderId;
+        // let gettoken = await helper.gettoken(get_data.receiverId);
+        // if(gettoken.isNotification==1) {
+        //     console.log("===================here");
+        //     let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Butterfly", senddata, senderIdData);
+        // }
+        // let notify = await helper.savenotifications(get_data.senderId,get_data.receiverId, '1', "New Message");
+  
+  
+      } else {
+  
+        let create_last_message = await chatConstants.create({
+          senderId: get_data.senderId,
+         // receiverId: get_data.receiverId,
+          groupId:get_data.groupId,
+          lastMessageId: 0,
+          created: await this.create_time_stamp(),
+          updated: await this.create_time_stamp(),
+        });
+  
+        create_message = await groupMessages.create({
+          senderId: get_data.senderId,
+          //receiverId: get_data.receiverId,
+          messageType: get_data.messageType,
+          message: get_data.message,
+          groupId:get_data.groupId,
+          chatConstantId: create_last_message.dataValues.id,
+          created: await this.create_time_stamp(),
+          updated: await this.create_time_stamp(),
+        });
+  
+        let update_last_message = await chatConstants.update({
+  
+          lastMessageId: create_message.dataValues.id
+        },
+          {
+            where: {
+              id: create_last_message.dataValues.id
+            }
+          }
+        );
+        
+        var senduserdata = await appusers.findOne({
+          where: {
+            id: get_data.senderId,
+          }
+        });
+  
+        var senddata = senduserdata.dataValues.name;
+        var senderIdData =get_data.senderId;
+        let gettoken = await helper.gettoken(get_data.receiverId);
+        if(gettoken.isNotification==1) {
+            console.log("===================here");
+            let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Future Robotics", senddata, senderIdData);
+        }
+        // let notify = await helper.savenotifications(get_data.senderId,get_data.receiverId, '1', "New Message");
+       
+  
+        return create_message;
+      }
+    },
+
+    data_to_send1: async function (get_data) {
+      final_array = [];
+      final_array = {
+        senderId: get_data.senderId,
+        receiverId: get_data.receiverId,
+        messageType: get_data.messageType,
+        message: get_data.message,
+        groupId:get_data.groupId,
+        senderName: get_data.senderName,
+        senderProfileImage: get_data.senderProfileImage,
+        receiverName: get_data.receiverName,
+        RecieverProfileImage: get_data.RecieverProfileImage,
+        created: await this.create_time_stamp(),
+  
+      }
+      return final_array;
+  
+    },
+
+    get_reciever_data1: async function (get_data) {
+
+      get_reciever_data = await socket_group.findOne({
+  
+        where: {
+          userId: get_data.receiverId
+        }
+  
+      });
+      return get_reciever_data
+  
+    },
+
+    get_block_status_users1: async function (get_data) {
+
+      get_user_block_status = await userblocks.findOne({
+        atrributes: ['id'],
+        where: {
+          [Op.or]: [
+            { userId: get_data.senderId, blockUserId: get_data.receiverId },
+            { blockUserId: get_data.senderId, userId: get_data.receiverId }
+  
+          ]
+        }
+      });
+  
+      /*  console.log(get_user_block_status,"get_user_block_status"); */
+  
+      return get_user_block_status;
+    },
+
+    get_reciever_device_token1: async function (get_data) {
+      // console.log(get_data,"=======check data")
+      get_reciever_token = await appusers.findOne({
+       // atrributes: ['id', 'deviceToken', 'deviceType', 'isNotification'],
+        atrributes: ['id', 'deviceToken', 'deviceType'],//, 'isNotification'],
+        where: {
+          id: get_data.receiverId,
+          // role: 2,
+          //isNotification: 1
+        }
+      });
+  
+      return get_reciever_token
+  
+  
+    },
+
+    get_blocked_user_status1: async function (get_data) {
+
+      //---------------------Testing-------------Dump
+     // get_data.senderId=1
+     // get_data.receiverId=1
+  
+  //----------------------------------------
+  get_data.receiverId=2
+      get_block_status_data = await userblocks.findOne({
+        where: {
+  
+          [Op.or]: [
+            { userId: get_data.senderId, blockUserId: get_data.receiverId },
+            { blockUserId: get_data.senderId, userId: get_data.receiverId }
+  
+          ]
+        }
+      });
+      return get_block_status_data
+  
+    },
 
 
 
