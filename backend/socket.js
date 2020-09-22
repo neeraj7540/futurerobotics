@@ -190,13 +190,14 @@ socket.on('connect_user1', async function (connect_listener) {
   let availableGroups = await my_function.getRoomList(connect_listener, socket_id);
   
   availableGroups.forEach(item=>{ 
-  socket.join(item.category);
+  socket.join(item.groupId);
   });
   
   success_message = [];
   success_message = {
   'success_message': 'connected successfully',
   'connectedGroups': availableGroups
+  
   }
   socket.emit('connect_listener1', success_message);
   } catch (error) {
