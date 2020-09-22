@@ -186,7 +186,7 @@ socket.on('connect_user1', async function (connect_listener) {
   let socket_id = socket.id
   let check_socket_id = await my_function.check_socket_id1(connect_listener, socket_id);
   
-  //console.log(check_socket_id)
+  console.log(check_socket_id)
   let availableGroups = await my_function.getRoomList(connect_listener, socket_id);
   
   availableGroups.forEach(item=>{ 

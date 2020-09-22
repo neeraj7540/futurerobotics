@@ -736,7 +736,7 @@ module.exports = {
      
       get_reciever = await socket_group.findAll({
       where: {
-        category:connect_listener.category
+        groupId:connect_listener.groupId
          // id:1,
           // role: 2,
           //isNotification: 1
@@ -822,7 +822,9 @@ module.exports = {
           createdAt: await this.create_time_stamp(),
           updatedAt: await this.create_time_stamp()
         })
+
       }
+     // console.log(create_socket_user)
       return create_socket_user;
   
     },
