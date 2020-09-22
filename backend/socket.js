@@ -65,7 +65,10 @@ module.exports = function (io) {
           }
           let send_message = await my_function.send_message(get_data)
           let data_to_send = await my_function.data_to_send(get_data);
-          socket.emit('new_message', data_to_send);
+
+          let get_message = await my_function. get_message1(get_data);
+          //socket.emit('new_message', data_to_send);
+          socket.emit('new_message', get_message);
           let get_reciever_data = await my_function.get_reciever_data(get_data)
           if (get_reciever_data.isOnline == 1) {
             let get_block_status_data = await my_function.get_block_status_users(get_data);
@@ -73,7 +76,7 @@ module.exports = function (io) {
             /*    console.log(get_block_status,"get_block_status"); */
             console.log(!get_block_status_data, "============")
             if (!get_block_status_data) {
-              socket.to(get_reciever_data.dataValues.socketId).emit('new_message', data_to_send);
+              socket.to(get_reciever_data.dataValues.socketId).emit('new_message', get_message);
             }
           }
 
@@ -176,6 +179,99 @@ module.exports = function (io) {
         throw error
       }
     });
+
+//---------------------------Testing- group------------------------------------------------------------------------
+socket.on('connect_user1', async function (connect_listener) {
+  try {
+  let socket_id = socket.id
+  let check_socket_id = await my_function.check_socket_id(connect_listener, socket_id);
+  let availableGroups = await my_function.getRoomList(connect_listener, socket_id);
+  
+  availableGroups.forEach(item=>{
+  socket.join(item.groupName);
+  });
+  
+  success_message = [];
+  success_message = {
+  'success_message': 'connected successfully',
+  'connectedGroups': availableGroups
+  }
+  socket.emit('connect_listener1', success_message);
+  } catch (error) {
+  throw error
+  }
+  });
+
+
+  //------------------------------------------
+  socket.on('send_message_group', async function (get_data) {
+    try {
+
+       //console.log("Neeraj")
+      let get_block_status_data_user = await my_function.get_blocked_user_status(get_data)
+        //  console.log(get_block_status_data_user,"get_block_status_data_user")
+      if(get_block_status_data_user!=null){
+      if (get_block_status_data_user.dataValues.userTo == get_data.senderId) {
+        success_message = [];
+        success_message = {
+          'success_message': 'You Are Blocked By This User'
+        }
+        socket.emit('messageReceiveAtGroup', success_message);
+        return;
+      }
+    }
+      // } else {
+
+        if (get_data.messageType == 1) {
+          extension_data = get_data.extension
+          convert_image = await my_function.image_base_64(get_data.message, extension_data);
+          get_data.message = convert_image;
+        }
+        let send_message = await my_function.send_message(get_data)
+        let data_to_send = await my_function.data_to_send(get_data);
+        let availableGroups = await my_function.getRoomList(get_data);
+        //socket.emit('new_message', data_to_send);
+        console.log(availableGroups[0].groupName)
+
+        socket.to(availableGroups[0].groupName).emit('messageReceiveAtGroup', data_to_send);
+
+
+
+
+        let get_reciever_data = await my_function.get_reciever_data(get_data)
+        if (get_reciever_data.isOnline == 1) {
+          let get_block_status_data = await my_function.get_block_status_users(get_data);
+
+          /*    console.log(get_block_status,"get_block_status"); */
+          console.log(!get_block_status_data, "============")
+          if (!get_block_status_data) {
+            socket.to(availableGroups[0].groupName).emit('messageReceiveAtGroup', data_to_send);
+          //  socket.to(get_reciever_data.dataValues.socketId).emit('new_message', data_to_send);
+          }
+        }
+
+         let get_reciever_device_token = await my_function.get_reciever_device_token(get_data)
+        // get_reciever_device_token.dataValues.deviceToken='deUAAwWyQ42mz3vplOvOna:APA91bHfosYaHG0fK8XWmtmR_5_nT0NpvaBT0fi2tml5j5RmLA7Am_gSdCMkPSpcmcfkjzjqHKHeHgms8KVwf3KkVM_fxw-kfhkJ9gcDDRm5fUr9Mp8B30TfjTVn2KFPQXrqrUtc4oZc'
+         get_reciever_device_token.dataValues.device_type=1
+
+         console.log('Neeraj Kumar')
+
+        if (get_reciever_device_token && get_data.message!='') {
+           console.log("innnnnnnnnnndata"); 
+          message = get_data.senderName + ' Sent You a Message'
+          device_token = get_reciever_device_token.dataValues.deviceToken
+          device_type = get_reciever_device_token.dataValues.device_type
+          title = 'Future Robotics'
+          let send_push_to_reciever = await my_function.send_push_notification(message, device_token, device_type, title, data_to_send)
+        }
+      
+
+    } catch (error) {
+      throw error
+    }
+  });
+
+
 
 
 
