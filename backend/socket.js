@@ -38,7 +38,7 @@ module.exports = function (io) {
       console.log('socket user disconnected');
     });
 
-
+ 
     
     socket.on('send_message', async function (get_data) {
       try {
@@ -184,11 +184,13 @@ module.exports = function (io) {
 socket.on('connect_user1', async function (connect_listener) {
   try {
   let socket_id = socket.id
-  let check_socket_id = await my_function.check_socket_id(connect_listener, socket_id);
+  let check_socket_id = await my_function.check_socket_id1(connect_listener, socket_id);
+  
+  //console.log(check_socket_id)
   let availableGroups = await my_function.getRoomList(connect_listener, socket_id);
   
-  availableGroups.forEach(item=>{
-  socket.join(item.groupName);
+  availableGroups.forEach(item=>{ 
+  socket.join(item.category);
   });
   
   success_message = [];
@@ -233,9 +235,9 @@ socket.on('connect_user1', async function (connect_listener) {
         //socket.emit('new_message', data_to_send);
         console.log(availableGroups[0].groupName)
 
-        socket.to(availableGroups[0].groupName).emit('messageReceiveAtGroup', data_to_send);
+        //socket.to(availableGroups[0].groupName).emit('messageReceiveAtGroup', data_to_send);
 
-
+        socket.emit('messageReceiveAtGroup', data_to_send);
 
 
         let get_reciever_data = await my_function.get_reciever_data(get_data)

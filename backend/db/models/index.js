@@ -46,7 +46,9 @@ let modules = [
   require('./chat_constants.js'),
   require('./messages.js'),
   require('./chat_block.js'),
-  require('./roomlist.js')
+  require('./roomlist.js'),
+  require('./group_messages.js'),
+  require('./socket_group.js')
   
    
 ];

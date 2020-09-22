@@ -17,7 +17,12 @@ const database = require('./db/db');
 const chatBlock = db.models.chatBlock;
 
 const roomList =db.models.roomlist;
-console.log(roomList)
+
+const groupMessages=db.models.group_messages;
+
+const socket_group=db.models.socket_group;
+
+console.log(socket_group)
 
 const FCM = require('fcm-node');
 
@@ -727,11 +732,12 @@ module.exports = {
     },
 
 
-    getRoomList: async function (get_data) {
+    getRoomList: async function (connect_listener) {
      
-      get_reciever = await roomList.findAll({
+      get_reciever = await socket_group.findAll({
       where: {
-          id:1,
+        category:connect_listener.category
+         // id:1,
           // role: 2,
           //isNotification: 1
         }
@@ -781,6 +787,45 @@ module.exports = {
          return get_messages_data[0];
        }
      },
+
+     check_socket_id1: async function (connect_listener, socket_id) {
+
+      let check_user = await socket_group.findOne({
+  
+        where: {
+          userId: connect_listener.userId
+        }
+      });
+  
+      /* console.log(check_user, "check_user"); */
+  
+      if (check_user) {
+  
+        create_socket_user = await socket_group.update({
+          isOnline: 1,
+          socketId: socket_id,
+        },
+          {
+            where: {
+              userId: connect_listener.userId
+            }
+          }
+        );
+  
+      } else {
+        create_socket_user = await socket_group.create({
+          userId: connect_listener.userId,
+          groupId:connect_listener.groupId,
+          category:connect_listener.category,
+         socketId: socket_id,
+          isOnline: 1,
+          createdAt: await this.create_time_stamp(),
+          updatedAt: await this.create_time_stamp()
+        })
+      }
+      return create_socket_user;
+  
+    },
 
 
 
