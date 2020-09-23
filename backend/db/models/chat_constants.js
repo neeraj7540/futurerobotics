@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		receiverId: {
 			type: DataTypes.INTEGER(11),
-			allowNull: false,
+			allowNull: true,
 			field: 'receiverId'
 		},
 		lastMessageId: {

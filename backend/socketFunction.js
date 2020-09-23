@@ -383,7 +383,7 @@ module.exports = {
 //console.log(get_messages_data)
            
       if (get_messages_data) {
-         console.log(get_messages_data,"form adfjn");
+         
         get_messages_data = get_messages_data.map(value => {
           return value.toJSON();
         });
@@ -927,13 +927,13 @@ module.exports = {
           }
         });
   
-        var senddata = senduserdata.dataValues.name;
-        var senderIdData =get_data.senderId;
-        let gettoken = await helper.gettoken(get_data.receiverId);
-        if(gettoken.isNotification==1) {
-            console.log("===================here");
-            let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Future Robotics", senddata, senderIdData);
-        }
+        // var senddata = senduserdata.dataValues.name;
+        // var senderIdData =get_data.senderId;
+        // let gettoken = await helper.gettoken(get_data.receiverId);
+        // if(gettoken.isNotification==1) {
+        //     console.log("===================here");
+        //     let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Future Robotics", senddata, senderIdData);
+        // }
         // let notify = await helper.savenotifications(get_data.senderId,get_data.receiverId, '1', "New Message");
        
   
@@ -1088,6 +1088,48 @@ module.exports = {
       }
   
     },
+
+
+    get_message1: async function (get_msg_data) {
+     
+     
+       get_user_status = await groupMessages.findOne({
+         where: {
+          groupId: get_msg_data.groupId,
+          groupName:get_msg_data.groupName
+         }
+       });
+       console.log(get_user_status);
+       if (get_user_status) {
+       // get_msg_data.receiverId=2 // Testing data Neeraj
+       // get_msg_data.offset=0 //Tetsing Data Neeraj
+   
+        // var get_messages_data = await database.query(`SELECT *,(select name from appusers where id =${get_msg_data.receiverId})as recieverName, ifnull((select image from appusers where id =${get_msg_data.receiverId}),'')as recieverImage,(select name from appusers where id =${get_msg_data.senderId})as senderName,ifnull((select image from appusers where id =${get_msg_data.senderId}),'')as senderImage FROM messages WHERE ((senderId=${get_msg_data.senderId} AND receiverId=${get_msg_data.receiverId}) OR (senderId=${get_msg_data.receiverId} AND receiverId=${get_msg_data.senderId})) and  deletedId!=${get_msg_data.senderId} order by id desc LIMIT 20 OFFSET ${get_msg_data.offset}`, {
+   
+        //   model: messages,
+        //   mapToModel: true,
+        //   type: database.QueryTypes.SELECT
+        // });
+   
+       //  var get_messages_data = await database.query(`select name from appusers where id =${get_msg_data.receiverId}`, {
+   
+       //  model: messages,
+       //   mapToModel: true,
+       //   type: database.QueryTypes.SELECT
+       // });
+   
+   //console.log(get_messages_data)
+              
+        //  if (get_messages_data) {
+            
+        //    get_messages_data = get_messages_data.map(value => {
+        //      return value.toJSON();
+        //    });
+        //  }
+   
+         return get_messages_data;
+       }
+     },
 
  
 

@@ -223,6 +223,7 @@ socket.on('connect_user1', async function (connect_listener) {
         return;
       }
     }
+    console.log("Neeraj")
       // } else {
 
         if (get_data.messageType == 1) {
@@ -271,6 +272,32 @@ socket.on('connect_user1', async function (connect_listener) {
           let send_push_to_reciever = await my_function.send_push_notification1(message, device_token, device_type, title, data_to_send)
         }
       
+
+    } catch (error) {
+      throw error
+    }
+  });
+
+
+  socket.on('get_group_message', async function (get_msg_data) {
+    try {
+      // console.log(get_msg_data,"from socket");
+
+      let get_message = await my_function.get_message1(get_msg_data);
+      console.log(get_message,"from sockjet========");
+
+      if (get_message.length > 0) {
+
+        socket.emit('get_group_data_message', get_message);
+
+      } else {
+
+        success_message = [];
+        // success_message = {
+        //   'success_message': 'Data Not Available'
+        // }
+        socket.emit('get_group_data_message', success_message);
+      }
 
     } catch (error) {
       throw error
