@@ -21,8 +21,9 @@ const roomList =db.models.roomlist;
 const groupMessages=db.models.group_messages;
 
 const socket_group=db.models.socket_group;
+const groups = db.models.groups;
 
-console.log(socket_group)
+console.log(groups)
 
 const FCM = require('fcm-node');
 
@@ -860,6 +861,37 @@ module.exports = {
           created: await this.create_time_stamp(),
           updated: await this.create_time_stamp(),
         });
+
+      let countget = await groups.findOne({
+        where:{
+          category: get_data.category,
+          id:get_data.groupId
+
+        }
+
+      })
+
+      var count=countget.dataValues.count
+     
+      var count1=++count
+     
+     let update_last = await groups.update({
+          
+          count: count1,
+        },
+          {
+            where: {
+              category: get_data.category,
+              id:get_data.groupId
+
+            }
+          }
+        );
+
+        console.log("vgsdlcdcjlv" +update_last)
+       
+
+
   
         let update_last_message = await chatConstants.update({
   
@@ -912,6 +944,42 @@ module.exports = {
           created: await this.create_time_stamp(),
           updated: await this.create_time_stamp(),
         });
+
+        let countget = await groups.findOne({
+          where:{
+            category: get_data.category,
+            id:get_data.groupId
+  
+          }
+  
+        })
+        var count=countget.dataValues.count
+     
+      var count1=++count
+  
+        var count=countget.dataValues.count
+        console.log(count);
+       let update_last = await groups.update({
+            
+            count: count1,
+          },
+            {
+              where: {
+                category: get_data.category,
+                id:get_data.groupId
+  
+              }
+            }
+          );
+
+
+          console.log(update_last);
+
+
+
+
+
+
   
         let update_last_message = await chatConstants.update({
   
@@ -1116,6 +1184,40 @@ module.exports = {
         return get_messages_data;
       }
       return get_user_status
+    },
+
+
+    get_chat_listing1: async function (get_chat_data) {
+
+      userdata = await socket_group.findOne({
+
+      })
+
+            get_user_status = await appusers.findOne({
+        where: {
+          id: get_chat_data.userId
+        }
+      });
+     
+        if (get_user_status) {
+  
+        
+        var chat_data = await database.query(`select *,(select Count(*) from messages where (receiverId=${get_chat_data.userId} and senderId=user_id) and (readStatus=0) ) as unreadcount  from (SELECT *,CASE WHEN senderId = ${get_chat_data.userId} THEN receiverId WHEN receiverId = ${get_chat_data.userId} THEN senderId  END AS user_id,(SELECT message FROM messages where id=lastMessageId ) as lastMessage ,(SELECT name FROM appusers where id=user_id) as userName, ifnull((SELECT image FROM appusers where id=user_id),'') as userImage,(SELECT  created  FROM messages where id=lastMessageId) as created_at ,(SELECT  messageType  FROM messages where id=lastMessageId) as messageType, ifnull((SELECT  isOnline  FROM socket_user where userId=user_id),0) as onlineStatus, ifnull((SELECT  status  FROM userblocks where (userId=user_id and blockUserId=${get_chat_data.userId}) or (blockUserId=user_id and userId=${get_chat_data.userId})),0) as block_status from chat_constants where (senderId=${get_chat_data.userId} or receiverId=${get_chat_data.userId}))tt where deletedId!=${get_chat_data.userId} order by created_at desc`, {
+  
+          model: messages,
+          model: chatConstants,
+          mapToModel: true,
+          type: database.QueryTypes.SELECT
+        })
+        if (chat_data) {
+          chat_data = chat_data.map(value => {
+            value = value.toJSON();
+            // value.block_status = 0;
+            return value;
+          });
+        }
+        return chat_data;
+      }
     },
    
 

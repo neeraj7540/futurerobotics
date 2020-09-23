@@ -218,7 +218,7 @@ socket.on('connect_user1', async function (connect_listener) {
         success_message = [];
         success_message = {
           'success_message': 'You Are Blocked By This User'
-        }
+        } 
         socket.emit('messageReceiveAtGroup', success_message);
         return;
       }
@@ -308,7 +308,7 @@ socket.on('connect_user1', async function (connect_listener) {
   socket.on('group_chat_listing', async function (chat_data) {
     try {
       console.log(chat_data, "=====socket ");
-      let get_chat_listing = await my_function.get_chat_listing(chat_data);
+      let get_chat_listing = await my_function.get_chat_listing1(chat_data);
 
       if (get_chat_listing.length > 0) {
         socket.emit('group_chat_list', get_chat_listing);
