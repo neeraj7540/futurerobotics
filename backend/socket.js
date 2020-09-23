@@ -283,7 +283,7 @@ socket.on('connect_user1', async function (connect_listener) {
     try {
       // console.log(get_msg_data,"from socket");
 
-      let get_message = await my_function.get_message1(get_msg_data);
+      let get_message = await my_function.get_message2(get_msg_data);
       console.log(get_message,"from sockjet========");
 
       if (get_message) {
@@ -299,6 +299,28 @@ socket.on('connect_user1', async function (connect_listener) {
         socket.emit('get_group_data_message', success_message);
       }
 
+    } catch (error) {
+      throw error
+    }
+  });
+
+
+  socket.on('group_chat_listing', async function (chat_data) {
+    try {
+      console.log(chat_data, "=====socket ");
+      let get_chat_listing = await my_function.get_chat_listing(chat_data);
+
+      if (get_chat_listing.length > 0) {
+        socket.emit('group_chat_list', get_chat_listing);
+      } else {
+
+        success_message = [];
+        /* success_message = {
+          'success_message': 'Data Not Available'
+        } */
+        socket.emit('group_chat_list', success_message);
+
+      }
     } catch (error) {
       throw error
     }

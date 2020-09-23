@@ -853,7 +853,9 @@ module.exports = {
           messageType: get_data.messageType,
           message: get_data.message,
           groupId:get_data.groupId,
+          category:get_data.category,
           groupName:get_data.groupName,
+
           chatConstantId: user_data.dataValues.id,
           created: await this.create_time_stamp(),
           updated: await this.create_time_stamp(),
@@ -904,6 +906,7 @@ module.exports = {
           messageType: get_data.messageType,
           message: get_data.message,
           groupId:get_data.groupId,
+          category:get_data.category,
           groupName:get_data.groupName,
           chatConstantId: create_last_message.dataValues.id,
           created: await this.create_time_stamp(),
@@ -927,13 +930,13 @@ module.exports = {
           }
         });
   
-        // var senddata = senduserdata.dataValues.name;
-        // var senderIdData =get_data.senderId;
-        // let gettoken = await helper.gettoken(get_data.receiverId);
-        // if(gettoken.isNotification==1) {
-        //     console.log("===================here");
-        //     let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Future Robotics", senddata, senderIdData);
-        // }
+        var senddata = senduserdata.dataValues.name;
+        var senderIdData =get_data.senderId;
+        let gettoken = await helper.gettoken(get_data.receiverId);
+        if(gettoken.isNotification==1) {
+            console.log("===================here");
+            let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Future Robotics", senddata, senderIdData);
+        }
         // let notify = await helper.savenotifications(get_data.senderId,get_data.receiverId, '1', "New Message");
        
   
@@ -1090,32 +1093,32 @@ module.exports = {
     },
 
 
-    get_message1: async function (get_msg_data) {
+    get_message2: async function (get_msg_data) {
      
      
-       get_user_status = await groupMessages.findOne({
-         where: {
-          groupId: get_msg_data.groupId,
-          groupName:get_msg_data.groupName
-         }
-       });
-       console.log(get_user_status);
-       if (get_user_status) {
-        var get_messages_data = await database.query(`SELECT senderId,groupId,groupName,message,appusers.name as senderName,appusers.image as senderProfileImage,group_messages.created FROM group_messages INNER JOIN appusers ON group_messages.senderId=appusers.id WHERE groupId=2 and groupName="first"`, {
-   
-       // model: messages,
-         //mapToModel: true,
-         type: database.QueryTypes.SELECT
-       });
-   
- 
-   
-         return get_messages_data;
-       }
-       return  get_user_status;
-     },
+      get_user_status = await groupMessages.findOne({
+        where: {
+         groupId: get_msg_data.groupId,
+         groupName:get_msg_data.groupName
+        }
+      });
+      console.log(get_user_status);
+      if (get_user_status) {
+       var get_messages_data = await database.query(`SELECT senderId,groupId,groupName,message,appusers.name as senderName,appusers.image as senderProfileImage,messageType,category,group_messages.created FROM group_messages INNER JOIN appusers ON group_messages.senderId=appusers.id WHERE groupId=${get_msg_data.groupId} and groupName="${get_msg_data.groupName}"`, {
+  
+      // model: messages,
+        //mapToModel: true,
+        type: database.QueryTypes.SELECT
+      });
+  
 
- 
+  
+        return get_messages_data;
+      }
+      return get_user_status
+    },
+   
+
 
 
 
