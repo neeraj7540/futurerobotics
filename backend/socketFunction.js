@@ -793,7 +793,8 @@ module.exports = {
       let check_user = await socket_group.findOne({
   
         where: {
-          userId: connect_listener.userId
+          userId: connect_listener.userId,
+          groupId:connect_listener.groupId
         }
       });
   
@@ -824,7 +825,7 @@ module.exports = {
         })
 
       }
-     // console.log(create_socket_user)
+   
       return create_socket_user;
   
     },
@@ -834,30 +835,25 @@ module.exports = {
 
       var user_data = await chatConstants.findOne({
         where: {
+          senderId: get_data.senderId
   
-          [Op.or]: [
-            { senderId: get_data.senderId, receiverId: get_data.receiverId },
-            { receiverId: get_data.senderId, senderId: get_data.receiverId }
+          // [Op.or]: [
+          //   { senderId: get_data.senderId, receiverId: get_data.receiverId },
+          //   { receiverId: get_data.senderId, senderId: get_data.receiverId }
   
-          ]
+          // ]
         }
       });
   
       if (user_data) {
-  //------------------Testing-----------Dump-------------------
-  //  get_data.senderId=1
-  //   get_data.receiverId=2
-  //      get_data.messageType=1
-       //  get_data.message="Love you jan"
   
-  
-  //------------------------------------------
         create_message = await groupMessages.create({
           senderId: get_data.senderId,
           //receiverId: get_data.receiverId,
           messageType: get_data.messageType,
           message: get_data.message,
           groupId:get_data.groupId,
+          groupName:get_data.groupName,
           chatConstantId: user_data.dataValues.id,
           created: await this.create_time_stamp(),
           updated: await this.create_time_stamp(),
@@ -908,6 +904,7 @@ module.exports = {
           messageType: get_data.messageType,
           message: get_data.message,
           groupId:get_data.groupId,
+          groupName:get_data.groupName,
           chatConstantId: create_last_message.dataValues.id,
           created: await this.create_time_stamp(),
           updated: await this.create_time_stamp(),
@@ -952,6 +949,8 @@ module.exports = {
         messageType: get_data.messageType,
         message: get_data.message,
         groupId:get_data.groupId,
+        category:get_data.category,
+        groupName:get_data.groupName,
         senderName: get_data.senderName,
         senderProfileImage: get_data.senderProfileImage,
         receiverName: get_data.receiverName,
@@ -968,7 +967,7 @@ module.exports = {
       get_reciever_data = await socket_group.findOne({
   
         where: {
-          userId: get_data.receiverId
+          userId: get_data.senderId
         }
   
       });
@@ -981,11 +980,12 @@ module.exports = {
       get_user_block_status = await userblocks.findOne({
         atrributes: ['id'],
         where: {
-          [Op.or]: [
-            { userId: get_data.senderId, blockUserId: get_data.receiverId },
-            { blockUserId: get_data.senderId, userId: get_data.receiverId }
+          userId: get_data.senderId
+          // [Op.or]: [
+          //   { userId: get_data.senderId, blockUserId: get_data.receiverId },
+          //   { blockUserId: get_data.senderId, userId: get_data.receiverId }
   
-          ]
+          // ]
         }
       });
   
@@ -995,43 +995,102 @@ module.exports = {
     },
 
     get_reciever_device_token1: async function (get_data) {
-      // console.log(get_data,"=======check data")
-      get_reciever_token = await appusers.findOne({
-       // atrributes: ['id', 'deviceToken', 'deviceType', 'isNotification'],
-        atrributes: ['id', 'deviceToken', 'deviceType'],//, 'isNotification'],
-        where: {
-          id: get_data.receiverId,
-          // role: 2,
-          //isNotification: 1
-        }
-      });
+
+      var chat_data = await database.query(`SELECT appusers.id,deviceToken,deviceType FROM appusers INNER JOIN socket_group ON appusers.id=socket_group.userId where socket_group.groupId=${get_data.groupId} and socket_group.category="${get_data.category}"`)
+
+      var tokendata=chat_data[0]
+      var output1 = tokendata.map(user => user.deviceToken);
+     // console.log(output1)
+      
+
+     
+
+      
+      // get_reciever_token = await appusers.findOne({
+       
+      //   atrributes: ['id', 'deviceToken', 'deviceType'],//, 'isNotification'],
+      //   where: {
+      //     id: get_data.receiverId,
+      //     // role: 2,
+      //     //isNotification: 1
+      //   }
+      // });
   
-      return get_reciever_token
+      return output1
   
   
     },
 
     get_blocked_user_status1: async function (get_data) {
 
-      //---------------------Testing-------------Dump
-     // get_data.senderId=1
-     // get_data.receiverId=1
+    
   
   //----------------------------------------
-  get_data.receiverId=2
+  //get_data.receiverId=2
       get_block_status_data = await userblocks.findOne({
         where: {
-  
-          [Op.or]: [
-            { userId: get_data.senderId, blockUserId: get_data.receiverId },
-            { blockUserId: get_data.senderId, userId: get_data.receiverId }
-  
-          ]
+          
+          blockUserId:get_data.senderId
+          
         }
       });
       return get_block_status_data
   
     },
+
+
+    send_push_notification1: function (get_message, device_token, device_type, title, data_to_send) {
+
+      if (device_token != '' && device_token != null) {
+        var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+        var fcm = new FCM(serverKey);
+        if (device_type == 1) {
+          var message = { 
+           // to: device_token,
+           registration_ids:device_token,
+            notification: {
+              title: title,
+              body: get_message
+            },
+  
+            data: {  
+              body: get_message,
+              receiver_data: data_to_send,
+            }
+          };
+        } else {
+          var message = { 
+          //  to: device_token,
+          registration_ids:device_token,
+            
+  
+            
+  
+            data: {  
+              body: get_message,
+              receiver_data: data_to_send,
+            }
+          };
+        }
+  
+        fcm.send(message, function (err, response) {
+          if (err) {
+            console.log("Something has gone wrong!", message);
+          } else {
+            console.log("Successfully sent with response: ", response);
+          }
+        });
+  
+        return fcm;
+  
+      } else {
+        return;
+      }
+  
+    },
+
+ 
+
 
 
 

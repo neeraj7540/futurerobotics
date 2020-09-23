@@ -186,11 +186,11 @@ socket.on('connect_user1', async function (connect_listener) {
   let socket_id = socket.id
   let check_socket_id = await my_function.check_socket_id1(connect_listener, socket_id);
   
-  console.log(check_socket_id)
+  //console.log(check_socket_id)
   let availableGroups = await my_function.getRoomList(connect_listener, socket_id);
-  
+ // console.log(availableGroups)
   availableGroups.forEach(item=>{ 
-  socket.join(item.groupId);
+  socket.join(item.groupId); 
   });
   
   success_message = [];
@@ -210,9 +210,9 @@ socket.on('connect_user1', async function (connect_listener) {
   socket.on('send_message_group', async function (get_data) {
     try {
 
-       //console.log("Neeraj")
+       
       let get_block_status_data_user = await my_function.get_blocked_user_status1(get_data)
-        //  console.log(get_block_status_data_user,"get_block_status_data_user")
+        
       if(get_block_status_data_user!=null){
       if (get_block_status_data_user.dataValues.userTo == get_data.senderId) {
         success_message = [];
@@ -233,39 +233,42 @@ socket.on('connect_user1', async function (connect_listener) {
         let send_message = await my_function.send_message1(get_data)
         let data_to_send = await my_function.data_to_send1(get_data);
         let availableGroups = await my_function.getRoomList(get_data);
-        //socket.emit('new_message', data_to_send);
+       
         console.log(availableGroups[0].groupId)
-
-        //socket.to(availableGroups[0].groupName).emit('messageReceiveAtGroup', data_to_send);
-
         socket.emit('messageReceiveAtGroup', data_to_send);
 
+        
 
         let get_reciever_data = await my_function.get_reciever_data1(get_data)
+        console.log("Neeraj")
         if (get_reciever_data.isOnline == 1) {
           let get_block_status_data = await my_function.get_block_status_users1(get_data);
 
-          /*    console.log(get_block_status,"get_block_status"); */
+          
           console.log(!get_block_status_data, "============")
           if (!get_block_status_data) {
             socket.to(availableGroups[0].groupId).emit('messageReceiveAtGroup', data_to_send);
-          //  socket.to(get_reciever_data.dataValues.socketId).emit('new_message', data_to_send);
+          
           }
         }
 
          let get_reciever_device_token = await my_function.get_reciever_device_token1(get_data)
         // get_reciever_device_token.dataValues.deviceToken='deUAAwWyQ42mz3vplOvOna:APA91bHfosYaHG0fK8XWmtmR_5_nT0NpvaBT0fi2tml5j5RmLA7Am_gSdCMkPSpcmcfkjzjqHKHeHgms8KVwf3KkVM_fxw-kfhkJ9gcDDRm5fUr9Mp8B30TfjTVn2KFPQXrqrUtc4oZc'
-         get_reciever_device_token.dataValues.device_type=1
+       
+        console.log(get_reciever_device_token)
+        device_type=1
+
+      
 
          console.log('Neeraj Kumar')
 
         if (get_reciever_device_token && get_data.message!='') {
            console.log("innnnnnnnnnndata"); 
           message = get_data.senderName + ' Sent You a Message'
-          device_token = get_reciever_device_token.dataValues.deviceToken
-          device_type = get_reciever_device_token.dataValues.device_type
-          title = 'Future Robotics'
-          let send_push_to_reciever = await my_function.send_push_notification(message, device_token, device_type, title, data_to_send)
+          device_token = get_reciever_device_token
+          device_type = device_type
+          title = get_data.groupName
+          let send_push_to_reciever = await my_function.send_push_notification1(message, device_token, device_type, title, data_to_send)
         }
       
 

@@ -77,7 +77,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
     },
     deviceToken : {
-      type: DataTypes.STRING(200),
+      type: DataTypes.STRING(1000),
       allowNull: true,
     }
     ,

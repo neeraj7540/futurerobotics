@@ -22,6 +22,12 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: false,
 			field: 'groupId'
 		},
+		groupName:{
+			type: DataTypes.STRING(100),
+			allowNull: false,
+			field: 'groupName'
+
+		},
 		chatConstantId: {
 			type: DataTypes.INTEGER(11),
 			allowNull: false,
