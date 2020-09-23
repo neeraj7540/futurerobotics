@@ -1220,6 +1220,28 @@ module.exports = {
         return chat_data;
       }
     },
+
+
+    delete_chat_users1: async function (get_data) {
+     
+      let update_last = await socket_group.update({
+             msg_status:1
+      },
+        {
+          where: {
+            category: get_data.category,
+            groupId:get_data.groupId,
+            userId:get_data.userId
+
+          }
+        }
+      );
+
+      return update_last
+     
+  
+      
+    },
    
 
 

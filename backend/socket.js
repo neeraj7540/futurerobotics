@@ -327,6 +327,26 @@ socket.on('connect_user1', async function (connect_listener) {
   });
 
 
+//------------------------------------------------------------------------------------------
+
+
+socket.on('group_chat_delete', async function (get_data) {
+  try {
+
+    let delete_chat_data = await my_function.delete_chat_users1(get_data)
+    success_message = []
+    success_message = {
+      'success_message': 'Chat Deleted Successfully'
+    }
+
+    socket.emit('group_delete_data', success_message);
+
+  } catch (error) {
+    throw error
+  }
+});
+
+
 
 
 
