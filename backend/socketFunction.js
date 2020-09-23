@@ -660,6 +660,7 @@ module.exports = {
     var filename = Math.floor(Date.now() / 1000) + '.' + extension;
     var base64Str = data;
     upload_path = path.join(__dirname, '../backend/public/images/chat/' + filename);
+    console.log("djgvcajabkj" +upload_path)
     if (extension) {
       fs.writeFile(upload_path, base64Str, {
         encoding: 'base64'
