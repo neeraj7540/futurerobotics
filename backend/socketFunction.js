@@ -1101,34 +1101,18 @@ module.exports = {
        });
        console.log(get_user_status);
        if (get_user_status) {
-       // get_msg_data.receiverId=2 // Testing data Neeraj
-       // get_msg_data.offset=0 //Tetsing Data Neeraj
+        var get_messages_data = await database.query(`SELECT senderId,groupId,groupName,message,appusers.name as senderName,appusers.image as senderProfileImage,group_messages.created FROM group_messages INNER JOIN appusers ON group_messages.senderId=appusers.id WHERE groupId=2 and groupName="first"`, {
    
-        // var get_messages_data = await database.query(`SELECT *,(select name from appusers where id =${get_msg_data.receiverId})as recieverName, ifnull((select image from appusers where id =${get_msg_data.receiverId}),'')as recieverImage,(select name from appusers where id =${get_msg_data.senderId})as senderName,ifnull((select image from appusers where id =${get_msg_data.senderId}),'')as senderImage FROM messages WHERE ((senderId=${get_msg_data.senderId} AND receiverId=${get_msg_data.receiverId}) OR (senderId=${get_msg_data.receiverId} AND receiverId=${get_msg_data.senderId})) and  deletedId!=${get_msg_data.senderId} order by id desc LIMIT 20 OFFSET ${get_msg_data.offset}`, {
+       // model: messages,
+         //mapToModel: true,
+         type: database.QueryTypes.SELECT
+       });
    
-        //   model: messages,
-        //   mapToModel: true,
-        //   type: database.QueryTypes.SELECT
-        // });
-   
-       //  var get_messages_data = await database.query(`select name from appusers where id =${get_msg_data.receiverId}`, {
-   
-       //  model: messages,
-       //   mapToModel: true,
-       //   type: database.QueryTypes.SELECT
-       // });
-   
-   //console.log(get_messages_data)
-              
-        //  if (get_messages_data) {
-            
-        //    get_messages_data = get_messages_data.map(value => {
-        //      return value.toJSON();
-        //    });
-        //  }
+ 
    
          return get_messages_data;
        }
+       return  get_user_status;
      },
 
  
