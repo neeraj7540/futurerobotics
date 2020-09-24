@@ -2243,6 +2243,105 @@ get_all_robots_admim_list: async (req, res) => {
     }
 },
 
+get_all_robots_admim_list1: async (req, res) => {
+  try {
+     const itemList = await appusers.findAll({
+           
+                where: {
+                  id:req.params.id
+                 }
+         
+   });
+   if(!itemList[0].select_robots){
+
+    return apiResponseHelper.post(res, true, 'Robots list',[]);
+  }
+
+   var listdata1=itemList[0].select_robots
+   var listdata2=JSON.parse(listdata1)
+  
+   console.log(listdata2)
+   var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
+var arrayofTaskId = listdata2;
+const itemList1 = await groups.findAll({
+  where: {
+    name: {
+      [Op.in]: arrayofTaskId
+      },
+      status:'1'
+
+    
+  }
+ })
+
+ console.log(itemList1)
+  
+         
+     if (itemList) {
+        
+          return apiResponseHelper.post(res, true, 'Robots list',itemList1);
+         } else {
+             return apiResponseHelper.post(res, true, 'Robots list',{});
+ }
+    } catch (e) {
+       
+     return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+         
+    }
+},
+
+
+get_all_plc_admin_list1: async (req, res) => {
+  try {
+    const itemList = await appusers.findAll({
+           
+      where: {
+        id:req.params.id
+       }
+
+});
+if(!itemList[0].select_plc){
+
+return apiResponseHelper.post(res, true, 'PLC list',[]);
+}
+
+
+var listdata1=itemList[0].select_plc
+var listdata2=JSON.parse(listdata1)
+
+console.log(listdata2)
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
+var arrayofTaskId = listdata2;
+const itemList1 = await groups.findAll({
+where: {
+ name: {
+   [Op.in]: arrayofTaskId
+   },
+   status:'1'
+
+ 
+}
+})
+         
+     if (itemList) {
+        
+          return apiResponseHelper.post(res, true, 'PLC list',itemList1);
+         } else {
+             return apiResponseHelper.post(res, true, 'PLC list',{});
+ }
+    } catch (e) {
+       
+     return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+         
+    }
+},
+
+
+
+
+
 get_all_plc_admin_list: async (req, res) => {
   try {
       //const id=req.params.id;

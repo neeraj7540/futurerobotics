@@ -215,10 +215,16 @@ routes.get('/allcomments_list/:id', feedsCtrl.getAllComments_list);
 //routes.post('/addlike_dislike/:id')
 
 
-//-----------------------28-08-2020--------------------------Correct
+//-----------------------28-08-2020--------------------------Correct----
 
 routes.get('/all_robots_list',appUsersCtrl.get_all_robots_admim_list);
+
+routes.get('/robots_list/:id',appUsersCtrl.get_all_robots_admim_list1); //new 24-09-2020
+
 routes.get('/all_plc_list',appUsersCtrl.get_all_plc_admin_list);
+
+routes.get('/plc_list/:id',appUsersCtrl.get_all_plc_admin_list1);
+
 routes.get('/all_general_list',appUsersCtrl.get_all_general_admin_list);
 
 //-------------------------31-08-2020-------------------------
