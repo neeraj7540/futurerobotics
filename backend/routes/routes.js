@@ -288,6 +288,8 @@ routes.get('/GetChat',socketFunction.GetChat);
 
 routes.get('/userlist/:id',feedsCtrl.userlist);
 
+routes.get('/massagelist/:id',feedsCtrl.massagelist)
+
 
 
 

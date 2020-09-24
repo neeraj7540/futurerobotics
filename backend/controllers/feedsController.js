@@ -16,7 +16,11 @@ const feedCommentTable = db.models.feedcomment;
 
 const messages=db.models.messages;
 
+const socket_group=db.models.socket_group;
+
 const groupMessages=db.models.group_messages;
+
+const updateMessages=db.models.update_messages;
 
 appUsersTable.hasMany(groupMessages, { foreignKey: 'senderId' });
 
@@ -1816,6 +1820,74 @@ console.log(testdata);
  if (itemList) {
             
         return apiResponseHelper.post(res, true, 'User List',itemList);
+      } else {
+          return apiResponseHelper.post(res, true, 'User List',{});
+      }
+
+
+  }catch(e){
+
+
+    console.log(e);
+    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+       
+  }
+
+
+
+
+
+
+
+
+
+
+}  ,
+
+
+massagelist:  async (req, res) => {
+
+
+  try{
+
+    const itemList = await socket_group.findAll({
+      
+     where:{
+      userId:req.params.id
+     }  
+});
+
+var testdata=itemList;
+console.log(testdata[0].groupId);
+
+var data = testdata.map(user=>user.groupId)
+
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
+var arrayofTaskId = data;
+const itemList1 = await updateMessages.findAll({
+  where: {
+    groupId: {
+      [Op.in]: arrayofTaskId
+    }
+  }
+ })//.then(function(result) {
+//   return res.json(result)
+// })
+
+console.log(itemList1)
+
+
+
+
+
+
+
+
+
+ if (itemList) {
+            
+        return apiResponseHelper.post(res, true, 'User List',itemList1);
       } else {
           return apiResponseHelper.post(res, true, 'User List',{});
       }

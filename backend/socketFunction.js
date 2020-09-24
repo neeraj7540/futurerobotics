@@ -876,6 +876,9 @@ if(!datacheck){
    chatConstantId: user_data.dataValues.id,
     created: await this.create_time_stamp(),
     updated: await this.create_time_stamp(),
+    senderName:get_data.senderName,
+    senderProfileImage:get_data.senderProfileImage
+
   });
 
 }
@@ -892,6 +895,8 @@ else{
     chatConstantId: user_data.dataValues.id,
     created: await this.create_time_stamp(),
     updated: await this.create_time_stamp(),
+    senderName:get_data.senderName,
+    senderProfileImage:get_data.senderProfileImage
   },{
      where:{
       id:datacheck.dataValues.id

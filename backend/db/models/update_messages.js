@@ -77,7 +77,20 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.INTEGER(11),
 			allowNull: false,
 			field: 'updated'
-		}
+        },
+        senderName:{
+			type: DataTypes.STRING(100),
+			allowNull: true,
+			field: 'senderName'
+
+        },
+        
+        senderProfileImage:{
+			type: DataTypes.STRING(1000),
+			allowNull: true,
+			field: 'senderProfileImage'
+
+		},
 	}, {
 		tableName: 'update_messages',
 		timestamps:false
