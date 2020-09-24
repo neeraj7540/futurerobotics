@@ -1163,15 +1163,25 @@ module.exports = {
 
 
     get_message2: async function (get_msg_data) {
-     
-     
+
+      get_user_status =await socket_group.findOne({
+        where:{
+          groupId: get_msg_data.groupId,
+         category:get_msg_data.category,
+         userId:get_msg_data.userId
+
+}
+
+})
+console.log(get_user_status.dataValues.msg_status)
+ if(get_user_status.dataValues.msg_status ==0){
       get_user_status = await groupMessages.findOne({
         where: {
          groupId: get_msg_data.groupId,
          groupName:get_msg_data.groupName
         }
       });
-      console.log(get_user_status);
+     // console.log(get_user_status);
       if (get_user_status) {
        var get_messages_data = await database.query(`SELECT senderId,groupId,groupName,message,appusers.name as senderName,appusers.image as senderProfileImage,messageType,category,group_messages.created FROM group_messages INNER JOIN appusers ON group_messages.senderId=appusers.id WHERE groupId=${get_msg_data.groupId} and groupName="${get_msg_data.groupName}"`, {
   
@@ -1185,6 +1195,40 @@ module.exports = {
         return get_messages_data;
       }
       return get_user_status
+    }
+else{
+  get_user_status = await groupMessages.findOne({
+    where: {
+     groupId: get_msg_data.groupId,
+     groupName:get_msg_data.groupName
+    }
+  });
+  get_user_status1 =await socket_group.findOne({
+    where:{
+      groupId: get_msg_data.groupId,
+     category:get_msg_data.category,
+     userId:get_msg_data.userId
+
+}
+
+})
+//console.log(get_user_status1.dataValues.msg_status)
+  if (get_user_status) {
+   var get_messages_data = await database.query(`SELECT senderId,groupId,groupName,message,appusers.name as senderName,appusers.image as senderProfileImage,messageType,category,group_messages.created FROM group_messages INNER JOIN appusers ON group_messages.senderId=appusers.id WHERE groupId=${get_msg_data.groupId} and groupName="${get_msg_data.groupName}" and group_messages.id>${get_user_status1.dataValues.msg_status}`, {
+
+  // model: messages,
+    //mapToModel: true,
+    type: database.QueryTypes.SELECT
+  });
+
+
+
+    return get_messages_data;
+  }
+  return get_user_status
+
+}
+    //return false;
     },
 
 
@@ -1223,9 +1267,27 @@ module.exports = {
 
 
     delete_chat_users1: async function (get_data) {
-     
-      let update_last = await socket_group.update({
-             msg_status:1
+
+
+      let dataget =await groupMessages.findOne({
+
+        where: {
+          category: get_data.category,
+          groupId:get_data.groupId,
+         
+
+        },
+        limit: 1,
+          
+        order :   [
+          ['id', 'DESC']
+            ]
+
+      })
+
+      //console.log(dataget)
+       let update_last = await socket_group.update({
+             msg_status:dataget.dataValues.id
       },
         {
           where: {

@@ -16,6 +16,10 @@ const feedCommentTable = db.models.feedcomment;
 
 const messages=db.models.messages;
 
+const groupMessages=db.models.group_messages;
+
+appUsersTable.hasMany(groupMessages, { foreignKey: 'senderId' });
+
 //const feedCommentTable1 = db.models.feedcomment;
 
 const commentLikedeslike=db.models.comment_likedeslike;
@@ -1785,17 +1789,17 @@ userlist:  async (req, res) => {
     const itemList = await appUsersTable.findAll({
       include: [
           {
-            model: messages,
+            model: groupMessages,
            // attributes: ['id','name','email','image','status']
-           where: {
-            receiverId:req.params.id
-          },
+          //  where: {
+          //   receiverId:req.params.id
+          // },
             
-           limit: 1,
+            limit: 1,
           
-          order :   [
+           order :   [
              ['id', 'DESC']
-              ]
+               ]
       
           },
         ]
