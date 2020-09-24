@@ -1857,8 +1857,13 @@ massagelist:  async (req, res) => {
      }  
 });
 
+if(!itemList){
+
+  return apiResponseHelper.post(res, true, 'User List',{});
+}
+
 var testdata=itemList;
-console.log(testdata[0].groupId);
+
 
 var data = testdata.map(user=>user.groupId)
 
@@ -1875,7 +1880,7 @@ const itemList1 = await updateMessages.findAll({
 //   return res.json(result)
 // })
 
-console.log(itemList1)
+//console.log(itemList1)
 
 
 
