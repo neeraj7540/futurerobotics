@@ -1068,7 +1068,7 @@ module.exports = {
 
     get_reciever_device_token1: async function (get_data) {
 
-      var chat_data = await database.query(`SELECT appusers.id,deviceToken,deviceType FROM appusers INNER JOIN socket_group ON appusers.id=socket_group.userId where socket_group.groupId=${get_data.groupId} and socket_group.category="${get_data.category}"`)
+      var chat_data = await database.query(`SELECT appusers.id,deviceToken,deviceType FROM appusers INNER JOIN socket_group ON appusers.id=socket_group.userId where socket_group.groupId=${get_data.groupId} and socket_group.notification=0 and socket_group.category="${get_data.category}"`)
 
       var tokendata=chat_data[0]
       var output1 = tokendata.map(user => user.deviceToken);
@@ -1305,6 +1305,28 @@ else{
       
     },
    
+    notification_users1: async function (get_data) {
+
+
+     
+       let update_last = await socket_group.update({
+        notification:get_data.notification
+      },
+        {
+          where: {
+            category: get_data.category,
+            groupId:get_data.groupId,
+            userId:get_data.userId
+
+          }
+        }
+      );
+
+      return update_last
+     
+  
+      
+    },
 
 
 

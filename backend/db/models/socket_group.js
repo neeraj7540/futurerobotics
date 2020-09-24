@@ -55,7 +55,13 @@ isOnline: {
       allowNull: true,
       default: 0
       
-     }    
+     },
+     notification: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+      default: 0
+      
+     }   
 
          
 }, {

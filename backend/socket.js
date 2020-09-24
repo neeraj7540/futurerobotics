@@ -346,6 +346,50 @@ socket.on('group_chat_delete', async function (get_data) {
   }
 });
 
+//---------------------------------Notification-----------------------------------------------
+
+socket.on('notification_status', async function (get_data) {
+  try {
+
+    let delete_chat_data = await my_function.notification_users1(get_data)
+
+    if(get_data.notification ==0){
+      success_message = {
+        'success_message': 'Notifications Unblock Successfully'
+      }
+
+    }
+
+    if(get_data.notification ==1){
+      success_message = {
+        'success_message': 'Notifications block Successfully'
+      }
+
+    }
+
+    // success_message = []
+    // success_message = {
+    //   'success_message': ' Successfully'
+    // }
+
+    socket.emit('notification_information', success_message);
+
+  } catch (error) {
+    throw error
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
