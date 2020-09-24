@@ -1874,7 +1874,12 @@ const itemList1 = await updateMessages.findAll({
   where: {
     groupId: {
       [Op.in]: arrayofTaskId
-    }
+      },
+      senderId:{
+        [Op.not]:req.params.id
+      }
+
+    
   }
  })//.then(function(result) {
 //   return res.json(result)
