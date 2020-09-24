@@ -18,6 +18,10 @@ const chatBlock = db.models.chatBlock;
 
 const roomList =db.models.roomlist;
 
+const updateMessages=db.models.update_messages;
+
+console.log(updateMessages)
+
 const groupMessages=db.models.group_messages;
 
 const socket_group=db.models.socket_group;
@@ -848,6 +852,63 @@ module.exports = {
       });
   
       if (user_data) {
+//---------------------------------------------------------
+
+var datacheck = await updateMessages.findOne({
+  where: {
+    senderId: get_data.senderId,
+    groupId:get_data.groupId,
+    category:get_data.category,
+}
+});
+
+console.log("HFHVFDVDFBVDFBDF"+datacheck)
+if(!datacheck){
+  create_message = await updateMessages.create({
+    senderId: get_data.senderId,
+    //receiverId: get_data.receiverId,
+    messageType: get_data.messageType,
+    message: get_data.message,
+    groupId:get_data.groupId,
+    category:get_data.category,
+    groupName:get_data.groupName,
+
+   chatConstantId: user_data.dataValues.id,
+    created: await this.create_time_stamp(),
+    updated: await this.create_time_stamp(),
+  });
+
+}
+else{
+  create_message = await updateMessages.update({
+    senderId: get_data.senderId,
+    //receiverId: get_data.receiverId,
+    messageType: get_data.messageType,
+    message: get_data.message,
+    groupId:get_data.groupId,
+    category:get_data.category,
+    groupName:get_data.groupName,
+
+    chatConstantId: user_data.dataValues.id,
+    created: await this.create_time_stamp(),
+    updated: await this.create_time_stamp(),
+  },{
+     where:{
+      id:datacheck.dataValues.id
+
+     }
+
+  }
+  
+  
+  );
+
+
+}
+
+
+//-------------------------------------------------
+
   
         create_message = await groupMessages.create({
           senderId: get_data.senderId,
