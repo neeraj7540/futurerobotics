@@ -18,6 +18,10 @@ const messages=db.models.messages;
 
 const socket_group=db.models.socket_group;
 
+const notificationData=db.models.notification_data;
+
+console.log(notificationData)
+
 const groupMessages=db.models.group_messages;
 
 const updateMessages=db.models.update_messages;
@@ -1790,23 +1794,15 @@ userlist:  async (req, res) => {
 
   try{
 
-    const itemList = await appUsersTable.findAll({
-      include: [
-          {
-            model: groupMessages,
-           // attributes: ['id','name','email','image','status']
-          //  where: {
-          //   receiverId:req.params.id
-          // },
-            
-            limit: 1,
-          
-           order :   [
-             ['id', 'DESC']
-               ]
+    const itemList = await notificationData.findAll({
       
-          },
-        ]
+      where: {
+        receiver_id:req.params.id
+       },
+        
+       order :   [
+         ['id', 'DESC']
+           ]
      
       
       
@@ -1819,9 +1815,9 @@ console.log(testdata);
 
  if (itemList) {
             
-        return apiResponseHelper.post(res, true, 'User List',itemList);
+        return apiResponseHelper.post(res, true, 'Notification List',itemList);
       } else {
-          return apiResponseHelper.post(res, true, 'User List',{});
+          return apiResponseHelper.post(res, true, 'Notification List',{});
       }
 
 

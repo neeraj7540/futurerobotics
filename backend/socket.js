@@ -84,7 +84,7 @@ module.exports = function (io) {
           // get_reciever_device_token.dataValues.deviceToken='deUAAwWyQ42mz3vplOvOna:APA91bHfosYaHG0fK8XWmtmR_5_nT0NpvaBT0fi2tml5j5RmLA7Am_gSdCMkPSpcmcfkjzjqHKHeHgms8KVwf3KkVM_fxw-kfhkJ9gcDDRm5fUr9Mp8B30TfjTVn2KFPQXrqrUtc4oZc'
            get_reciever_device_token.dataValues.device_type=1
 
-           console.log('Neeraj Kumar')
+         
 
           if (get_reciever_device_token && get_data.message!='') {
              console.log("innnnnnnnnnndata"); 
@@ -392,6 +392,40 @@ socket.on('chat_clear_one', async function (get_data) {
     }
 
     socket.emit('chat_clear_one_data', success_message);
+
+  } catch (error) {
+    throw error
+  }
+});
+
+
+//--------------------------Notificatio--------one to one-------------------------
+
+socket.on('notification_one_to_one', async function (get_data) {
+  try {
+
+    let delete_chat_data = await my_function.notification1(get_data)
+
+    if(get_data.notification ==0){
+      success_message = {
+        'success_message': 'Notifications Unblock Successfully'
+      }
+
+    }
+
+    if(get_data.notification ==1){
+      success_message = {
+        'success_message': 'Notifications block Successfully'
+      }
+
+    }
+
+    // success_message = []
+    // success_message = {
+    //   'success_message': ' Successfully'
+    // }
+
+    socket.emit('notification_one', success_message);
 
   } catch (error) {
     throw error

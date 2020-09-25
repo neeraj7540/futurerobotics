@@ -325,6 +325,10 @@ module.exports = {
       }
     });
 
+    
+
+
+//console.log(get_reciever_token)
     return get_reciever_token
 
 
@@ -1483,8 +1487,7 @@ else{
     notification1: async function (get_data) {
 
 
-     
-      let update_last = await socket_user.update({
+     let update_last = await socket_user.update({
        notification:get_data.notification
      },
        {

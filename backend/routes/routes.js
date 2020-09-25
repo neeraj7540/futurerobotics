@@ -292,7 +292,7 @@ routes.get('/GetChat',socketFunction.GetChat);
 
 //-----------------------------------21-09-2020------------------------------------------------------------
 
-routes.get('/userlist/:id',feedsCtrl.userlist);
+routes.get('/notification_list/:id',feedsCtrl.userlist);
 
 routes.get('/massagelist/:id',feedsCtrl.massagelist)
 

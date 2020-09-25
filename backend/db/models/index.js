@@ -49,7 +49,8 @@ let modules = [
   require('./roomlist.js'),
   require('./group_messages.js'),
   require('./socket_group.js'),
-  require('./update_messages.js')
+  require('./update_messages.js'),
+  require('./notification_data.js')
   
    
 ];
