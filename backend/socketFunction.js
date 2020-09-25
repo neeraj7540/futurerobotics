@@ -364,35 +364,37 @@ module.exports = {
     return get_user_block_status;
   },
   get_message: async function (get_msg_data) {
-   console.log(get_msg_data,"from get=======");
-   //console.log(get_msg_data.senderId)
+
+    get_user_status =await socket_user.findOne({
+      where:{
+        userId: get_msg_data.senderId,
+        receiverId:get_msg_data.receiverId,
+      
+
+}
+
+})
+
+console.log(get_user_status.dataValues.msg_status)
+  
+
+if(get_user_status.dataValues.msg_status ==0){
+
+
     get_user_status = await appusers.findOne({
       where: {
         id: get_msg_data.senderId
       }
     });
-    //console.log(get_user_status);
+  
     if (get_user_status.dataValues.status = 1) {
-    // get_msg_data.receiverId=2 // Testing data Neeraj
-    // get_msg_data.offset=0 //Tetsing Data Neeraj
-
      var get_messages_data = await database.query(`SELECT *,(select name from appusers where id =${get_msg_data.receiverId})as recieverName, ifnull((select image from appusers where id =${get_msg_data.receiverId}),'')as recieverImage,(select name from appusers where id =${get_msg_data.senderId})as senderName,ifnull((select image from appusers where id =${get_msg_data.senderId}),'')as senderImage FROM messages WHERE ((senderId=${get_msg_data.senderId} AND receiverId=${get_msg_data.receiverId}) OR (senderId=${get_msg_data.receiverId} AND receiverId=${get_msg_data.senderId})) and  deletedId!=${get_msg_data.senderId} order by id desc LIMIT 20 OFFSET ${get_msg_data.offset}`, {
 
        model: messages,
        mapToModel: true,
        type: database.QueryTypes.SELECT
      });
-
-    //  var get_messages_data = await database.query(`select name from appusers where id =${get_msg_data.receiverId}`, {
-
-    //  model: messages,
-    //   mapToModel: true,
-    //   type: database.QueryTypes.SELECT
-    // });
-
-//console.log(get_messages_data)
-           
-      if (get_messages_data) {
+ if (get_messages_data) {
          
         get_messages_data = get_messages_data.map(value => {
           return value.toJSON();
@@ -401,6 +403,52 @@ module.exports = {
 
       return get_messages_data;
     }
+
+  }
+
+  else{
+
+
+    get_user_status1 =await socket_user.findOne({
+      where:{
+        userId: get_msg_data.senderId,
+        receiverId:get_msg_data.receiverId,
+      }
+
+})
+
+get_user_status = await appusers.findOne({
+  where: {
+    id: get_msg_data.senderId
+  }
+});
+
+if (get_user_status.dataValues.status = 1) {
+  var get_messages_data = await database.query(`SELECT *,(select name from appusers where id =${get_msg_data.receiverId})as recieverName, ifnull((select image from appusers where id =${get_msg_data.receiverId}),'')as recieverImage,(select name from appusers where id =${get_msg_data.senderId})as senderName,ifnull((select image from appusers where id =${get_msg_data.senderId}),'')as senderImage FROM messages WHERE ((id>${get_user_status1.dataValues.msg_status} AND senderId=${get_msg_data.senderId} AND receiverId=${get_msg_data.receiverId}) OR (senderId=${get_msg_data.receiverId} AND receiverId=${get_msg_data.senderId})) and  deletedId!=${get_msg_data.senderId} order by id desc LIMIT 20 OFFSET ${get_msg_data.offset}`, {
+
+    model: messages,
+    mapToModel: true,
+    type: database.QueryTypes.SELECT
+  });
+if (get_messages_data) {
+      
+     get_messages_data = get_messages_data.map(value => {
+       return value.toJSON();
+     });
+   }
+
+   return get_messages_data;
+ }
+
+
+
+
+  }
+
+
+
+
+
   },
   get_chat_listing: async function (get_chat_data) {
 
@@ -1403,14 +1451,8 @@ else{
     one_chat_users1: async function (get_data) {
 
 
-      let dataget =await groupMessages.findOne({
+      let dataget =await messages.findOne({
 
-        where: {
-          category: get_data.category,
-          groupId:get_data.groupId,
-         
-
-        },
         limit: 1,
           
         order :   [
@@ -1420,16 +1462,14 @@ else{
       })
 
       //console.log(dataget)
-       let update_last = await socket_group.update({
+       let update_last = await socket_user.update({
              msg_status:dataget.dataValues.id
       },
         {
           where: {
-            category: get_data.category,
-            groupId:get_data.groupId,
-            userId:get_data.userId
-
-          }
+            userId: get_data.userId,
+            receiverId:get_data.receiverId,
+            }
         }
       );
 
