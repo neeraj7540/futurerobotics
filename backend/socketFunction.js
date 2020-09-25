@@ -388,7 +388,7 @@ if(get_user_status.dataValues.msg_status ==0){
     });
   
     if (get_user_status.dataValues.status = 1) {
-     var get_messages_data = await database.query(`SELECT *,(select name from appusers where id =${get_msg_data.receiverId})as recieverName, ifnull((select image from appusers where id =${get_msg_data.receiverId}),'')as recieverImage,(select name from appusers where id =${get_msg_data.senderId})as senderName,ifnull((select image from appusers where id =${get_msg_data.senderId}),'')as senderImage FROM messages WHERE ((senderId=${get_msg_data.senderId} AND receiverId=${get_msg_data.receiverId}) OR (senderId=${get_msg_data.receiverId} AND receiverId=${get_msg_data.senderId})) and  deletedId!=${get_msg_data.senderId} order by id desc LIMIT 20 OFFSET ${get_msg_data.offset}`, {
+     var get_messages_data = await database.query(`SELECT *,(select name from appusers where id =${get_msg_data.receiverId})as recieverName, ifnull((select image from appusers where id =${get_msg_data.receiverId}),'')as recieverImage,(select name from appusers where id =${get_msg_data.senderId})as senderName,ifnull((select image from appusers where id =${get_msg_data.senderId}),'')as senderImage FROM messages WHERE ((senderId=${get_msg_data.senderId} AND receiverId=${get_msg_data.receiverId}) OR (senderId=${get_msg_data.receiverId} AND receiverId=${get_msg_data.senderId})) and  deletedId!=${get_msg_data.senderId} order by id ASC LIMIT 200 OFFSET ${get_msg_data.offset}`, {
 
        model: messages,
        mapToModel: true,
@@ -424,7 +424,7 @@ get_user_status = await appusers.findOne({
 });
 
 if (get_user_status.dataValues.status = 1) {
-  var get_messages_data = await database.query(`SELECT *,(select name from appusers where id =${get_msg_data.receiverId})as recieverName, ifnull((select image from appusers where id =${get_msg_data.receiverId}),'')as recieverImage,(select name from appusers where id =${get_msg_data.senderId})as senderName,ifnull((select image from appusers where id =${get_msg_data.senderId}),'')as senderImage FROM messages WHERE ((id>${get_user_status1.dataValues.msg_status} AND senderId=${get_msg_data.senderId} AND receiverId=${get_msg_data.receiverId}) OR (senderId=${get_msg_data.receiverId} AND receiverId=${get_msg_data.senderId})) and  deletedId!=${get_msg_data.senderId} order by id desc LIMIT 20 OFFSET ${get_msg_data.offset}`, {
+  var get_messages_data = await database.query(`SELECT *,(select name from appusers where id =${get_msg_data.receiverId})as recieverName, ifnull((select image from appusers where id =${get_msg_data.receiverId}),'')as recieverImage,(select name from appusers where id =${get_msg_data.senderId})as senderName,ifnull((select image from appusers where id =${get_msg_data.senderId}),'')as senderImage FROM messages WHERE ((id>${get_user_status1.dataValues.msg_status} AND senderId=${get_msg_data.senderId} AND receiverId=${get_msg_data.receiverId}) OR (senderId=${get_msg_data.receiverId} AND receiverId=${get_msg_data.senderId})) and  deletedId!=${get_msg_data.senderId} order by id ASC LIMIT 20 OFFSET ${get_msg_data.offset}`, {
 
     model: messages,
     mapToModel: true,
@@ -1185,7 +1185,7 @@ else{
       return get_user_block_status;
     },
 
-    get_reciever_device_token1: async function (get_data) {
+     get_reciever_device_token1: async function (get_data) {
 
       var chat_data = await database.query(`SELECT appusers.id,deviceToken,deviceType FROM appusers INNER JOIN socket_group ON appusers.id=socket_group.userId where socket_group.groupId=${get_data.groupId} and socket_group.notification=0 and socket_group.category="${get_data.category}"`)
 
@@ -1478,6 +1478,32 @@ else{
   
       
     },
+
+
+    notification1: async function (get_data) {
+
+
+     
+      let update_last = await socket_user.update({
+       notification:get_data.notification
+     },
+       {
+         where: {
+           
+           userId:get_data.userId,
+           receiverId:get_data.receiverId
+
+
+         }
+       }
+     );
+
+     return update_last
+    
+ 
+     
+   },
+
 
 
 
