@@ -122,7 +122,8 @@ module.exports = {
     let check_user = await socket_user.findOne({
 
       where: {
-        userId: connect_listener.userId
+        userId: connect_listener.userId,
+        receiverId:connect_listener.receiverId
       }
     });
 
@@ -136,14 +137,18 @@ module.exports = {
       },
         {
           where: {
-            userId: connect_listener.userId
+            userId: connect_listener.userId,
+            receiverId:connect_listener.receiverId
           }
         }
       );
 
     } else {
+
+      console.log(connect_listener.receiverId)
       create_socket_user = await socket_user.create({
         userId: connect_listener.userId,
+        receiverId:connect_listener.receiverId,
         socketId: socket_id,
         isOnline: 1,
         createdAt: await this.create_time_stamp(),
@@ -1377,6 +1382,46 @@ else{
      
        let update_last = await socket_group.update({
         notification:get_data.notification
+      },
+        {
+          where: {
+            category: get_data.category,
+            groupId:get_data.groupId,
+            userId:get_data.userId
+
+          }
+        }
+      );
+
+      return update_last
+     
+  
+      
+    },
+
+
+    one_chat_users1: async function (get_data) {
+
+
+      let dataget =await groupMessages.findOne({
+
+        where: {
+          category: get_data.category,
+          groupId:get_data.groupId,
+         
+
+        },
+        limit: 1,
+          
+        order :   [
+          ['id', 'DESC']
+            ]
+
+      })
+
+      //console.log(dataget)
+       let update_last = await socket_group.update({
+             msg_status:dataget.dataValues.id
       },
         {
           where: {

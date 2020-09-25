@@ -36,7 +36,25 @@ isOnline: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
      // defaultValue: common.timestamp()
-    },  
+    },
+    
+    msg_status: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+      default: 0
+      
+     },
+     notification: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+      default: 0
+      
+     },
+     receiverId: {
+			type: DataTypes.INTEGER(11),
+			allowNull: false,
+			field: 'receiverId'
+		},
 
          
 }, {

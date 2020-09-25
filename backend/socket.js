@@ -380,6 +380,25 @@ socket.on('notification_status', async function (get_data) {
 });
 
 
+//---------------------------Clear Chat-----------------------------------------------
+
+socket.on('chat_clear_one', async function (get_data) {
+  try {
+
+    let delete_chat_data = await my_function.one_chat_users1(get_data)
+    success_message = []
+    success_message = {
+      'success_message': 'Chat Deleted Successfully'
+    }
+
+    socket.emit('chat_clear_one_data', success_message);
+
+  } catch (error) {
+    throw error
+  }
+});
+
+
 
 
 
