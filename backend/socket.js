@@ -265,10 +265,10 @@ socket.on('connect_user1', async function (connect_listener) {
 
         if (get_reciever_device_token && get_data.message!='') {
            console.log("innnnnnnnnnndata"); 
-          message = get_data.senderName + ' Sent You a Message'
+          message = get_data.senderName + ' added new message in group'
           device_token = get_reciever_device_token
           device_type = device_type
-          title = get_data.groupName
+          title =  get_data.category+'('+get_data.groupName+')'
           let send_push_to_reciever = await my_function.send_push_notification1(message, device_token, device_type, title, data_to_send)
         }
       

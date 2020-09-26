@@ -19,6 +19,7 @@ const chatBlock = db.models.chatBlock;
 const roomList =db.models.roomlist;
 
 const updateMessages=db.models.update_messages;
+const notificationData=db.models.notification_data;
 
 console.log(updateMessages)
 
@@ -325,7 +326,35 @@ module.exports = {
       }
     });
 
+   
+
+    //---------------------------For Notification--------------------------------
+    get_reciever = await appusers.findOne({
     
+       
+       where: {
+         id: get_data.senderId,
+        
+       }
+     });
+
+     console.log(get_reciever.name)
+     console.log(get_reciever.image)
+     console.log(get_data.message)
+
+     recors_upate = await notificationData.create({
+      sender_id:get_data.senderId,
+      receiver_id:get_data.receiverId,
+      senderName:get_reciever.name,
+      senderImage:get_reciever.image,
+      notification:'has sent you a messsage'
+})
+
+
+
+
+
+    //-------------------------------------------
 
 
 //console.log(get_reciever_token)
@@ -1195,9 +1224,30 @@ else{
 
       var tokendata=chat_data[0]
       var output1 = tokendata.map(user => user.deviceToken);
-     // console.log(output1)
-      
 
+      var outpout2=tokendata.map(user => user.id);
+      console.log(outpout2)
+      
+  //     recors_upate = await notificationData.create({
+  //       sender_id:get_data.senderId,
+  //       receiver_id:get_data.receiverId,
+  //       senderName:get_data.senderName,
+  //       senderImage:get_data.senderProfileImage, 
+  //       notification:'has sent you a messsage in groups'
+  // })
+  var i;
+  for (i = 0; i < outpout2.length; i++) {
+    recors_upate = await notificationData.create({
+      sender_id:get_data.senderId,
+      receiver_id:outpout2[i],
+      senderName:get_data.senderName,
+      senderImage:get_data.senderProfileImage, 
+      notification:'has sent you a messsage in groups'
+})
+
+
+
+  }
      
 
       

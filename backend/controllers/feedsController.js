@@ -9,6 +9,7 @@ const groupsTable = db.models.groups;
 const reportedTable = db.models.reportedfeed;
 
 const postTable = db.models.post;
+const FCM = require('fcm-node');
 
 const likeDeslikeTable = db.models.feedlikedeslike
 
@@ -66,6 +67,7 @@ appUsersTable.hasMany(messages, { foreignKey: 'receiverId' });
 
 const filesUpload = require('../helpers/uploadFiles').uploadFile;
 const fs = require('fs');
+const appusers = require('../db/models/appusers');
 
 module.exports = {
 
@@ -631,6 +633,7 @@ like_deslike :  async (req, res) => {
     const feed_id=req.params.feed_id;
   
 
+
     const likedeslike = await likeDeslikeTable.findOne({
    
       where:{
@@ -639,14 +642,266 @@ like_deslike :  async (req, res) => {
      
       },
     }) 
-   // console.log(likedeslike)
+   //-------------------------------------------------------------------- Test For Notification-----------------
 
+
+
+
+   const dataget = await feedsTable.findOne({
+   
+    where:{
+      id:req.params.feed_id,
+      
+   
+    },
+  }) 
+
+ // console.log(dataget.dataValues.userId)
+
+  const getdevice_token = await appUsersTable.findOne({
+   
+    where:{
+      id:dataget.dataValues.userId,
+       },
+  }) 
+
+  const senderuser = await appUsersTable.findOne({
+   
+    where:{
+      id:req.params.id,
+       },
+  })
+
+  if(!likedeslike){
+if(getdevice_token.dataValues.deviceToken && req.body.likeDeslike==1){
+//----------------------------------------DataStore
+
+
+recors_upate = await notificationData.create({
+  sender_id:req.params.id,
+  receiver_id:dataget.dataValues.userId,
+  senderName:senderuser.dataValues.name,
+  senderImage:senderuser.dataValues.image,
+  notification:'likes your post'
+})
+
+
+//---------------------------------
+
+  var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+  var fcm = new FCM(serverKey);
+  var device_token=getdevice_token.dataValues.deviceToken
+  var title = 'Future Robotics'
+  var get_message=senderuser.dataValues.name  +" likes your post"  
+
+
+  var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+    to: device_token,
+    // collapse_key: 'your_collapse_key',
+
+    notification: {
+      title: title,
+      body: get_message
+    },
+
+    data: {  //you can send only notification or only data(or include both)
+      body: get_message,
+     // receiver_data: data_to_send,
+    }
+  };
+
+  fcm.send(message, function (err, response) {
+    if (err) {
+      console.log("Something has gone wrong!", message);
+    } else {
+      console.log("Successfully sent with response: ", response);
+    }
+  });
+
+ // return fcm;
+
+}
+
+if(getdevice_token.dataValues.deviceToken && req.body.likeDeslike==0){
+//----------------------------Update data-------------------------
+recors_upate = await notificationData.create({
+  sender_id:req.params.id,
+  receiver_id:dataget.dataValues.userId,
+  senderName:senderuser.dataValues.name,
+  senderImage:senderuser.dataValues.image,
+  notification:'dislike your post'
+})
+
+
+
+
+
+
+//-------------------------------------------------
+
+  var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+  var fcm = new FCM(serverKey);
+  var device_token=getdevice_token.dataValues.deviceToken
+  var title = 'Future Robotics'
+  var get_message=senderuser.dataValues.name  +" dislike your post"  
+
+
+  var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+    to: device_token,
+    // collapse_key: 'your_collapse_key',
+
+    notification: {
+      title: title,
+      body: get_message
+    },
+
+    data: {  //you can send only notification or only data(or include both)
+      body: get_message,
+     // receiver_data: data_to_send,
+    }
+  };
+
+  fcm.send(message, function (err, response) {
+    if (err) {
+      console.log("Something has gone wrong!", message);
+    } else {
+      console.log("Successfully sent with response: ", response);
+    }
+  });
+
+ // return fcm;
+
+}
+  }
+
+else{
+  //-------------------------Update data information------------------------------------------
+
+  var information =await likeDeslikeTable.findOne({
+    where:{
+      feedId:req.params.feed_id,
+      userId:req.params.id,
+
+    }
+
+  })
+
+  var test=information.dataValues.likeDeslike;
+
+  if(req.body.likeDeslike !==test){
+    if(getdevice_token.dataValues.deviceToken && req.body.likeDeslike==1){
+    //----------------------------------------DataStore
+    
+    
+    recors_upate = await notificationData.create({
+      sender_id:req.params.id,
+      receiver_id:dataget.dataValues.userId,
+      senderName:senderuser.dataValues.name,
+      senderImage:senderuser.dataValues.image,
+      notification:'likes your post'
+    })
+    
+    
+    //---------------------------------
+    
+      var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+      var fcm = new FCM(serverKey);
+      var device_token=getdevice_token.dataValues.deviceToken
+      var title = 'Future Robotics'
+      var get_message=senderuser.dataValues.name  +" likes your post"  
+    
+    
+      var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+        to: device_token,
+        // collapse_key: 'your_collapse_key',
+    
+        notification: {
+          title: title,
+          body: get_message
+        },
+    
+        data: {  //you can send only notification or only data(or include both)
+          body: get_message,
+         // receiver_data: data_to_send,
+        }
+      };
+    
+      fcm.send(message, function (err, response) {
+        if (err) {
+          console.log("Something has gone wrong!", message);
+        } else {
+          console.log("Successfully sent with response: ", response);
+        }
+      });
+    
+     // return fcm;
+    
+    }
+    
+    if(getdevice_token.dataValues.deviceToken && req.body.likeDeslike==0){
+    //----------------------------Update data-------------------------
+    recors_upate = await notificationData.create({
+      sender_id:req.params.id,
+      receiver_id:dataget.dataValues.userId,
+      senderName:senderuser.dataValues.name,
+      senderImage:senderuser.dataValues.image,
+      notification:'dislike your post'
+    })
+    
+    
+    
+    
+    
+    
+    //-------------------------------------------------
+    
+      var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+      var fcm = new FCM(serverKey);
+      var device_token=getdevice_token.dataValues.deviceToken
+      var title = 'Future Robotics'
+      var get_message=senderuser.dataValues.name  +" dislike your post"  
+    
+    
+      var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+        to: device_token,
+        // collapse_key: 'your_collapse_key',
+    
+        notification: {
+          title: title,
+          body: get_message
+        },
+    
+        data: {  //you can send only notification or only data(or include both)
+          body: get_message,
+         // receiver_data: data_to_send,
+        }
+      };
+    
+      fcm.send(message, function (err, response) {
+        if (err) {
+          console.log("Something has gone wrong!", message);
+        } else {
+          console.log("Successfully sent with response: ", response);
+        }
+      });
+    
+     // return fcm;
+    
+    }
+      }
+
+    }
+
+
+  
+
+//--------------------------------------------------------------------------
     if(!likedeslike){
       const data1 = req.body;
       data1.feedId = req.params.feed_id;
       data1.userId=req.params.id;
       data1.likeDeslike=req.body.likeDeslike;
-      data1.status = '1'
+      data1.status = '1' 
     
       const itemAdded = await likeDeslikeTable.create(data1);
 
@@ -725,6 +980,9 @@ let data2 = {
 
 
     }
+
+
+
    
       const data1 = req.body;
       data1.feedId = req.params.feed_id;
@@ -977,9 +1235,7 @@ feed_comment_data :  async (req, res) => {
       data1.status = '1'
     
       const itemAdded = await feedCommentTable.create(data1);
-     // console.log(itemAdded.dataValues.id)
 
-      
       const upadete=await feedCommentTable.update(
         {
         commentId:itemAdded.dataValues.id,
@@ -990,6 +1246,94 @@ feed_comment_data :  async (req, res) => {
         }
       
     })
+//----------------------------------------------------------------------------------------Firebase Notification--------------------
+
+
+const dataget = await feedsTable.findOne({
+   
+  where:{
+    id:req.params.feed_id,
+    
+ 
+  },
+}) 
+
+// console.log(dataget.dataValues.userId)
+
+const getdevice_token = await appUsersTable.findOne({
+ 
+  where:{
+    id:dataget.dataValues.userId,
+     },
+}) 
+
+const senderuser = await appUsersTable.findOne({
+ 
+  where:{
+    id:req.params.id,
+     },
+})
+
+
+if(getdevice_token.dataValues.deviceToken){
+
+  recors_upate = await notificationData.create({
+    sender_id:req.params.id,
+    receiver_id:dataget.dataValues.userId,
+    senderName:senderuser.dataValues.name,
+    senderImage:senderuser.dataValues.image,
+    notification:'commented on your post'
+  })
+
+  
+  var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+  var fcm = new FCM(serverKey);
+  var device_token=getdevice_token.dataValues.deviceToken
+  var title = 'Future Robotics'
+  var get_message=senderuser.dataValues.name  +" commented on your post"  
+
+
+  var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+    to: device_token,
+    // collapse_key: 'your_collapse_key',
+
+    notification: {
+      title: title,
+      body: get_message
+    },
+
+    data: {  //you can send only notification or only data(or include both)
+      body: get_message,
+     // receiver_data: data_to_send,
+    }
+  };
+
+  fcm.send(message, function (err, response) {
+    if (err) {
+      console.log("Something has gone wrong!", message);
+    } else {
+      console.log("Successfully sent with response: ", response);
+    }
+  });
+
+  
+
+
+
+}
+
+
+
+
+
+
+
+//-----------------------------------------------------------------------------------
+
+     // console.log(itemAdded.dataValues.id)
+
+      
+   
      const dataget1=await feedCommentTable.findOne({
       attributes:['id','commentId','feedId','userId','comment','comment_image','createdAt','updatedAt'],
         
@@ -1250,6 +1594,259 @@ comment_like_deslike :  async (req, res) => {
      
       },
     }) 
+
+//-------------------------------Firebase ------------------
+
+const dataget = await feedCommentTable.findOne({
+   
+  where:{
+    commentId:req.params.commentId,
+    
+ 
+  },
+}) 
+
+// console.log(dataget.dataValues.userId)
+
+const getdevice_token = await appUsersTable.findOne({
+ 
+  where:{
+    id:dataget.dataValues.userId,
+     },
+}) 
+
+const senderuser = await appUsersTable.findOne({
+ 
+  where:{
+    id:req.params.id,
+     },
+})
+
+
+if(!likedeslike){
+  if(getdevice_token.dataValues.deviceToken && req.body.likeDeslike==1){
+  //----------------------------------------DataStore
+  
+  
+  recors_upate = await notificationData.create({
+    sender_id:req.params.id,
+    receiver_id:dataget.dataValues.userId,
+    senderName:senderuser.dataValues.name,
+    senderImage:senderuser.dataValues.image,
+    notification:'likes your comment'
+  })
+  
+  
+  //---------------------------------
+  
+    var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+    var fcm = new FCM(serverKey);
+    var device_token=getdevice_token.dataValues.deviceToken
+    var title = 'Future Robotics'
+    var get_message=senderuser.dataValues.name  +" likes your comment"  
+  
+  
+    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+      to: device_token,
+      // collapse_key: 'your_collapse_key',
+  
+      notification: {
+        title: title,
+        body: get_message
+      },
+  
+      data: {  //you can send only notification or only data(or include both)
+        body: get_message,
+       // receiver_data: data_to_send,
+      }
+    };
+  
+    fcm.send(message, function (err, response) {
+      if (err) {
+        console.log("Something has gone wrong!", message);
+      } else {
+        console.log("Successfully sent with response: ", response);
+      }
+    });
+  
+   // return fcm;
+  
+  }
+  
+  if(getdevice_token.dataValues.deviceToken && req.body.likeDeslike==0){
+  //----------------------------Update data-------------------------
+  recors_upate = await notificationData.create({
+    sender_id:req.params.id,
+    receiver_id:dataget.dataValues.userId,
+    senderName:senderuser.dataValues.name,
+    senderImage:senderuser.dataValues.image,
+    notification:'dislike your comment'
+  })
+  
+  
+  
+  
+  
+  
+  //-------------------------------------------------
+  
+    var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+    var fcm = new FCM(serverKey);
+    var device_token=getdevice_token.dataValues.deviceToken
+    var title = 'Future Robotics'
+    var get_message=senderuser.dataValues.name  +" dislike your comment"  
+  
+  
+    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+      to: device_token,
+      // collapse_key: 'your_collapse_key',
+  
+      notification: {
+        title: title,
+        body: get_message
+      },
+  
+      data: {  //you can send only notification or only data(or include both)
+        body: get_message,
+       // receiver_data: data_to_send,
+      }
+    };
+  
+    fcm.send(message, function (err, response) {
+      if (err) {
+        console.log("Something has gone wrong!", message);
+      } else {
+        console.log("Successfully sent with response: ", response);
+      }
+    });
+  
+   // return fcm;
+  
+  }
+    }
+    else{
+      //-------------------------Update data information------------------------------------------
+    
+      const information = await commentLikedeslike.findOne({
+     
+        where:{
+          commentId:req.params.commentId,
+          userId:req.params.id,
+       
+        },
+      }) 
+    
+      var test=information.dataValues.likeDeslike;
+    
+      if(req.body.likeDeslike !==test){
+        if(getdevice_token.dataValues.deviceToken && req.body.likeDeslike==1){
+        //----------------------------------------DataStore
+        
+        
+        recors_upate = await notificationData.create({
+          sender_id:req.params.id,
+          receiver_id:dataget.dataValues.userId,
+          senderName:senderuser.dataValues.name,
+          senderImage:senderuser.dataValues.image,
+          notification:'likes your comment'
+        })
+        
+        
+        //---------------------------------
+        
+          var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+          var fcm = new FCM(serverKey);
+          var device_token=getdevice_token.dataValues.deviceToken
+          var title = 'Future Robotics'
+          var get_message=senderuser.dataValues.name  +" likes your comment"  
+        
+        
+          var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+            to: device_token,
+            // collapse_key: 'your_collapse_key',
+        
+            notification: {
+              title: title,
+              body: get_message
+            },
+        
+            data: {  //you can send only notification or only data(or include both)
+              body: get_message,
+             // receiver_data: data_to_send,
+            }
+          };
+        
+          fcm.send(message, function (err, response) {
+            if (err) {
+              console.log("Something has gone wrong!", message);
+            } else {
+              console.log("Successfully sent with response: ", response);
+            }
+          });
+        
+         // return fcm;
+        
+        }
+        
+        if(getdevice_token.dataValues.deviceToken && req.body.likeDeslike==0){
+        //----------------------------Update data-------------------------
+        recors_upate = await notificationData.create({
+          sender_id:req.params.id,
+          receiver_id:dataget.dataValues.userId,
+          senderName:senderuser.dataValues.name,
+          senderImage:senderuser.dataValues.image,
+          notification:'dislike your comment'
+        })
+        
+        
+        
+        
+        
+        
+        //-------------------------------------------------
+        
+          var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+          var fcm = new FCM(serverKey);
+          var device_token=getdevice_token.dataValues.deviceToken
+          var title = 'Future Robotics'
+          var get_message=senderuser.dataValues.name  +" dislike your comment"  
+        
+        
+          var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+            to: device_token,
+            // collapse_key: 'your_collapse_key',
+        
+            notification: {
+              title: title,
+              body: get_message
+            },
+        
+            data: {  //you can send only notification or only data(or include both)
+              body: get_message,
+             // receiver_data: data_to_send,
+            }
+          };
+        
+          fcm.send(message, function (err, response) {
+            if (err) {
+              console.log("Something has gone wrong!", message);
+            } else {
+              console.log("Successfully sent with response: ", response);
+            }
+          });
+        
+         // return fcm;
+        
+        }
+          }
+    
+        }
+
+
+
+
+
+//---------------------------------------------------------
    // console.log(likedeslike)
 
     if(!likedeslike){
