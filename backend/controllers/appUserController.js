@@ -30,6 +30,7 @@ const  path = require('path');
 const nodeMailer = require('nodemailer');
 var waterfall = require('async-waterfall');
 const e = require('express');
+const { Console } = require('console');
 
 
 
@@ -687,10 +688,14 @@ profile: async (req, res) => {
          attributes: [[sequelize.fn('sum', sequelize.col('like')), 'total']],
        where:{
         userId: req.params.id,
+        status:'1'
         
        }
       })
+
+      
 if(userDetails1[0].dataValues.total !==null){
+ 
 var feedcount1=userDetails1[0].dataValues.total
 
 var feedcount2=parseInt(feedcount1)
@@ -699,33 +704,71 @@ else{
   var feedcount2=0
 }
 
-const userDetails2 = await feedCommentTable.findAll({
-  attributes: [[sequelize.fn('sum', sequelize.col('like')), 'total']],
-where:{
-  userId: req.params.id,
+
+
+const allfeedid = await feedsTable.findAll({
+  attributes:['id'],
+  where:{
+userId: req.params.id,
+status:'1'
+
+
 }
 })
+console.log(allfeedid.length)
+if(allfeedid.length>0){
 
-if(userDetails2[0].dataValues.total !==null){
-var coumentcount1=userDetails2[0].dataValues.total
+var datamap=allfeedid.map(item=>item.id)
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
+
+
+
+const commentlikecount = await feedCommentTable.findAll({
+  attributes: [[sequelize.fn('sum', sequelize.col('like')), 'total']],
+  where: {
+    feedId: {
+      [Op.in]:datamap
+    },
+    status:'1'
+
+  }
+})
+
+var totellike1=commentlikecount[0].dataValues.total;
+
+}
+else{
+
+  console.log("---------------------------------------------------------Mod off")
+  var totellike1=null
+}
+
+
+
+if(totellike1 !==null){
+var coumentcount1=totellike1
 var coumentcount2=parseInt(coumentcount1)
 
 
 }
 else{
-  var coumentcount1=userDetails2[0].dataValues.total
+  var coumentcount1=totellike1
   var coumentcount2=0
 }
 
+
+//--------------Total Like count 
 var total_like_count=feedcount2+coumentcount2
 
-console.log(total_like_count)
+//console.log(total_like_count)
 
 
 const feeddeslike = await feedsTable.findAll({
   attributes: [[sequelize.fn('sum', sequelize.col('deslike')), 'total']],
 where:{
  userId: req.params.id,
+ status:'1'
  
 }
 })
@@ -737,24 +780,59 @@ var feeddesdeslike2=parseInt(feeddeslike1)
 else{
 var feeddesdeslike2=0
 }
+//----------------------Testing Mode---------------------
 
+const allfeedid1 = await feedsTable.findAll({
+  attributes:['id'],
+  where:{
+userId: req.params.id,
+status:'1'
+
+
+}
+})
+if(allfeedid1.length>0){
+
+var datamap1=allfeedid1.map(item=>item.id)
+
+//console.log(datamap)
+
+
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
+
+//var nee=[1234]
 
 const feedcoment_deslike = await feedCommentTable.findAll({
   attributes: [[sequelize.fn('sum', sequelize.col('deslike')), 'total']],
-where:{
-  userId: req.params.id,
-}
+  where: {
+    feedId: {
+      [Op.in]:datamap1
+    },
+    status:'1'
+
+  }
 })
 
-if(feedcoment_deslike[0].dataValues.total !==null){
-var feedcoment_deslike1=feedcoment_deslike[0].dataValues.total
+var totaldes1=feedcoment_deslike[0].dataValues.total
+}
+
+else{
+  var totaldes1=null
+
+}
+
+
+if(totaldes1 !==null){
+var feedcoment_deslike1=totaldes1
 var feedcoment_deslike23=parseInt(feedcoment_deslike1)
 
 }
 else{
   var feedcoment_deslike23=0
 }
-        
+     
+console.log("------------------------------------"+feedcoment_deslike23)
 
 var total_des_like=feeddesdeslike2+feedcoment_deslike23
 
