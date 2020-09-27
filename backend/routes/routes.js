@@ -55,6 +55,10 @@ routes.use(function (req, res, next) {
   routes.delete('/appusers/:id',passport.authenticate('admin', { session: false }), appUsersCtrl.deleteAppUserByAdmin);
   routes.put('/statusupdate',passport.authenticate('admin', { session: false }), appUsersCtrl.userStatusUpdteByAdmin);
 
+  routes.put('/statusupdate1', appUsersCtrl.userStatusUpdteByAdmin);
+
+  //routes.delete('/appusers1/:id', appUsersCtrl.deleteAppUserByAdmin);
+
 
    // groups
    
@@ -73,6 +77,10 @@ routes.delete('/feedscategory/:id',passport.authenticate('admin', { session: fal
 routes.put('/feedscategoryedit/:id',passport.authenticate('admin', { session: false }), feedCatCtrl.feedsCategoryEditAdmin);
 routes.put('/feedsCategorystatusupdate',passport.authenticate('admin', { session: false }), feedCatCtrl.feedsCategoryStatusUpdteByAdmin);
 
+//----------------------Testing
+//routes.put('/feedscategoryedit1/:id', feedCatCtrl.feedsCategoryEditAdmin);
+
+routes.put('/feedsCategorystatusupdate1', feedCatCtrl.feedsCategoryStatusUpdteByAdmin);
 
 
 //otherAppCtrl 
@@ -173,9 +181,9 @@ routes.post('/add_social_links',addsCtrl.add_social_links);
 
 
 //----------------robots---------------------------------------------------
-routes.get('/get_all_robots/:id',appUsersCtrl.get_all_robots);
+//routes.get('/get_all_robots/:id',appUsersCtrl.get_all_robots);
 
-routes.get('/get_all_plc/:id',appUsersCtrl.get_all_plc);
+//routes.get('/get_all_plc/:id',appUsersCtrl.get_all_plc);
 
 //----------------notification----------------------------
 routes.get('/notification_listing/:id',addsCtrl.notification);
@@ -186,7 +194,7 @@ routes.post('/socialLogin',appUsersCtrl.socialLogin);//old
 //routes.post('/socialLogin',appUsersCtrl.socialLogin_final);
 
 //----------------socketio-------------------------------------------
-routes.get('/testings',socketFunction.get_typing_list);
+//routes.get('/testings',socketFunction.get_typing_list);
 
 
 
@@ -196,9 +204,9 @@ routes.post('/social_links/:id',appUsersCtrl.add_social_url);
 
 //----------------All Robot list--------------------------
 
-routes.get('/all_robots',appUsersCtrl.get_all_robots_admin);
-routes.get('/all_plc',appUsersCtrl.get_all_plc_admin);
-routes.get('/all_general',appUsersCtrl.get_all_general_admin);
+//routes.get('/all_robots',appUsersCtrl.get_all_robots_admin);
+//routes.get('/all_plc',appUsersCtrl.get_all_plc_admin);
+//routes.get('/all_general',appUsersCtrl.get_all_general_admin);
 
 //----------------Feed Data New-----------------------------------------------------------------
 //--------------New Data------------------------
@@ -206,11 +214,11 @@ routes.get('/all_general',appUsersCtrl.get_all_general_admin);
 
 
 
-//------------------------Feed category-------------------------------------------
+//------------------------Feed category-------------------------------------------No neeed
 
 
-routes.get('/allikes_list/:id', feedsCtrl.getAllLikes_List);
-routes.get('/allcomments_list/:id', feedsCtrl.getAllComments_list);
+//routes.get('/allikes_list/:id', feedsCtrl.getAllLikes_List);
+//routes.get('/allcomments_list/:id', feedsCtrl.getAllComments_list);
 
 //routes.post('/addlike_dislike/:id')
 
@@ -227,7 +235,7 @@ routes.get('/plc_list/:id',appUsersCtrl.get_all_plc_admin_list1);
 
 routes.get('/all_general_list',appUsersCtrl.get_all_general_admin_list);
 
-//-------------------------31-08-2020-------------------------
+//-------------------------31-08-2020-------------------------need---
 
 routes.get('/all_robots_list/:id',appUsersCtrl.get_user_robots);
 routes.get('/all_plc_list/:id',appUsersCtrl.get_user_plc);
@@ -268,7 +276,7 @@ routes.post('/comment_like_deslike/:id/:commentId',feedsCtrl.comment_like_deslik
 
 
 //-----------------------------11-09-2020-------------------------------------------------search Community Feed Post 
-
+  
 routes.post('/delete_post',feedsCtrl.delete_post);
 
 routes.post('/delete_comment',feedsCtrl.delete_comment);
@@ -288,7 +296,7 @@ routes.post('/additional_profile/:id',appUsersCtrl.additional_profile);
 
 //--------------------------------17-09-2020---------------------------------------------------
 
-routes.get('/GetChat',socketFunction.GetChat);
+//routes.get('/GetChat',socketFunction.GetChat);
 
 //-----------------------------------21-09-2020------------------------------------------------------------
 

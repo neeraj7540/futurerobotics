@@ -480,6 +480,9 @@ getAllFeeds_data:  async (req, res) => {
 
     const itemList = await feedsTable.findAll({
      attributes: ['id','feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
+     where:{
+      status:'1'
+    },
       include: [
           {
             model: appUsersTable,
@@ -496,6 +499,11 @@ getAllFeeds_data:  async (req, res) => {
          {
             model: feedCommentTable,
             attributes: ['id','commentId','feedId','userId','comment','comment_image','status','like','deslike','createdAt','updatedAt'],
+
+            where:{
+              status:'1'
+            },
+
             include: [
               {
                 model: appUsersTable,
@@ -514,6 +522,7 @@ getAllFeeds_data:  async (req, res) => {
 
       ],
       //limit: 1,
+      
       
    
 });
@@ -627,11 +636,13 @@ return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Ag
 }
 ,
 
-like_deslike :  async (req, res) => {
+ like_deslike :  async (req, res) => {
   try{
     const id=req.params.id;
     const feed_id=req.params.feed_id;
   
+
+    console.log('-----------------------------------------Test1')
 
 
     const likedeslike = await likeDeslikeTable.findOne({
@@ -676,6 +687,8 @@ like_deslike :  async (req, res) => {
 if(getdevice_token.dataValues.deviceToken && req.body.likeDeslike==1){
 //----------------------------------------DataStore
 
+
+console.log('-----------------------------------------------------Test2--------------------')
 
 recors_upate = await notificationData.create({
   sender_id:req.params.id,
@@ -723,6 +736,9 @@ recors_upate = await notificationData.create({
 }
 
 if(getdevice_token.dataValues.deviceToken && req.body.likeDeslike==0){
+
+
+  console.log("------------------------------------------------------------Test3-------------------------")
 //----------------------------Update data-------------------------
 recors_upate = await notificationData.create({
   sender_id:req.params.id,
@@ -777,6 +793,8 @@ recors_upate = await notificationData.create({
 else{
   //-------------------------Update data information------------------------------------------
 
+  console.log("----------------------------------------------------Test5")
+
   var information =await likeDeslikeTable.findOne({
     where:{
       feedId:req.params.feed_id,
@@ -791,6 +809,8 @@ else{
   if(req.body.likeDeslike !==test){
     if(getdevice_token.dataValues.deviceToken && req.body.likeDeslike==1){
     //----------------------------------------DataStore
+
+    console.log('------------------------------------------------Test6------------------')
     
     
     recors_upate = await notificationData.create({
@@ -908,20 +928,26 @@ else{
 
       const get_available_data1 = await likeDeslikeTable.count({
         where:{
+             status:'1',
             feedId:req.params.feed_id,
-          likeDeslike:'1'
+          likeDeslike:'1',
+         // status:'1'
          },
           }) 
        var test1=get_available_data1;
-       console.log(test1);
+       console.log("----------------------------------------------Test7")
+       console.log("Total like count"+  test1);
         const get_available_data2 = await likeDeslikeTable.count({
          where:{
+             
              feedId:req.params.feed_id,
-           likeDeslike:'0'
+           likeDeslike:'0',
+         
           },
            }) 
          var test2=get_available_data2;
-         console.log(test2)
+         console.log("Total deslike count"+ test2)
+         console.log("--------------------------------------------------------Test8")
 //---------------------------------------------------------------
 
 let data2 = {
@@ -999,6 +1025,7 @@ let data2 = {
 
         const get_available_data1 = await likeDeslikeTable.count({
           where:{
+            status:'1',
               feedId:req.params.feed_id,
             likeDeslike:'1'
            },
@@ -1007,6 +1034,7 @@ let data2 = {
          console.log(test1);
           const get_available_data2 = await likeDeslikeTable.count({
            where:{
+            status:'1',
                feedId:req.params.feed_id,
              likeDeslike:'0'
             },
@@ -1085,6 +1113,7 @@ get_cat_data:  async (req, res) => {
 
 
   try{
+   
 
     const title=req.params.title;
     console.log(title)
@@ -1093,7 +1122,8 @@ get_cat_data:  async (req, res) => {
  const itemList = await feedsTable.findAll({
      attributes: ['id','feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
      where:{
-      title:req.params.title
+      title:req.params.title,
+      status:'1'
     },
       include: [
           {
@@ -1111,6 +1141,9 @@ get_cat_data:  async (req, res) => {
          {
             model: feedCommentTable,
             attributes: ['id','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+            where:{
+              status:'1'
+            },
             include: [
               {
                 model: appUsersTable,
@@ -1138,7 +1171,11 @@ if (itemList) {
     else{
       const itemList = await feedsTable.findAll({
         attributes: ['id','feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
-         include: [
+        where:{
+          status:'1'
+        },
+      
+        include: [
              {
                model: appUsersTable,
                attributes: ['id','name','email','image','status']
@@ -1150,6 +1187,9 @@ if (itemList) {
               {
                model: feedCommentTable,
                attributes: ['id','commentId','feedId','userId','comment','status','like','deslike','createdAt','updatedAt'],
+               where:{
+                status:'1'
+              },
                include: [
                  {
                    model: appUsersTable,
@@ -1236,6 +1276,30 @@ feed_comment_data :  async (req, res) => {
     
       const itemAdded = await feedCommentTable.create(data1);
 
+      //----------------------------feed Comment Count---------------------------------------
+
+     const countdata = await feedCommentTable.count({
+       where:{
+        feedId:req.params.feed_id,
+        status:'1'
+       }
+ })
+
+    // console.log(countdata)
+
+     const dataupdate=await feedsTable.update({
+      comment_count:countdata
+     },{
+       where:{
+        id:req.params.feed_id
+      }
+    }
+     )
+
+
+
+
+//----------------------------------------------------------------------------------------------
       const upadete=await feedCommentTable.update(
         {
         commentId:itemAdded.dataValues.id,
@@ -1336,10 +1400,19 @@ if(getdevice_token.dataValues.deviceToken){
    
      const dataget1=await feedCommentTable.findOne({
       attributes:['id','commentId','feedId','userId','comment','comment_image','createdAt','updatedAt'],
+
         
       where:{
         id:itemAdded.dataValues.id
-      }
+      },
+      include: [
+        {
+          model: feedsTable,
+          attributes: ['comment_count']
+          
+        }
+
+      ]
 
     })
 
@@ -1515,7 +1588,8 @@ community_feed_details:  async (req, res) => {
 const feed_id=req.params.feed_id;
     const itemList = await feedsTable.findOne({
      attributes: ['feedCatId','userId','feed_id','title','Date','like','comment_count','deslike','description','image','status','createdAt','updatedAt'],
-    include: [ 
+    
+include: [ 
           {
             model: appUsersTable,
             attributes: ['id','name','email','image','status']
@@ -1525,6 +1599,9 @@ const feed_id=req.params.feed_id;
            {
             model: feedCommentTable,
             attributes: ['commentId','feedId','userId','comment','comment_image','status','like','deslike','createdAt','updatedAt'],
+            where:{
+              status:'1'
+            },
             required: false,
             include: [ 
               {
@@ -1539,7 +1616,8 @@ const feed_id=req.params.feed_id;
 
       ],
       where:{
-        feed_id:req.params.feed_id
+        feed_id:req.params.feed_id,
+        status:'1'
       },
     order :   [
       ['id', 'DESC']
@@ -1861,6 +1939,7 @@ if(!likedeslike){
 
       const get_available_data1 = await commentLikedeslike.count({
         where:{
+          status:'1',
           commentId:req.params.commentId,
           likeDeslike:'1'
          },
@@ -1869,6 +1948,7 @@ if(!likedeslike){
        console.log(test1);
         const get_available_data2 = await commentLikedeslike.count({
          where:{
+          status:'1',
           commentId:req.params.commentId,
            likeDeslike:'0'
           },
@@ -1945,6 +2025,7 @@ const updateEntry2 =  await feedCommentTable.update(
 
         const get_available_data1 = await commentLikedeslike.count({
           where:{
+            status:'1',
             commentId:req.params.commentId,
             likeDeslike:'1'
            },
@@ -1953,6 +2034,7 @@ const updateEntry2 =  await feedCommentTable.update(
          console.log(test1);
           const get_available_data2 = await commentLikedeslike.count({
            where:{
+            status:'1',
             commentId:req.params.commentId,
              likeDeslike:'0'
             },
@@ -2112,7 +2194,7 @@ delete_comment :  async (req, res) => {
      req.checkBody('userId', 'userId is required in body').notEmpty();
       req.checkBody('commentId', 'commentId is required in body').notEmpty();
 
-      const error = req.validationErrors();
+      const error = req.validationErrors(); 
       const userId=req.body.userId;
       const commentId=req.body.commentId;
   if (error) {
@@ -2127,8 +2209,19 @@ delete_comment :  async (req, res) => {
         commentId:req.body.commentId
     }
    });
+   
 
    if(updateEntrys){
+
+    const datacount=  await feedCommentTable.count(
+      {
+         where: {
+          feedId:updateEntrys.dataValues.feedId,
+          status:'1'
+      }
+     });
+
+
 
 
 
@@ -2147,6 +2240,23 @@ delete_comment :  async (req, res) => {
              commentId:req.body.commentId
         }
        });
+
+       const datacount1=  await feedCommentTable.count(
+        {
+           where: {
+            feedId:updateEntrys.dataValues.feedId,
+            status:'1'
+        }
+       });
+
+       const dataupdate=await feedsTable.update({
+        comment_count:datacount1
+       },{
+         where:{
+          id:updateEntrys.dataValues.feedId
+        }
+      }
+       )
 
        return apiResponseHelper.post(res, true, 'Comment Delete successfully', updateEntry1);
 
@@ -2311,7 +2421,8 @@ const Op = Sequelize.Op
     where: {
       title: {
         [Op.like]: '%' + req.body.title + '%'
-      }
+      },
+      status:'1'
     },
 
       include: [
@@ -2330,6 +2441,10 @@ const Op = Sequelize.Op
          {
             model: feedCommentTable,
             attributes: ['id','commentId','feedId','userId','comment','comment_image','status','like','deslike','createdAt','updatedAt'],
+            where:{
+              status:'1'
+            },
+           
             include: [
               {
                 model: appUsersTable,

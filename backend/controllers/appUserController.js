@@ -14,6 +14,8 @@ const generalList=db.models.general;
 const feedsCategory=db.models.feedscategory;
 console.log(feedsCategory)
 
+const commentLikedeslike=db.models.comment_likedeslike;
+
 const groupaccessTable = db.models.groupaccess;
 const groups = db.models.groups;
 const jwt = require('jsonwebtoken');
@@ -184,7 +186,7 @@ deleteAppUserByAdmin: async (req, res) => {
 
 
 
-                if (users) {
+                if (users) { 
     
                     const allReports = await reportedTable.findAll({
                         attributes: ['id'],
@@ -262,6 +264,28 @@ deleteAppUserByAdmin: async (req, res) => {
                     })
                 }
 
+                //-----------------------------------------------------------
+                const comment_like = await commentLikedeslike.findAll({
+                  attributes: ['id'],
+                  where: {
+                    userId: req.params.id
+                  }
+                  ,raw:true
+              })
+              
+              if(comment_like.length>0){
+              
+              const deletecmments = await commentLikedeslike.destroy({
+                  where: {
+                      userId: req.params.id
+                  }
+              })
+          }
+
+
+                //---------------------------------------------------------
+
+                //commentLikedeslike
 
                 const deleteUser = await appusers.destroy({
 
@@ -329,6 +353,66 @@ deleteAppUserByAdmin: async (req, res) => {
 
                     }
                 });  
+//----------------------Test=================================
+const updateEntry1 =  await feedsTable.update(
+  {
+      status:req.body.status
+  },
+  
+  {
+      where: {
+        userId: req.body.userId,
+
+      }
+  }); 
+
+  const updateEntry2 =  await likeDeslikeTable.update(
+    {
+        status:req.body.status
+    },
+    
+    {
+        where: {
+          userId: req.body.userId,
+  
+        }
+    });
+
+    const updateEntry3 =  await commentLikedeslike.update(
+      {
+          status:req.body.status
+      },
+      
+      {
+          where: {
+            userId: req.body.userId,
+    
+          }
+      });
+
+      const updateEntry4 =  await feedCommentTable.update(
+        {
+            status:req.body.status
+        },
+        
+        {
+            where: {
+              userId: req.body.userId,
+      
+            }
+        });
+
+
+  
+  
+
+
+
+
+
+//--------------------------------------------
+
+
         if (updateEntry) {
           return apiResponseHelper.post(res, true, 'Status updated Successfully!',{});
         } else {

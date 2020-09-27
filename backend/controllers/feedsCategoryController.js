@@ -215,7 +215,23 @@ feedsCategoryEditAdmin : async (req, res) => {
         
                             }
                         });  
+//-------------------------------------New Add------------------------
 
+const updateEntry1 =  await feedsTable.update(
+    {
+        title:req.body.name
+    },
+    
+    {
+        where: {
+            feedCatId: req.params.id,
+
+        }
+    });  
+
+
+
+//---------------------------------------------------------------------------------------
                      if(updateEntry){
                         return apiResponseHelper.post(res, true, 'Feeds Category updated Successfully!', {});
 
@@ -275,7 +291,26 @@ feedsCategoryEditAdmin : async (req, res) => {
                   id: req.body.feedCategoryId,
 
                   }
-              });  
+              }); 
+              
+    //------------------------Test-----------------------------------------  
+    
+    const updateEntry1 =  await feedsTable.update(
+        {
+            status:req.body.status
+        },
+        
+        {
+            where: {
+                feedCatId: req.body.feedCategoryId,
+    
+            }
+        });  
+
+
+
+//-----------------------------------------------------------------------------------
+
       if (updateEntry) {
         return apiResponseHelper.post(res, true, 'Status updated Successfully!',{});
       } else {
