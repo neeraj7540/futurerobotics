@@ -174,7 +174,7 @@ module.exports = {
 
 
 
-deleteAppUserByAdmin: async (req, res) => {
+ deleteAppUserByAdmin: async (req, res) => {
             try {
                 const users = await appusers.findOne({
                     attributes: ['id','image'],
@@ -206,9 +206,201 @@ deleteAppUserByAdmin: async (req, res) => {
                     })
                    }
 
+//-------------------------------28-09-2020----------------------------------------------Comment count delete ---
+
+const feedget =  await feedCommentTable.findAll(
+         
+  {
+      where: {
+        userId: req.params.id,
+
+      }
+  });
+
+ // console.log(feedget)
+  if(feedget.length>0){
+    var totalfeed=feedget.map(user=>user.feedId)
+
+var i;
+for (i = 0; i < totalfeed.length; i++) {
+var outdata1= await feedsTable.findOne({
+where:{
+  id:totalfeed[i]
+}
+})
+var count=outdata1.dataValues.comment_count;
+var count1=--count
+
+var dataincrement= await feedsTable.update({
+comment_count:count1
+
+},{
+where:{
+id:totalfeed[i]
+}
+
+})
+
+}
+
+}
+
+//-------------------------------------like or deslike delete---
+
+
+const getlike =  await likeDeslikeTable.findAll(
+         
+  {
+      where: {
+        userId: req.params.id,
+
+      }
+  });
+  if(getlike.length>0){
+var feed1=getlike.map(user=>user.feedId)
+   var Deslike=getlike.map(user=>user.likeDeslike)
+  
+   
+    var i;
+    var j;
+      for (i = 0; i < feed1.length; i++) {
+  
+        var outdata2= await feedsTable.findOne({
+          where:{
+            id:feed1[i]
+          }
+    })
+  
+     for (j = 0; j < Deslike.length; j++) {
+  
+        if(Deslike[j] =='1'){
+          var datacount=outdata2.dataValues.like
+          var datacount1=--datacount
+  
+          var dataincrement12= await feedsTable.update({
+            like:datacount1
+          
+          },{
+            where:{
+              id:feed1[i]
+            }
+          
+          })
+  }
+        if(Deslike[j] =='0'){
+          var datacounts1=outdata2.dataValues.deslike
+          var datacounts2=--datacounts1
+  
+          var dataincrement123= await feedsTable.update({
+            deslike:datacounts2
+          
+          },{
+            where:{
+              id:feed1[i]
+            }
+          
+          })
+  
+  
+        }
+  
+  
+  
+  
+         }
+  
+      }
+  
+    }
+
+
+    //--------------------------Comment like or deslike---------------------
+
+    const commentlike1 =  await commentLikedeslike.findAll(
+         
+      {
+          where: {
+            userId: req.params.id,
+    
+          }
+      });
+
+      if(commentlike1.length>0){
+
+    
+  
+        var feed11=commentlike1.map(user=>user.commentId)
+       var Deslike11=commentlike1.map(user=>user.likeDeslike)
+      
+       
+        var i;
+        var j;
+          for (i = 0; i < feed11.length; i++) {
+      
+            var outdata21= await feedCommentTable.findOne({
+              where:{
+                commentId:feed11[i]
+              }
+        })
+      
+         for (j = 0; j < Deslike11.length; j++) {
+      
+            if(Deslike11[j] =='1'){
+              var datacount=outdata21.dataValues.like
+              var datacount1=--datacount
+      
+              var dataincrement12= await feedCommentTable.update({
+                like:datacount1
+              
+              },{
+                where:{
+                  id:feed11[i]
+                }
+              
+              })
+      }
+            if(Deslike11[j] =='0'){
+              var datacounts1=outdata21.dataValues.deslike
+              var datacounts2=--datacounts1
+      
+              var dataincrement123= await feedCommentTable.update({
+                deslike:datacounts2
+              
+              },{
+                where:{
+                  id:feed11[i]
+                }
+              
+              })
+      
+      
+            }
+      
+      
+      
+      
+             }
+      
+          }
+      
+        }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+//----------------------------------------------
                 const allFeeds = await feedsTable.findAll({
                     attributes: ['id'],
                     where: {
@@ -283,10 +475,19 @@ deleteAppUserByAdmin: async (req, res) => {
               })
           }
 
+//---------------------------------------------------------28-090-2020--------------------
 
-                //---------------------------------------------------------
 
-                //commentLikedeslike
+
+
+
+
+
+
+
+
+//-------------------------------------------------------------------------------
+               
 
                 const deleteUser = await appusers.destroy({
 
@@ -402,6 +603,358 @@ const updateEntry1 =  await feedsTable.update(
       
             }
         });
+
+        //----------------------------------28-09-2020---------------------------------------------
+
+        const feedget =  await feedCommentTable.findAll(
+         
+          {
+              where: {
+                userId: req.body.userId,
+        
+              }
+          });
+
+          if(feedget.length>0){
+
+            var totalfeed=feedget.map(user=>user.feedId)
+            
+//------------------------------------------------------
+if(req.body.status == 1){
+
+var i;
+  for (i = 0; i < totalfeed.length; i++) {
+    var outdata1= await feedsTable.findOne({
+      where:{
+        id:totalfeed[i]
+      }
+})
+var count=outdata1.dataValues.comment_count;
+var count1=++count
+
+var dataincrement= await feedsTable.update({
+  comment_count:count1
+
+},{
+  where:{
+    id:totalfeed[i]
+  }
+
+})
+
+
+
+  }
+
+}
+
+
+if(req.body.status == 0){
+
+  var i;
+    for (i = 0; i < totalfeed.length; i++) {
+      var outdata1= await feedsTable.findOne({
+        where:{
+          id:totalfeed[i]
+        }
+  })
+  var count=outdata1.dataValues.comment_count;
+  var count1=--count
+  
+  var dataincrement= await feedsTable.update({
+    comment_count:count1
+  
+  },{
+    where:{
+      id:totalfeed[i]
+    }
+  
+  })
+  
+  
+  
+    }
+  
+  }
+
+}
+
+//-------------------------For like or deslike---------------------------28-09-2020
+
+const getlike =  await likeDeslikeTable.findAll(
+         
+  {
+      where: {
+        userId: req.body.userId,
+
+      }
+  });
+ 
+
+  if(getlike.length>0){
+
+    if(req.body.status == 1){
+
+  var feed1=getlike.map(user=>user.feedId)
+ var Deslike=getlike.map(user=>user.likeDeslike)
+
+ 
+  var i;
+  var j;
+    for (i = 0; i < feed1.length; i++) {
+
+      var outdata2= await feedsTable.findOne({
+        where:{
+          id:feed1[i]
+        }
+  })
+
+   for (j = 0; j < Deslike.length; j++) {
+
+      if(Deslike[j] =='1'){
+        var datacount=outdata2.dataValues.like
+        var datacount1=++datacount
+
+        var dataincrement12= await feedsTable.update({
+          like:datacount1
+        
+        },{
+          where:{
+            id:feed1[i]
+          }
+        
+        })
+}
+      if(Deslike[j] =='0'){
+        var datacounts1=outdata2.dataValues.deslike
+        var datacounts2=++datacounts1
+
+        var dataincrement123= await feedsTable.update({
+          deslike:datacounts2
+        
+        },{
+          where:{
+            id:feed1[i]
+          }
+        
+        })
+
+
+      }
+
+
+
+
+       }
+
+    }
+
+  }
+  if(req.body.status == 0){
+var feed1=getlike.map(user=>user.feedId)
+     var Deslike=getlike.map(user=>user.likeDeslike)
+    
+     
+      var i;
+      var j;
+        for (i = 0; i < feed1.length; i++) {
+    
+          var outdata2= await feedsTable.findOne({
+            where:{
+              id:feed1[i]
+            }
+      })
+    
+       for (j = 0; j < Deslike.length; j++) {
+    
+          if(Deslike[j] =='1'){
+            var datacount=outdata2.dataValues.like
+            var datacount1=--datacount
+    
+            var dataincrement12= await feedsTable.update({
+              like:datacount1
+            
+            },{
+              where:{
+                id:feed1[i]
+              }
+            
+            })
+    }
+          if(Deslike[j] =='0'){
+            var datacounts1=outdata2.dataValues.deslike
+            var datacounts2=--datacounts1
+    
+            var dataincrement123= await feedsTable.update({
+              deslike:datacounts2
+            
+            },{
+              where:{
+                id:feed1[i]
+              }
+            
+            })
+    
+    
+          }
+    
+    
+    
+    
+           }
+    
+        }
+    
+      
+
+  }
+
+  }
+
+
+  //---------------------------------------------Coment_like_deslike-----------------
+
+  const commentlike1 =  await commentLikedeslike.findAll(
+         
+    {
+        where: {
+          userId: req.body.userId,
+  
+        }
+    });
+   
+  
+    if(commentlike1.length>0){
+  
+      if(req.body.status == 1){
+  
+    var feed11=commentlike1.map(user=>user.commentId)
+   var Deslike11=commentlike1.map(user=>user.likeDeslike)
+  
+   
+    var i;
+    var j;
+      for (i = 0; i < feed11.length; i++) {
+  
+        var outdata21= await feedCommentTable.findOne({
+          where:{
+            commentId:feed11[i]
+          }
+    })
+  
+     for (j = 0; j < Deslike11.length; j++) {
+  
+        if(Deslike11[j] =='1'){
+          var datacount=outdata21.dataValues.like
+          var datacount1=++datacount
+  
+          var dataincrement12= await feedCommentTable.update({
+            like:datacount1
+          
+          },{
+            where:{
+              id:feed11[i]
+            }
+          
+          })
+  }
+        if(Deslike11[j] =='0'){
+          var datacounts1=outdata21.dataValues.deslike
+          var datacounts2=++datacounts1
+  
+          var dataincrement123= await feedCommentTable.update({
+            deslike:datacounts2
+          
+          },{
+            where:{
+              id:feed11[i]
+            }
+          
+          })
+  
+  
+        }
+  
+  
+  
+  
+         }
+  
+      }
+  
+    }
+    
+
+    if(req.body.status == 0){
+  
+      var feed11=commentlike1.map(user=>user.commentId)
+     var Deslike11=commentlike1.map(user=>user.likeDeslike)
+    
+     
+      var i;
+      var j;
+        for (i = 0; i < feed11.length; i++) {
+    
+          var outdata21= await feedCommentTable.findOne({
+            where:{
+              commentId:feed11[i]
+            }
+      })
+    
+       for (j = 0; j < Deslike11.length; j++) {
+    
+          if(Deslike11[j] =='1'){
+            var datacount=outdata21.dataValues.like
+            var datacount1=--datacount
+    
+            var dataincrement12= await feedCommentTable.update({
+              like:datacount1
+            
+            },{
+              where:{
+                id:feed11[i]
+              }
+            
+            })
+    }
+          if(Deslike11[j] =='0'){
+            var datacounts1=outdata21.dataValues.deslike
+            var datacounts2=--datacounts1
+    
+            var dataincrement123= await feedCommentTable.update({
+              deslike:datacounts2
+            
+            },{
+              where:{
+                id:feed11[i]
+              }
+            
+            })
+    
+    
+          }
+    
+    
+    
+    
+           }
+    
+        }
+    
+      }
+  //----------------------------------------------------
+    }
+
+  
+
+
+
+
+
+
+
+
+
 
 
   
@@ -2405,7 +2958,7 @@ get_all_robots_admim_list: async (req, res) => {
     }
 },
 
-get_all_robots_admim_list1: async (req, res) => {
+ get_all_robots_admim_list1: async (req, res) => {
   try {
      const itemList = await appusers.findAll({
            

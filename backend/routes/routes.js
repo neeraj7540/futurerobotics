@@ -57,7 +57,7 @@ routes.use(function (req, res, next) {
 
   routes.put('/statusupdate1', appUsersCtrl.userStatusUpdteByAdmin);
 
-  //routes.delete('/appusers1/:id', appUsersCtrl.deleteAppUserByAdmin);
+  routes.delete('/appusers1/:id', appUsersCtrl.deleteAppUserByAdmin);
 
 
    // groups
@@ -231,7 +231,7 @@ routes.get('/robots_list/:id',appUsersCtrl.get_all_robots_admim_list1); //new 24
 
 routes.get('/all_plc_list',appUsersCtrl.get_all_plc_admin_list);
 
-routes.get('/plc_list/:id',appUsersCtrl.get_all_plc_admin_list1);
+routes.get('/plc_list/:id',appUsersCtrl.get_all_plc_admin_list1);//new api
 
 routes.get('/all_general_list',appUsersCtrl.get_all_general_admin_list);
 
