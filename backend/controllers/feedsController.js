@@ -703,7 +703,7 @@ recors_upate = await notificationData.create({
   receiver_id:dataget.dataValues.userId,
   senderName:senderuser.dataValues.name,
   senderImage:senderuser.dataValues.image,
-  notification:'likes your post'
+  notification:'liked your post'
 })
 
 
@@ -713,7 +713,7 @@ recors_upate = await notificationData.create({
   var fcm = new FCM(serverKey);
   var device_token=getdevice_token.dataValues.deviceToken
   var title = 'Future Robotics'
-  var get_message=senderuser.dataValues.name  +" likes your post"  
+  var get_message=senderuser.dataValues.name  +" liked your post"  
 
 
   var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
@@ -753,7 +753,7 @@ recors_upate = await notificationData.create({
   receiver_id:dataget.dataValues.userId,
   senderName:senderuser.dataValues.name,
   senderImage:senderuser.dataValues.image,
-  notification:'dislike your post'
+  notification:'disliked your post'
 })
 
 
@@ -767,7 +767,7 @@ recors_upate = await notificationData.create({
   var fcm = new FCM(serverKey);
   var device_token=getdevice_token.dataValues.deviceToken
   var title = 'Future Robotics'
-  var get_message=senderuser.dataValues.name  +" dislike your post"  
+  var get_message=senderuser.dataValues.name  +" disliked your post"  
 
 
   var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
@@ -826,7 +826,7 @@ else{
       receiver_id:dataget.dataValues.userId,
       senderName:senderuser.dataValues.name,
       senderImage:senderuser.dataValues.image,
-      notification:'likes your post'
+      notification:'liked your post'
     })
     
     
@@ -836,7 +836,7 @@ else{
       var fcm = new FCM(serverKey);
       var device_token=getdevice_token.dataValues.deviceToken
       var title = 'Future Robotics'
-      var get_message=senderuser.dataValues.name  +" likes your post"  
+      var get_message=senderuser.dataValues.name  +" liked your post"  
     
     
       var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
@@ -1719,7 +1719,7 @@ if(!likedeslike){
     receiver_id:dataget.dataValues.userId,
     senderName:senderuser.dataValues.name,
     senderImage:senderuser.dataValues.image,
-    notification:'likes your comment'
+    notification:'liked your comment'
   })
   
   
@@ -1729,7 +1729,7 @@ if(!likedeslike){
     var fcm = new FCM(serverKey);
     var device_token=getdevice_token.dataValues.deviceToken
     var title = 'Future Robotics'
-    var get_message=senderuser.dataValues.name  +" likes your comment"  
+    var get_message=senderuser.dataValues.name  +" liked your comment"  
   
   
     var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
@@ -1834,7 +1834,7 @@ if(!likedeslike){
           receiver_id:dataget.dataValues.userId,
           senderName:senderuser.dataValues.name,
           senderImage:senderuser.dataValues.image,
-          notification:'likes your comment'
+          notification:'liked your comment'
         })
         
         
@@ -1844,7 +1844,7 @@ if(!likedeslike){
           var fcm = new FCM(serverKey);
           var device_token=getdevice_token.dataValues.deviceToken
           var title = 'Future Robotics'
-          var get_message=senderuser.dataValues.name  +" likes your comment"  
+          var get_message=senderuser.dataValues.name  +" liked your comment"  
         
         
           var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)

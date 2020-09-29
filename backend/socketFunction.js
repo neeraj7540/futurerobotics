@@ -347,7 +347,7 @@ module.exports = {
       receiver_id:get_data.receiverId,
       senderName:get_reciever.name,
       senderImage:get_reciever.image,
-      notification:'has sent you a messsage'
+      notification:'has sent you a message'
 })
 
 
@@ -1242,7 +1242,7 @@ else{
       receiver_id:outpout2[i],
       senderName:get_data.senderName,
       senderImage:get_data.senderProfileImage, 
-      notification:'has sent you a messsage in groups'
+      notification:'has sent a message in the '+get_data.groupName
 })
 
 
