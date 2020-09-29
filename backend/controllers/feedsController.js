@@ -2517,7 +2517,8 @@ userlist:  async (req, res) => {
     const itemList = await notificationData.findAll({
       
       where: {
-        receiver_id:req.params.id
+        receiver_id:req.params.id,
+        status:'1'
        },
         
        order :   [
