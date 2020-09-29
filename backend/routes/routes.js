@@ -305,6 +305,12 @@ routes.get('/notification_list/:id',feedsCtrl.userlist);
 routes.get('/massagelist/:id',feedsCtrl.massagelist)
 
 
+//--------------------------------29-09-2020--------------------------------------------------
+
+routes.post('/massage_count_user',feedsCtrl.massagelist_count);
+
+
+
 
 
 

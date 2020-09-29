@@ -27,6 +27,14 @@ const groupMessages=db.models.group_messages;
 
 const updateMessages=db.models.update_messages;
 
+//------------------------
+//const socket_group=db.models.socket_group;
+
+//const updateMessages=db.models.update_messages;
+
+
+
+
 appUsersTable.hasMany(groupMessages, { foreignKey: 'senderId' });
 
 //const feedCommentTable1 = db.models.feedcomment;
@@ -2630,6 +2638,79 @@ const itemList1 = await updateMessages.findAll({
 
 }  ,
 
+
+
+massagelist_count:  async (req, res) => {
+
+
+  try{
+
+    const itemList = await socket_group.findAll({
+      
+     where:{
+      userId:req.body.id
+     }  
+});
+
+if(!itemList){
+
+  return apiResponseHelper.post(res, true, 'User List',{});
+}
+
+var testdata=itemList;
+
+
+var data = testdata.map(user=>user.groupId)
+
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
+var arrayofTaskId = data;
+const itemList1 = await updateMessages.count({
+  where: {
+    groupId: {
+      [Op.in]: arrayofTaskId
+      },
+      senderId:{
+        [Op.not]:req.body.id
+      }
+
+    
+  }
+ })
+
+
+
+
+
+
+
+
+ if (itemList) {
+            
+        return apiResponseHelper.post(res, true, 'Massage List Count',itemList1);
+      } else {
+          return apiResponseHelper.post(res, true, 'Massage List Count',{});
+      }
+
+
+  }catch(e){
+
+
+    console.log(e);
+    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+       
+  }
+
+
+
+
+
+
+
+
+
+
+}  ,
 
 
 
