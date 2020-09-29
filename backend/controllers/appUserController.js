@@ -964,7 +964,19 @@ var feed1=getlike.map(user=>user.feedId)
     }
 
   
+//-----------------------------------------29-09-2020-------------------------
 
+const updateEnt =  await notificationData.update(
+  {
+      status:req.body.status
+  },
+  
+  {
+      where: {
+        sender_id: req.body.userId,
+
+      }
+  });
 
 
 
