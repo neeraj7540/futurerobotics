@@ -139,7 +139,8 @@ module.exports = {
                         if (req.body.isImage == "false") {
                             data.image = item.dataValues.image;
                         } else {
-                            data.image = uploadFile[0].imageName;
+                            data.image = 'http://34.232.2.249:4100/'+uploadFile[0].imageName;
+                            
                         }
 
                         const updateItem = await addsTable.update(
