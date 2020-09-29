@@ -44,6 +44,12 @@ createdAt: {
       allowNull: false,
       defaultValue: common.timestamp()
     },  
+    status : {
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+      default: 1
+      
+     }
          
 }, {
     tableName: 'notification_data',
