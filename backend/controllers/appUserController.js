@@ -1641,7 +1641,7 @@ console.log(userDataUpdate)
         const password = req.body.password;
         const email = req.body.email;
         const device_type=req.body.device_type;
-        const device_token=req.body.device_token;
+        const deviceToken=req.body.device_token;
         const social_type=req.body.social_type;
         const social_id=req.body.social_id;
 
@@ -1687,8 +1687,8 @@ console.log(userDataUpdate)
               const updateEntry =await appusers.update(
                 {
                
-                  device_type:req.body.device_type,
-                  device_token:req.body.device_token,
+                  deviceType:req.body.device_type,
+                  deviceToken:req.body.device_token,
                   social_type:req.body.social_type,
                   social_id:req.body.social_id
  },
