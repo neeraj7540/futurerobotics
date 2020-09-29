@@ -14,6 +14,8 @@ const generalList=db.models.general;
 const feedsCategory=db.models.feedscategory;
 console.log(feedsCategory)
 
+const notificationData=db.models.notification_data;
+
 const commentLikedeslike=db.models.comment_likedeslike;
 
 const groupaccessTable = db.models.groupaccess;
@@ -475,9 +477,25 @@ var feed1=getlike.map(user=>user.feedId)
               })
           }
 
-//---------------------------------------------------------28-090-2020--------------------
+//---------------------------------------------------------28-090-2020--------------------notificationData
 
 
+const notification = await notificationData.findAll({
+  attributes: ['id'],
+  where: {
+    sender_id: req.params.id
+  }
+  ,raw:true
+})
+
+if(notification.length>0){
+
+const deletecmments1 = await notificationData.destroy({
+  where: {
+    sender_id: req.params.id
+  }
+})
+}
 
 
 

@@ -873,7 +873,7 @@ else{
       receiver_id:dataget.dataValues.userId,
       senderName:senderuser.dataValues.name,
       senderImage:senderuser.dataValues.image,
-      notification:'dislike your post'
+      notification:'disliked your post'
     })
     
     
@@ -1766,7 +1766,7 @@ if(!likedeslike){
     receiver_id:dataget.dataValues.userId,
     senderName:senderuser.dataValues.name,
     senderImage:senderuser.dataValues.image,
-    notification:'dislike your comment'
+    notification:'disliked your comment'
   })
   
   
@@ -1881,7 +1881,7 @@ if(!likedeslike){
           receiver_id:dataget.dataValues.userId,
           senderName:senderuser.dataValues.name,
           senderImage:senderuser.dataValues.image,
-          notification:'dislike your comment'
+          notification:'disliked your comment'
         })
         
         
