@@ -848,7 +848,71 @@ if (get_messages_data) {
            id: get_data.senderId
          }
        });
-       //console.log(get_user_status);
+       //----------------------------------------------------------------
+       var datacheck = await updateMessages.findOne({
+        where: {
+          senderId: get_data.senderId,
+         
+      }
+      });
+      
+      
+      if(!datacheck){
+        create_message = await updateMessages.create({
+          senderId: get_data.senderId,
+          //receiverId: get_data.receiverId,
+          messageType: get_data.messageType,
+          message: get_data.message,
+          groupId:get_data.groupId,
+          category:get_data.category,
+          groupName:get_data.groupName,
+      
+         chatConstantId: user_data.dataValues.id,
+          created: await this.create_time_stamp(),
+          updated: await this.create_time_stamp(),
+          senderName:get_data.senderName,
+          senderProfileImage:get_data.senderProfileImage
+      
+        });
+      
+      }
+      else{
+        create_message = await updateMessages.update({
+          senderId: get_data.senderId,
+          //receiverId: get_data.receiverId,
+          messageType: get_data.messageType,
+          message: get_data.message,
+          groupId:get_data.groupId,
+          category:get_data.category,
+          groupName:get_data.groupName,
+      
+          chatConstantId: user_data.dataValues.id,
+          created: await this.create_time_stamp(),
+          updated: await this.create_time_stamp(),
+          senderName:get_data.senderName,
+          senderProfileImage:get_data.senderProfileImage
+        },{
+           where:{
+            id:datacheck.dataValues.id
+      
+           }
+      
+        }
+        
+        
+        );
+      
+      
+      }
+
+
+
+
+
+
+
+
+//-----------------------------------------------------------------------------------
        if (get_user_status.dataValues.status = 1) {
         //get_msg_data.receiverId=2 // Testing data Neeraj
         get_data.offset=0 //Tetsing Data Neeraj
@@ -940,62 +1004,7 @@ if (get_messages_data) {
       if (user_data) {
 //---------------------------------------------------------
 
-var datacheck = await updateMessages.findOne({
-  where: {
-    senderId: get_data.senderId,
-    //groupId:get_data.groupId,
-    //category:get_data.category,
-}
-});
 
-console.log("HFHVFDVDFBVDFBDF"+datacheck)
-if(!datacheck){
-  create_message = await updateMessages.create({
-    senderId: get_data.senderId,
-    //receiverId: get_data.receiverId,
-    messageType: get_data.messageType,
-    message: get_data.message,
-    groupId:get_data.groupId,
-    category:get_data.category,
-    groupName:get_data.groupName,
-
-   chatConstantId: user_data.dataValues.id,
-    created: await this.create_time_stamp(),
-    updated: await this.create_time_stamp(),
-    senderName:get_data.senderName,
-    senderProfileImage:get_data.senderProfileImage
-
-  });
-
-}
-else{
-  create_message = await updateMessages.update({
-    senderId: get_data.senderId,
-    //receiverId: get_data.receiverId,
-    messageType: get_data.messageType,
-    message: get_data.message,
-    groupId:get_data.groupId,
-    category:get_data.category,
-    groupName:get_data.groupName,
-
-    chatConstantId: user_data.dataValues.id,
-    created: await this.create_time_stamp(),
-    updated: await this.create_time_stamp(),
-    senderName:get_data.senderName,
-    senderProfileImage:get_data.senderProfileImage
-  },{
-     where:{
-      id:datacheck.dataValues.id
-
-     }
-
-  }
-  
-  
-  );
-
-
-}
 
 
 //-------------------------------------------------
