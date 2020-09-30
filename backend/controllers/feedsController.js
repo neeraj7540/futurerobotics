@@ -2299,10 +2299,10 @@ return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Ag
 
 edit_post :  async (req, res) => {
   try{
-    // const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
-    // const data = req.body;
-    // data.image = uploadFile[0].imageName;
-    // var data1=data.image
+    const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+    const data = req.body;
+    data.image = uploadFile[0].imageName;
+    var data1=data.image
     //data.userId=req.body.userId;
     //data.feed_id=req.body.feed_id;
     //data.title=req.body.title;
@@ -2336,24 +2336,24 @@ edit_post :  async (req, res) => {
           var description=req.body.description;
         }
 
-        // if (req.body.image== "") {
-        //   var image=updateEntrys.image;
-        // }
+        if (req.body.image== "") {
+          var image=updateEntrys.image;
+        }
         
-        // else if(data1=="public/images/default/main.png"){
-        //   var image=updateEntrys.image
-        // }
-        // else{
+        else if(data1=="public/images/default/main.png"){
+          var image=updateEntrys.image
+        }
+        else{
           
-        //   var image='http://34.232.2.249:4100/'+data1;
-        // }
+          var image='http://34.232.2.249:4100/'+data1;
+        }
 
-        //console.log(image)
+        console.log(image)
         const feedupdate =await feedsTable.update(
           {
             title:title,
             description:description,
-            //image:image
+            image:image
           },{
             where: {
                     userId:req.body.userId,
