@@ -2651,6 +2651,118 @@ const itemList1 = await updateMessages.findAll({
 
 
 
+massagelist1:  async (req, res) => {
+
+
+  try{
+
+    const itemList = await socket_group.findAll({
+      
+     where:{
+      userId:req.params.id
+     }  
+});
+
+
+const itemList1123 = await messages.findAll({
+      
+  where:{
+    receiverId:req.params.id
+  } ,
+  limit:1,
+  order :   [
+    ['id', 'DESC']
+      ]
+
+
+});
+
+console.log("--------------------------------------------------------")
+console.log(itemList1123)
+
+
+var sendernewdata = itemList1123.map(user=>user.senderId)
+
+console.log(sendernewdata)
+
+
+
+
+
+
+if(!itemList){
+
+  return apiResponseHelper.post(res, true, 'User List',{});
+}
+
+var testdata=itemList;
+
+
+var data = testdata.map(user=>user.groupId)
+
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
+var arrayofTaskId = data;
+const itemList1 = await updateMessages.findAll({
+  where: {
+    groupId: {
+      [Op.in]: arrayofTaskId
+      },
+      senderId:{
+        [Op.not]:req.params.id
+      }
+
+    
+  }
+ })//.then(function(result) {
+//   return res.json(result)
+// })
+
+//console.log(itemList1)
+
+
+
+
+
+
+
+
+
+ if (itemList) {
+            
+        return apiResponseHelper.post(res, true, 'User List',itemList1);
+      } else {
+          return apiResponseHelper.post(res, true, 'User List',{});
+      }
+
+
+  }catch(e){
+
+
+    console.log(e);
+    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+       
+  }
+
+
+
+
+
+
+
+
+
+
+}  ,
+
+
+
+
+
+
+
+
+
 massagelist_count:  async (req, res) => {
 
 
@@ -2722,6 +2834,65 @@ const itemList1 = await updateMessages.count({
 
 
 }  ,
+
+//----------------------------------------------------------------
+
+notificationcountdata:  async (req, res) => {
+
+
+  try{
+
+    const itemList = await notificationData.count({
+      
+      where: {
+        receiver_id:req.body.id,
+        status:'1'
+       },
+        
+       order :   [
+         ['id', 'DESC']
+           ]
+     
+      
+      
+   
+});
+
+var testdata=itemList;
+console.log(testdata);
+
+
+ if (itemList) {
+            
+        return apiResponseHelper.post(res, true, 'Notification Count',itemList);
+      } else {
+          return apiResponseHelper.post(res, true, 'Notification Count',itemList);
+      }
+
+
+  }catch(e){
+
+
+    console.log(e);
+    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+       
+  }
+
+
+
+
+
+
+
+
+
+
+}  ,
+
+
+
+
+
 
 
 
