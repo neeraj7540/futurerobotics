@@ -943,8 +943,8 @@ if (get_messages_data) {
 var datacheck = await updateMessages.findOne({
   where: {
     senderId: get_data.senderId,
-    groupId:get_data.groupId,
-    category:get_data.category,
+    //groupId:get_data.groupId,
+    //category:get_data.category,
 }
 });
 

@@ -2315,7 +2315,8 @@ edit_post :  async (req, res) => {
     //data.description=req.body.description;
     
    // console.log(data1)
-      
+ //  userId:req.body.userId,
+  // feed_id:req.body.feed_id
  
   const updateEntrys=  await feedsTable.findOne(
     {
