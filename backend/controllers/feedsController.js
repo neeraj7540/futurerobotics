@@ -2005,10 +2005,10 @@ const updateEntry2 =  await feedCommentTable.update(
           });
 
           const countdata = await commentLikedeslike.findOne({
-            attributes: ['id','commentId','like_count','deslike_count'],
+            attributes: ['id','commentId','userId','like_count','deslike_count'],
               where:{
                 commentId:req.params.commentId,
-                //userId:req.params.id,
+                userId:req.params.id,
              
               },
             }) 
@@ -2095,10 +2095,10 @@ const updateEntry2 =  await feedCommentTable.update(
             });
 
             const countdata = await commentLikedeslike.findOne({
-             attributes: ['id','commentId','like_count','deslike_count'],
+             attributes: ['id','commentId','userId','like_count','deslike_count'],
                where:{
                 commentId:req.params.commentId,
-                 //userId:req.params.id,
+                 userId:req.params.id,
               
                },
              }) 
