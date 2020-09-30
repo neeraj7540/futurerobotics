@@ -36,7 +36,7 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		chatConstantId: {
 			type: DataTypes.INTEGER(11),
-			allowNull: false,
+			allowNull: true,
 			defaultValue: '0',
 			field: 'chatConstantId'
 		},

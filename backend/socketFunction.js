@@ -929,7 +929,11 @@ if (get_messages_data) {
         where: {
           senderId: get_data.senderId
   
-          
+          // [Op.or]: [
+          //   { senderId: get_data.senderId, receiverId: get_data.receiverId },
+          //   { receiverId: get_data.senderId, senderId: get_data.receiverId }
+  
+          // ]
         }
       });
   
@@ -939,7 +943,7 @@ if (get_messages_data) {
 var datacheck = await updateMessages.findOne({
   where: {
     senderId: get_data.senderId,
-    //groupId:get_data.groupId,
+   // groupId:get_data.groupId,
     //category:get_data.category,
 }
 });
@@ -1060,69 +1064,82 @@ else{
           }
         });
   
-      
+        // var senddata = senduserdata.dataValues.name;
+        // var senderIdData = get_data.senderId;
+        // let gettoken = await helper.gettoken(get_data.receiverId);
+        // if(gettoken.isNotification==1) {
+        //     console.log("===================here");
+        //     let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Butterfly", senddata, senderIdData);
+        // }
+        // let notify = await helper.savenotifications(get_data.senderId,get_data.receiverId, '1', "New Message");
+  
   
       } else {
-//----------------------------------
-var datacheck = await updateMessages.findOne({
-  where: {
-    senderId: get_data.senderId,
-    //groupId:get_data.groupId,
-    //category:get_data.category,
-}
-});
 
-console.log("HFHVFDVDFBVDFBDF"+datacheck)
-if(!datacheck){
-  create_message = await updateMessages.create({
-    senderId: get_data.senderId,
-    //receiverId: get_data.receiverId,
-    messageType: get_data.messageType,
-    message: get_data.message,
-    groupId:get_data.groupId,
-    category:get_data.category,
-    groupName:get_data.groupName,
+        console.log("-------------------------------------Test1-------------------")
+        var datacheck = await updateMessages.findOne({
+          where: {
+            senderId: get_data.senderId,
+           
+        }
+        });
 
-   chatConstantId: user_data.dataValues.id,
-    created: await this.create_time_stamp(),
-    updated: await this.create_time_stamp(),
-    senderName:get_data.senderName,
-    senderProfileImage:get_data.senderProfileImage
+        console.log(datacheck)
+console.log("-------------------------------Neeraj Testing")
+        if(!datacheck){
 
-  });
+          console.log("--------------------------------------------Test2----------------")
+          create_message = await updateMessages.create({
+            senderId: get_data.senderId,
+            //receiverId: get_data.receiverId,
+            messageType: get_data.messageType,
+            message: get_data.message,
+            groupId:get_data.groupId,
+            category:get_data.category,
+            groupName:get_data.groupName,
+        
+           //chatConstantId: user_data.dataValues.id,
+            created: await this.create_time_stamp(),
+            updated: await this.create_time_stamp(),
+            senderName:get_data.senderName,
+            senderProfileImage:get_data.senderProfileImage
+        
+          });
 
-}
-else{
-  create_message = await updateMessages.update({
-    senderId: get_data.senderId,
-    //receiverId: get_data.receiverId,
-    messageType: get_data.messageType,
-    message: get_data.message,
-    groupId:get_data.groupId,
-    category:get_data.category,
-    groupName:get_data.groupName,
+        }else{
 
-    chatConstantId: user_data.dataValues.id,
-    created: await this.create_time_stamp(),
-    updated: await this.create_time_stamp(),
-    senderName:get_data.senderName,
-    senderProfileImage:get_data.senderProfileImage
-  },{
-     where:{
-      id:datacheck.dataValues.id
+          create_message = await updateMessages.update({
+            senderId: get_data.senderId,
+            //receiverId: get_data.receiverId,
+            messageType: get_data.messageType,
+            message: get_data.message,
+            groupId:get_data.groupId,
+            category:get_data.category,
+            groupName:get_data.groupName,
+        
+            //chatConstantId: user_data.dataValues.id,
+            created: await this.create_time_stamp(),
+            updated: await this.create_time_stamp(),
+            senderName:get_data.senderName,
+            senderProfileImage:get_data.senderProfileImage
+          },{
+             where:{
+              id:datacheck.dataValues.id
+        
+             }
+        
+          }
+          
+          
+          );
 
-     }
 
-  }
+        }
+
+
+        
+
   
-  
-  );
-
-
-}
-
-
-//-----------------------------------------------------------------  
         let create_last_message = await chatConstants.create({
           senderId: get_data.senderId,
          // receiverId: get_data.receiverId,
@@ -1192,19 +1209,19 @@ else{
           }
         );
         
-        var senduserdata = await appusers.findOne({
-          where: {
-            id: get_data.senderId,
-          }
-        });
+        // var senduserdata = await appusers.findOne({
+        //   where: {
+        //     id: get_data.senderId,
+        //   }
+        // });
   
-        var senddata = senduserdata.dataValues.name;
-        var senderIdData =get_data.senderId;
-        let gettoken = await helper.gettoken(get_data.receiverId);
-        if(gettoken.isNotification==1) {
-            console.log("===================here");
-            let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Future Robotics", senddata, senderIdData);
-        }
+        // var senddata = senduserdata.dataValues.name;
+        // var senderIdData =get_data.senderId;
+        // let gettoken = await helper.gettoken(get_data.receiverId);
+        // if(gettoken.isNotification==1) {
+        //     console.log("===================here");
+        //     let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Future Robotics", senddata, senderIdData);
+        // }
         // let notify = await helper.savenotifications(get_data.senderId,get_data.receiverId, '1', "New Message");
        
   
