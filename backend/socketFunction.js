@@ -849,61 +849,7 @@ if (get_messages_data) {
          }
        });
        //----------------------------------------------------------------
-       var datacheck = await updateMessages.findOne({
-        where: {
-          senderId: get_data.senderId,
-         
-      }
-      });
       
-      
-      if(!datacheck){
-        create_message = await updateMessages.create({
-          senderId: get_data.senderId,
-          //receiverId: get_data.receiverId,
-          messageType: get_data.messageType,
-          message: get_data.message,
-          groupId:get_data.groupId,
-          category:get_data.category,
-          groupName:get_data.groupName,
-      
-         chatConstantId: user_data.dataValues.id,
-          created: await this.create_time_stamp(),
-          updated: await this.create_time_stamp(),
-          senderName:get_data.senderName,
-          senderProfileImage:get_data.senderProfileImage
-      
-        });
-      
-      }
-      else{
-        create_message = await updateMessages.update({
-          senderId: get_data.senderId,
-          //receiverId: get_data.receiverId,
-          messageType: get_data.messageType,
-          message: get_data.message,
-          groupId:get_data.groupId,
-          category:get_data.category,
-          groupName:get_data.groupName,
-      
-          chatConstantId: user_data.dataValues.id,
-          created: await this.create_time_stamp(),
-          updated: await this.create_time_stamp(),
-          senderName:get_data.senderName,
-          senderProfileImage:get_data.senderProfileImage
-        },{
-           where:{
-            id:datacheck.dataValues.id
-      
-           }
-      
-        }
-        
-        
-        );
-      
-      
-      }
 
 
 
@@ -1000,6 +946,67 @@ if (get_messages_data) {
           // ]
         }
       });
+
+      //------------------------------------------
+      var datacheck = await updateMessages.findOne({
+        where: {
+          senderId: get_data.senderId,
+         
+      }
+      });
+      
+      
+      if(!datacheck){
+        create_message = await updateMessages.create({
+          senderId: get_data.senderId,
+          //receiverId: get_data.receiverId,
+          messageType: get_data.messageType,
+          message: get_data.message,
+          groupId:get_data.groupId,
+          category:get_data.category,
+          groupName:get_data.groupName,
+      
+         chatConstantId: user_data.dataValues.id,
+          created: await this.create_time_stamp(),
+          updated: await this.create_time_stamp(),
+          senderName:get_data.senderName,
+          senderProfileImage:get_data.senderProfileImage
+      
+        });
+      
+      }
+      else{
+        create_message = await updateMessages.update({
+          senderId: get_data.senderId,
+          //receiverId: get_data.receiverId,
+          messageType: get_data.messageType,
+          message: get_data.message,
+          groupId:get_data.groupId,
+          category:get_data.category,
+          groupName:get_data.groupName,
+      
+          chatConstantId: user_data.dataValues.id,
+          created: await this.create_time_stamp(),
+          updated: await this.create_time_stamp(),
+          senderName:get_data.senderName,
+          senderProfileImage:get_data.senderProfileImage
+        },{
+           where:{
+            id:datacheck.dataValues.id
+      
+           }
+      
+        }
+        
+        
+        );
+      
+      
+      }
+
+
+
+      //---------------------------------------------------
   
       if (user_data) {
 //---------------------------------------------------------
