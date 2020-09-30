@@ -848,17 +848,7 @@ if (get_messages_data) {
            id: get_data.senderId
          }
        });
-       //----------------------------------------------------------------
-      
-
-
-
-
-
-
-
-
-//-----------------------------------------------------------------------------------
+       //console.log(get_user_status);
        if (get_user_status.dataValues.status = 1) {
         //get_msg_data.receiverId=2 // Testing data Neeraj
         get_data.offset=0 //Tetsing Data Neeraj
@@ -946,72 +936,66 @@ if (get_messages_data) {
           // ]
         }
       });
-
-      //------------------------------------------
-      var datacheck = await updateMessages.findOne({
-        where: {
-          senderId: get_data.senderId,
-         
-      }
-      });
-      
-      
-      if(!datacheck){
-        create_message = await updateMessages.create({
-          senderId: get_data.senderId,
-          //receiverId: get_data.receiverId,
-          messageType: get_data.messageType,
-          message: get_data.message,
-          groupId:get_data.groupId,
-          category:get_data.category,
-          groupName:get_data.groupName,
-      
-         chatConstantId: user_data.dataValues.id,
-          created: await this.create_time_stamp(),
-          updated: await this.create_time_stamp(),
-          senderName:get_data.senderName,
-          senderProfileImage:get_data.senderProfileImage
-      
-        });
-      
-      }
-      else{
-        create_message = await updateMessages.update({
-          senderId: get_data.senderId,
-          //receiverId: get_data.receiverId,
-          messageType: get_data.messageType,
-          message: get_data.message,
-          groupId:get_data.groupId,
-          category:get_data.category,
-          groupName:get_data.groupName,
-      
-          chatConstantId: user_data.dataValues.id,
-          created: await this.create_time_stamp(),
-          updated: await this.create_time_stamp(),
-          senderName:get_data.senderName,
-          senderProfileImage:get_data.senderProfileImage
-        },{
-           where:{
-            id:datacheck.dataValues.id
-      
-           }
-      
-        }
-        
-        
-        );
-      
-      
-      }
-
-
-
-      //---------------------------------------------------
   
       if (user_data) {
 //---------------------------------------------------------
 
+var datacheck = await updateMessages.findOne({
+  where: {
+    senderId: get_data.senderId,
+    groupId:get_data.groupId,
+    category:get_data.category,
+}
+});
 
+console.log("HFHVFDVDFBVDFBDF"+datacheck)
+if(!datacheck){
+  create_message = await updateMessages.create({
+    senderId: get_data.senderId,
+    //receiverId: get_data.receiverId,
+    messageType: get_data.messageType,
+    message: get_data.message,
+    groupId:get_data.groupId,
+    category:get_data.category,
+    groupName:get_data.groupName,
+
+   chatConstantId: user_data.dataValues.id,
+    created: await this.create_time_stamp(),
+    updated: await this.create_time_stamp(),
+    senderName:get_data.senderName,
+    senderProfileImage:get_data.senderProfileImage
+
+  });
+
+}
+else{
+  create_message = await updateMessages.update({
+    senderId: get_data.senderId,
+    //receiverId: get_data.receiverId,
+    messageType: get_data.messageType,
+    message: get_data.message,
+    groupId:get_data.groupId,
+    category:get_data.category,
+    groupName:get_data.groupName,
+
+    chatConstantId: user_data.dataValues.id,
+    created: await this.create_time_stamp(),
+    updated: await this.create_time_stamp(),
+    senderName:get_data.senderName,
+    senderProfileImage:get_data.senderProfileImage
+  },{
+     where:{
+      id:datacheck.dataValues.id
+
+     }
+
+  }
+  
+  
+  );
+
+
+}
 
 
 //-------------------------------------------------
@@ -1091,6 +1075,151 @@ if (get_messages_data) {
   
   
       } else {
+
+        //-------------------------Testing----------------------
+
+       
+          
+          var datacheck = await updateMessages.findOne({
+            where: {
+              senderId: get_data.senderId,
+              groupId:get_data.groupId,
+              category:get_data.category,
+          }
+          });
+          
+          console.log("HFHVFDVDFBVDFBDF"+datacheck)
+          if(!datacheck){
+            create_message = await updateMessages.create({
+              senderId: get_data.senderId,
+              //receiverId: get_data.receiverId,
+              messageType: get_data.messageType,
+              message: get_data.message,
+              groupId:get_data.groupId,
+              category:get_data.category,
+              groupName:get_data.groupName,
+          
+             chatConstantId: user_data.dataValues.id,
+              created: await this.create_time_stamp(),
+              updated: await this.create_time_stamp(),
+              senderName:get_data.senderName,
+              senderProfileImage:get_data.senderProfileImage
+          
+            });
+          
+          }
+          else{
+            create_message = await updateMessages.update({
+              senderId: get_data.senderId,
+              //receiverId: get_data.receiverId,
+              messageType: get_data.messageType,
+              message: get_data.message,
+              groupId:get_data.groupId,
+              category:get_data.category,
+              groupName:get_data.groupName,
+          
+              chatConstantId: user_data.dataValues.id,
+              created: await this.create_time_stamp(),
+              updated: await this.create_time_stamp(),
+              senderName:get_data.senderName,
+              senderProfileImage:get_data.senderProfileImage
+            },{
+               where:{
+                id:datacheck.dataValues.id
+          
+               }
+          
+            }
+            
+            
+            );
+          
+          
+          
+          
+          
+          //-------------------------------------------------
+          
+            
+                  create_message = await groupMessages.create({
+                    senderId: get_data.senderId,
+                    //receiverId: get_data.receiverId,
+                    messageType: get_data.messageType,
+                    message: get_data.message,
+                    groupId:get_data.groupId,
+                    category:get_data.category,
+                    groupName:get_data.groupName,
+          
+                    chatConstantId: user_data.dataValues.id,
+                    created: await this.create_time_stamp(),
+                    updated: await this.create_time_stamp(),
+                  });
+          
+                let countget = await groups.findOne({
+                  where:{
+                    category: get_data.category,
+                    id:get_data.groupId
+          
+                  }
+          
+                })
+          
+                var count=countget.dataValues.count
+               
+                var count1=++count
+               
+               let update_last = await groups.update({
+                    
+                    count: count1,
+                  },
+                    {
+                      where: {
+                        category: get_data.category,
+                        id:get_data.groupId
+          
+                      }
+                    }
+                  );
+          
+                  console.log("vgsdlcdcjlv" +update_last)
+                 
+          
+          
+            
+                  let update_last_message = await chatConstants.update({
+            
+                    lastMessageId: create_message.dataValues.id,
+                    deletedId: 0
+                  },
+                    {
+                      where: {
+                        id: user_data.dataValues.id
+                      }
+                    }
+                  );
+            
+                  var senduserdata = await appusers.findOne({
+                    where: {
+                      id: get_data.senderId,
+                    }
+                  });
+            
+                  // var senddata = senduserdata.dataValues.name;
+                  // var senderIdData = get_data.senderId;
+                  // let gettoken = await helper.gettoken(get_data.receiverId);
+                  // if(gettoken.isNotification==1) {
+                  //     console.log("===================here");
+                  //     let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Butterfly", senddata, senderIdData);
+                  // }
+                  // let notify = await helper.savenotifications(get_data.senderId,get_data.receiverId, '1', "New Message");
+            
+            
+                }
+
+
+
+
+        //------------------------------------------------------------
   
         let create_last_message = await chatConstants.create({
           senderId: get_data.senderId,
@@ -1142,7 +1271,7 @@ if (get_messages_data) {
           );
 
 
-          console.log(update_last);
+          //console.log(update_last);
 
 
 
