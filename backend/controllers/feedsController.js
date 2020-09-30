@@ -2650,45 +2650,17 @@ const itemList1 = await updateMessages.findAll({
 }  ,
 
 
-
 massagelist1:  async (req, res) => {
 
 
   try{
 
-    const itemList = await socket_group.findAll({
+    const itemList = await updateMessages.findAll({
       
      where:{
-      userId:req.params.id
+      senderId:req.params.id
      }  
 });
-
-
-const itemList1123 = await messages.findAll({
-      
-  where:{
-    receiverId:req.params.id
-  } ,
-  limit:1,
-  order :   [
-    ['id', 'DESC']
-      ]
-
-
-});
-
-console.log("--------------------------------------------------------")
-console.log(itemList1123)
-
-
-var sendernewdata = itemList1123.map(user=>user.senderId)
-
-console.log(sendernewdata)
-
-
-
-
-
 
 if(!itemList){
 
@@ -2754,6 +2726,10 @@ const itemList1 = await updateMessages.findAll({
 
 
 }  ,
+
+
+
+
 
 
 
