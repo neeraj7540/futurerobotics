@@ -491,6 +491,9 @@ getAllFeeds_data:  async (req, res) => {
      where:{
       status:'1'
     },
+    order :   [
+      ['id', 'DESC']
+       ],
       include: [
           {
             model: appUsersTable,
@@ -1133,6 +1136,9 @@ get_cat_data:  async (req, res) => {
       title:req.params.title,
       status:'1'
     },
+    order :   [
+      ['id', 'DESC']
+       ],
       include: [
           {
             model: appUsersTable,
@@ -2432,6 +2438,9 @@ const Op = Sequelize.Op
       },
       status:'1'
     },
+ order :   [
+      ['id', 'DESC']
+       ],
 
       include: [
           {
