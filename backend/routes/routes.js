@@ -302,7 +302,9 @@ routes.post('/additional_profile/:id',appUsersCtrl.additional_profile);
 
 routes.get('/notification_list/:id',feedsCtrl.userlist);
 
-routes.get('/massagelist/:id',feedsCtrl.massagelist2);
+//routes.get('/massagelist/:id',feedsCtrl.massagelist2);
+
+routes.get('/massagelist/:id',feedsCtrl.massageDataliist);
 
 
 //--------------------------------29-09-2020--------------------------------------------------

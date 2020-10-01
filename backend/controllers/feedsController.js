@@ -17,6 +17,8 @@ const feedCommentTable = db.models.feedcomment;
 
 const messages=db.models.messages;
 
+const database = require('../db/db');
+
 const socket_group=db.models.socket_group;
 
 const notificationData=db.models.notification_data;
@@ -26,6 +28,9 @@ console.log(notificationData)
 const groupMessages=db.models.group_messages;
 
 const updateMessages=db.models.update_messages;
+
+
+const oneUpdateMessages=db.models.one_update_messages;
 
 //------------------------
 //const socket_group=db.models.socket_group;
@@ -2707,12 +2712,7 @@ const itemList1 = await updateMessages.findAll({
   order :   [
     ['id', 'DESC']
      ]
- })//.then(function(result) {
-//   return res.json(result)
-// })
-
-//console.log(itemList1)
-
+ })
 
 
 
@@ -2969,6 +2969,112 @@ console.log(testdata);
 
 
 }  ,
+
+
+
+//------------------------------Massage data-----------------------------------
+
+//oneUpdateMessages
+
+massageDataliist:  async (req, res) => {
+try{
+ 
+  const itemList = await socket_group.findAll({
+      
+     where:{
+      userId:req.params.id
+     }  
+});
+
+const getsenderdata = await oneUpdateMessages.findAll({
+      
+  where:{
+    receiverId:req.params.id
+  }  
+});
+
+
+ var get_messages_data = await database.query(`SELECT one_update_messages.id, appusers.id as senderId,one_update_messages.message,one_update_messages.created,appusers.name as senderName,appusers.image as senderProfileImage FROM one_update_messages INNER JOIN appusers ON one_update_messages.senderId=appusers.id WHERE one_update_messages.receiverId=${req.params.id}`, {
+
+});
+
+console.log(get_messages_data)
+
+
+
+
+
+
+
+if(!itemList){
+
+  return apiResponseHelper.post(res, true, 'User List',{});
+}
+
+var testdata=itemList;
+
+
+var data = testdata.map(user=>user.groupId)
+
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
+var arrayofTaskId = data;
+const itemList1 = await updateMessages.findAll({
+  where: {
+    groupId: {
+      [Op.in]: arrayofTaskId
+      },
+      senderId:{
+        [Op.not]:req.params.id
+      },
+
+      
+    
+  },
+  order :   [
+    ['id', 'DESC']
+     ]
+ })//.then(function(result) {
+//   return res.json(result)
+// })
+
+//console.log(itemList1)
+
+
+
+
+
+
+
+
+
+ if (itemList) {
+            
+        return apiResponseHelper.post(res, true, 'User List',get_messages_data[0]);
+      } else {
+          return apiResponseHelper.post(res, true, 'User List',{});
+      }
+
+
+  }catch(e){
+
+
+    console.log(e);
+    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+       
+  }
+
+
+
+
+
+
+
+
+
+
+}  ,
+
 
 
 

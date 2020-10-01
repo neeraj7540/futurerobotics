@@ -21,7 +21,9 @@ const roomList =db.models.roomlist;
 const updateMessages=db.models.update_messages;
 const notificationData=db.models.notification_data;
 
-console.log(updateMessages)
+const oneUpdateMessages=db.models.one_update_messages;
+
+console.log(oneUpdateMessages)
 
 const groupMessages=db.models.group_messages;
 
@@ -187,12 +189,51 @@ module.exports = {
       }
     });
 
+    console.log("----------------------------------Test-----------------------")
+
     if (user_data) {
-//------------------Testing-----------Dump-------------------
-//  get_data.senderId=1
-//   get_data.receiverId=2
-//      get_data.messageType=1
-     //  get_data.message="Love you jan"
+console.log("//-------------------------------------------------------------------------")
+
+const dataget = await oneUpdateMessages.findOne({
+  where:{
+    senderId:get_data.senderId,
+    receiverId: get_data.receiverId
+}
+})
+if(!dataget){
+  create_message = await oneUpdateMessages.create({
+    senderId: get_data.senderId,
+    receiverId: get_data.receiverId,
+    messageType: get_data.messageType,
+    message: get_data.message,
+    chatConstantId: 1,
+    created: await this.create_time_stamp(),
+    updated: await this.create_time_stamp(),
+  });
+}
+else{
+
+  create_message1 = await oneUpdateMessages.update({
+    senderId: get_data.senderId,
+    receiverId: get_data.receiverId,
+    messageType: get_data.messageType,
+    message: get_data.message,
+    chatConstantId:1,
+    created: await this.create_time_stamp(),
+    updated: await this.create_time_stamp(),
+  },{
+    where:{
+      senderId:get_data.senderId,
+      receiverId: get_data.receiverId
+   }
+
+  }
+  
+  
+  );
+  
+}
+
 
 
 //------------------------------------------
@@ -224,18 +265,62 @@ module.exports = {
         }
       });
 
-      // var senddata = senduserdata.dataValues.name;
-      // var senderIdData = get_data.senderId;
-      // let gettoken = await helper.gettoken(get_data.receiverId);
-      // if(gettoken.isNotification==1) {
-      //     console.log("===================here");
-      //     let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Butterfly", senddata, senderIdData);
-      // }
-      // let notify = await helper.savenotifications(get_data.senderId,get_data.receiverId, '1', "New Message");
-
+     
 
     } else {
 
+console.log("//----------------------Test1-------------------------")
+const dataget1 = await oneUpdateMessages.findOne({
+  where:{
+    senderId:get_data.senderId,
+    receiverId: get_data.receiverId
+}
+})
+if(!dataget1){
+
+  console.log("//----------------------Test2-------------------------")
+
+  create_message = await oneUpdateMessages.create({
+    senderId: get_data.senderId,
+    receiverId: get_data.receiverId,
+    messageType: get_data.messageType,
+    message: get_data.message,
+    chatConstantId:1,
+    created: await this.create_time_stamp(),
+    updated: await this.create_time_stamp(),
+  });
+}
+else{
+
+  create_message1 = await oneUpdateMessages.update({
+    senderId: get_data.senderId,
+    receiverId: get_data.receiverId,
+    messageType: get_data.messageType,
+    message: get_data.message,
+    chatConstantId:1,
+    created: await this.create_time_stamp(),
+    updated: await this.create_time_stamp(),
+  },{
+    where:{
+      senderId:get_data.senderId,
+      receiverId: get_data.receiverId
+   }
+
+  }
+  
+  
+  );
+  
+}
+
+
+
+
+
+
+
+
+//-----------------------------------------------------
       let create_last_message = await chatConstants.create({
         senderId: get_data.senderId,
         receiverId: get_data.receiverId,
@@ -265,20 +350,7 @@ module.exports = {
         }
       );
       
-      // var senduserdata = await appusers.findOne({
-      //   where: {
-      //     id: get_data.senderId,
-      //   }
-      // });
-
-      // var senddata = senduserdata.dataValues.name;
-      // var senderIdData =get_data.senderId;
-      // let gettoken = await helper.gettoken(get_data.receiverId);
-      // if(gettoken.isNotification==1) {
-      //     console.log("===================here");
-      //     let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Future Robotics", senddata, senderIdData);
-      // }
-      // let notify = await helper.savenotifications(get_data.senderId,get_data.receiverId, '1', "New Message");
+      
      
 
       return create_message;
