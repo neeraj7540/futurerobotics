@@ -2604,10 +2604,109 @@ const itemList1 = await updateMessages.findAll({
       },
       senderId:{
         [Op.not]:req.params.id
+      },
+
+      
+    
+  },
+  order :   [
+    ['id', 'DESC']
+     ]
+ })//.then(function(result) {
+//   return res.json(result)
+// })
+
+//console.log(itemList1)
+
+
+
+
+
+
+
+
+
+ if (itemList) {
+            
+        return apiResponseHelper.post(res, true, 'User List',itemList1);
+      } else {
+          return apiResponseHelper.post(res, true, 'User List',{});
       }
 
-    
+
+  }catch(e){
+
+
+    console.log(e);
+    return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again',{});
+       
   }
+
+
+
+
+
+
+
+
+
+
+}  ,
+
+//---------------------Test-----------
+
+massagelist2:  async (req, res) => {
+
+
+  try{
+
+    const itemList = await socket_group.findAll({
+      
+     where:{
+      userId:req.params.id
+     }  
+});
+
+if(!itemList){
+
+  return apiResponseHelper.post(res, true, 'User List',{});
+}
+
+var testdata=itemList;
+
+
+var data = testdata.map(user=>user.groupId)
+
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
+var arrayofTaskId = data;
+const Data1 = await socket_group.findAll({
+  where: {
+    groupId: {
+      [Op.in]: arrayofTaskId
+      },  
+  },
+ 
+ })
+
+ 
+ var data123 = Data1.map(user=>user.userId)
+
+
+
+
+
+const itemList1 = await updateMessages.findAll({
+  where: {
+    senderId: {
+      [Op.in]: data123,
+      [Op.not]:req.params.id
+      },
+     
+  },
+  order :   [
+    ['id', 'DESC']
+     ]
  })//.then(function(result) {
 //   return res.json(result)
 // })
@@ -2650,6 +2749,12 @@ const itemList1 = await updateMessages.findAll({
 }  ,
 
 
+
+
+
+
+
+//------------------------------------------
 massagelist1:  async (req, res) => {
 
 

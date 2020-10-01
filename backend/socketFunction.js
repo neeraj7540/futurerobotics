@@ -265,19 +265,19 @@ module.exports = {
         }
       );
       
-      var senduserdata = await appusers.findOne({
-        where: {
-          id: get_data.senderId,
-        }
-      });
+      // var senduserdata = await appusers.findOne({
+      //   where: {
+      //     id: get_data.senderId,
+      //   }
+      // });
 
-      var senddata = senduserdata.dataValues.name;
-      var senderIdData =get_data.senderId;
-      let gettoken = await helper.gettoken(get_data.receiverId);
-      if(gettoken.isNotification==1) {
-          console.log("===================here");
-          let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Future Robotics", senddata, senderIdData);
-      }
+      // var senddata = senduserdata.dataValues.name;
+      // var senderIdData =get_data.senderId;
+      // let gettoken = await helper.gettoken(get_data.receiverId);
+      // if(gettoken.isNotification==1) {
+      //     console.log("===================here");
+      //     let sendpush = await helper.send_push_notification_chat( get_data.message, gettoken.deviceToken, gettoken.deviceType, '1', "Future Robotics", senddata, senderIdData);
+      // }
       // let notify = await helper.savenotifications(get_data.senderId,get_data.receiverId, '1', "New Message");
      
 
