@@ -514,9 +514,11 @@ const deletecmments1 = await notificationData.destroy({
                     }
                 })
 
+                console.log("-------------------Neeraj----------------------------------")
+
 
                     if (deleteUser) {
-                        fs.unlinkSync(users.dataValues.image);
+                       // fs.unlinkSync(users.dataValues.image);
                     return apiResponseHelper.post(res, true, 'Users Successfully Deleted!',{});
     
                     } else {
@@ -990,7 +992,7 @@ const updateEnt =  await notificationData.update(
   
   
 
-
+console.log("--------------------------Test------------------------------")
 
 
 
