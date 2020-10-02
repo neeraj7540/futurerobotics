@@ -1178,12 +1178,15 @@ module.exports = {
         feedId: requestData.feed_id,
         userId: requestData.id,
       })
-      console.log(alreadyLikedDisliked, '===============>alreadyLikedDisliked');
+      // console.log(alreadyLikedDisliked, '===============>alreadyLikedDisliked');
       // return;
 
-      let message = `${user.name}${!alreadyLikedDisliked ? `${requestData.likeDeslike == 1 ? ' liked' : ' disliked'} your` : `'s ${requestData.likeDeslike == 1 ? 'like' : 'dislike'} removed from`} post`;
+      // let message = `${user.name}${!alreadyLikedDisliked ? `${requestData.likeDeslike == 1 ? ' liked' : ' disliked'} your` : `'s ${requestData.likeDeslike == 1 ? 'like' : 'dislike'} removed from`} post`;
+      const condition = !alreadyLikedDisliked || alreadyLikedDisliked && alreadyLikedDisliked.likeDeslike != requestData.likeDeslike;
 
-      if (!alreadyLikedDisliked) {
+      let message = `${user.name}${condition ? `${requestData.likeDeslike == 1 ? ' liked' : ' disliked'} your` : `'s ${requestData.likeDeslike == 1 ? 'like' : 'dislike'} removed from`} post`;
+
+      if (condition) {
         const upFeedlikedeslike = {
           ...(
             alreadyLikedDisliked
@@ -1215,8 +1218,8 @@ module.exports = {
           helper.sendPushNotification(dataForSend);
           console.log(dataForSend, '===============>dataForSend');
         }
-        console.log(feed.appuser.deviceToken, '===============>user.deviceToken');
-        console.log(upFeedlikedeslike, '===============>upFeedlikedeslike');
+        // console.log(feed.appuser.deviceToken, '===============>user.deviceToken');
+        // console.log(upFeedlikedeslike, '===============>upFeedlikedeslike');
       } else {
         await helper.delete(models['feedlikedeslike'], alreadyLikedDisliked.id);
       }
@@ -1781,457 +1784,579 @@ module.exports = {
 
 
   //---------------------Comment Like or deslike-----------------------------------------------
-  comment_like_deslike: async (req, res) => {
+  comment_like_deslike_new: async (req, res) => {
     try {
-      const id = req.params.id;
-      const commentId = req.params.commentId;
+      const required = {
+        id: req.params.id,
+        commentId: req.params.commentId,
+        likeDeslike: req.body.likeDeslike, // 0 => dislike, 1 => like
+      };
+      const nonRequired = {
 
+      };
 
-      const likedeslike = await commentLikedeslike.findOne({
+      let requestData = await helper.vaildObject(required, nonRequired);
 
+      if (![0, 1].includes(parseInt(requestData.likeDeslike))) throw "Invalid value in param likeDeslike.";
+
+      const user = await appUsersTable.findOne({
         where: {
-          commentId: req.params.commentId,
-          userId: req.params.id,
-
+          id: requestData.id,
         },
-      })
+        raw: true,
+      });
+      if (!user) throw "Invalid id.";
 
-      //-------------------------------Firebase ------------------
-
-      const dataget = await feedCommentTable.findOne({
-
+      let feedComment = await feedCommentTable.findOne({
         where: {
-          commentId: req.params.commentId,
-
-
+          commentId: requestData.commentId,
         },
-      })
-
-      // console.log(dataget.dataValues.userId)
-
-      const getdevice_token = await appUsersTable.findOne({
-
-        where: {
-          id: dataget.dataValues.userId,
-        },
-      })
-
-      const senderuser = await appUsersTable.findOne({
-
-        where: {
-          id: req.params.id,
-        },
-      })
-
-
-      if (!likedeslike) {
-        if (getdevice_token.dataValues.deviceToken && req.body.likeDeslike == 1) {
-          //----------------------------------------DataStore
-
-
-          recors_upate = await notificationData.create({
-            sender_id: req.params.id,
-            receiver_id: dataget.dataValues.userId,
-            senderName: senderuser.dataValues.name,
-            senderImage: senderuser.dataValues.image,
-            notification: 'liked your comment'
-          })
-
-
-          //---------------------------------
-
-          var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
-          var fcm = new FCM(serverKey);
-          var device_token = getdevice_token.dataValues.deviceToken
-          var title = 'Future Robotics'
-          var get_message = senderuser.dataValues.name + " liked your comment"
-
-
-          var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-            to: device_token,
-            // collapse_key: 'your_collapse_key',
-
-            notification: {
-              title: title,
-              body: get_message
-            },
-
-            data: {  //you can send only notification or only data(or include both)
-              body: get_message,
-              // receiver_data: data_to_send,
-            }
-          };
-
-          fcm.send(message, function (err, response) {
-            if (err) {
-              console.log("Something has gone wrong!", message);
-            } else {
-              console.log("Successfully sent with response: ", response);
-            }
-          });
-
-          // return fcm;
-
-        }
-
-        if (getdevice_token.dataValues.deviceToken && req.body.likeDeslike == 0) {
-          //----------------------------Update data-------------------------
-          recors_upate = await notificationData.create({
-            sender_id: req.params.id,
-            receiver_id: dataget.dataValues.userId,
-            senderName: senderuser.dataValues.name,
-            senderImage: senderuser.dataValues.image,
-            notification: 'disliked your comment'
-          })
-
-
-
-
-
-
-          //-------------------------------------------------
-
-          var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
-          var fcm = new FCM(serverKey);
-          var device_token = getdevice_token.dataValues.deviceToken
-          var title = 'Future Robotics'
-          var get_message = senderuser.dataValues.name + " dislike your comment"
-
-
-          var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-            to: device_token,
-            // collapse_key: 'your_collapse_key',
-
-            notification: {
-              title: title,
-              body: get_message
-            },
-
-            data: {  //you can send only notification or only data(or include both)
-              body: get_message,
-              // receiver_data: data_to_send,
-            }
-          };
-
-          fcm.send(message, function (err, response) {
-            if (err) {
-              console.log("Something has gone wrong!", message);
-            } else {
-              console.log("Successfully sent with response: ", response);
-            }
-          });
-
-          // return fcm;
-
-        }
-      }
-      else {
-        //-------------------------Update data information------------------------------------------
-
-        const information = await commentLikedeslike.findOne({
-
-          where: {
-            commentId: req.params.commentId,
-            userId: req.params.id,
-
-          },
-        })
-
-        var test = information.dataValues.likeDeslike;
-
-        if (req.body.likeDeslike !== test) {
-          if (getdevice_token.dataValues.deviceToken && req.body.likeDeslike == 1) {
-            //----------------------------------------DataStore
-
-
-            recors_upate = await notificationData.create({
-              sender_id: req.params.id,
-              receiver_id: dataget.dataValues.userId,
-              senderName: senderuser.dataValues.name,
-              senderImage: senderuser.dataValues.image,
-              notification: 'liked your comment'
-            })
-
-
-            //---------------------------------
-
-            var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
-            var fcm = new FCM(serverKey);
-            var device_token = getdevice_token.dataValues.deviceToken
-            var title = 'Future Robotics'
-            var get_message = senderuser.dataValues.name + " liked your comment"
-
-
-            var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-              to: device_token,
-              // collapse_key: 'your_collapse_key',
-
-              notification: {
-                title: title,
-                body: get_message
-              },
-
-              data: {  //you can send only notification or only data(or include both)
-                body: get_message,
-                // receiver_data: data_to_send,
-              }
-            };
-
-            fcm.send(message, function (err, response) {
-              if (err) {
-                console.log("Something has gone wrong!", message);
-              } else {
-                console.log("Successfully sent with response: ", response);
-              }
-            });
-
-            // return fcm;
-
-          }
-
-          if (getdevice_token.dataValues.deviceToken && req.body.likeDeslike == 0) {
-            //----------------------------Update data-------------------------
-            recors_upate = await notificationData.create({
-              sender_id: req.params.id,
-              receiver_id: dataget.dataValues.userId,
-              senderName: senderuser.dataValues.name,
-              senderImage: senderuser.dataValues.image,
-              notification: 'disliked your comment'
-            })
-
-
-
-
-
-
-            //-------------------------------------------------
-
-            var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
-            var fcm = new FCM(serverKey);
-            var device_token = getdevice_token.dataValues.deviceToken
-            var title = 'Future Robotics'
-            var get_message = senderuser.dataValues.name + " dislike your comment"
-
-
-            var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-              to: device_token,
-              // collapse_key: 'your_collapse_key',
-
-              notification: {
-                title: title,
-                body: get_message
-              },
-
-              data: {  //you can send only notification or only data(or include both)
-                body: get_message,
-                // receiver_data: data_to_send,
-              }
-            };
-
-            fcm.send(message, function (err, response) {
-              if (err) {
-                console.log("Something has gone wrong!", message);
-              } else {
-                console.log("Successfully sent with response: ", response);
-              }
-            });
-
-            // return fcm;
-
-          }
-        }
-
-      }
-
-
-
-
-
-      //---------------------------------------------------------
-      // console.log(likedeslike)
-
-      if (!likedeslike) {
-        const data1 = req.body;
-        data1.commentId = req.params.commentId;
-        data1.userId = req.params.id;
-        data1.likeDeslike = req.body.likeDeslike;
-        data1.status = '1'
-
-        const itemAdded = await commentLikedeslike.create(data1);
-
-
-        const get_available_data1 = await commentLikedeslike.count({
-          where: {
-            status: '1',
-            commentId: req.params.commentId,
-            likeDeslike: '1'
-          },
-        })
-        var test1 = get_available_data1;
-        console.log(test1);
-        const get_available_data2 = await commentLikedeslike.count({
-          where: {
-            status: '1',
-            commentId: req.params.commentId,
-            likeDeslike: '0'
-          },
-        })
-        var test2 = get_available_data2;
-        console.log(test2)
-
-        let data = {
-          like_count: test1,
-          deslike_count: test2
-
-        }
-        //-----------------------------------------------------
-        let data2 = {
-          like: test1,
-          deslike: test2
-
-        }
-
-
-        const updateEntry2 = await feedCommentTable.update(
-          data2,
+        include: [
           {
-            where: {
-              commentId: req.params.commentId,
-
-            }
-          });
-
-
-
-        //-------------------------------------------------------
-        const updateEntry = await commentLikedeslike.update(
-          data,
-          {
-            where: {
-              commentId: req.params.commentId,
-
-            }
-          });
-
-        const countdata = await commentLikedeslike.findOne({
-          attributes: ['id', 'commentId', 'userId', 'like_count', 'deslike_count'],
-          where: {
-            commentId: req.params.commentId,
-            userId: req.params.id,
-
+            model: models['appusers'],
+            required: true,
+            attributes: [
+              'id',
+              'name',
+              'email',
+              'deviceToken',
+            ],
           },
-        })
+          {
+            model: models['feed'],
+            required: true,
+            include: [
+              {
+                model: models['appusers'],
+                required: true,
+                attributes: [
+                  'id',
+                  'name',
+                  'email',
+                  'deviceToken',
+                ],
+              }
+            ]
+          },
+        ]
+      });
+      if (!feedComment) throw "Invalid commentId.";
+      feedComment = feedComment.toJSON();
+      console.log(feedComment, '=========>feedComment');
+      // return;
 
+      const alreadyLikedDisliked = await models['comment_likedeslike'].findOne({
+        where: {
+          commentId: requestData.commentId,
+          userId: requestData.id,
+        },
+        raw: true,
+      });
+      console.log(alreadyLikedDisliked, '===============>alreadyLikedDisliked');
+      // return;
+      const condition = !alreadyLikedDisliked || alreadyLikedDisliked && alreadyLikedDisliked.likeDeslike != requestData.likeDeslike;
 
-        if (itemAdded) {
+      let message = `${user.name}${condition ? `${requestData.likeDeslike == 1 ? ' liked' : ' disliked'} your` : `'s ${requestData.likeDeslike == 1 ? 'like' : 'dislike'} removed from`} comment`;
 
-          return apiResponseHelper.post(res, true, 'New Like/Deslike Add', countdata);
-        } else {
-          return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
+      // console.log(alreadyLikedDisliked, '=========>alreadyLikedDisliked');
+      // console.log(!alreadyLikedDisliked || alreadyLikedDisliked && alreadyLikedDisliked.hasOwnProperty('likeDeslike') == requestData.likeDeslike, '=========>alreadyLikedDisliked123123123');
+      // return;
+      
+      if (condition) {
+        const upFeedlikedeslike = {
+          ...(
+            alreadyLikedDisliked
+              ? {
+                id: alreadyLikedDisliked.id,
+              } : {}
+          ),
+          userId: requestData.id,
+          commentId: requestData.commentId,
+          status: '1',
+          likeDeslike: requestData.likeDeslike,
+        };
+
+        const updatedFeedlikedeslikeId = await helper.save(models['comment_likedeslike'], upFeedlikedeslike)
+
+        recors_upate = await helper.save(models.notification_data, {
+          sender_id: requestData.id,
+          receiver_id: feedComment.appuser.id,
+          senderName: user.name,
+          senderImage: user.image,
+          notification: `${requestData.likeDeslike == 1 ? 'liked' : 'disliked'} your comment`,
+        });
+
+        if (feedComment.appuser.deviceToken) {
+          const dataForSend = {
+            message,
+            deviceToken: feedComment.appuser.deviceToken,
+          };
+          helper.sendPushNotification(dataForSend);
+          console.log(dataForSend, '===============>dataForSend');
         }
-
-
-      }
-
-      const data1 = req.body;
-      data1.commentId = req.params.commentId;
-      data1.userId = req.params.id;
-      data1.likeDeslike = req.body.likeDeslike;
-      const updateEntry = await commentLikedeslike.update(
-        data1,
-        {
-          where: {
-            id: likedeslike.id,
-
-          }
-        });
-
-      const get_available_data1 = await commentLikedeslike.count({
-        where: {
-          status: '1',
-          commentId: req.params.commentId,
-          likeDeslike: '1'
-        },
-      })
-      var test1 = get_available_data1;
-      console.log(test1);
-      const get_available_data2 = await commentLikedeslike.count({
-        where: {
-          status: '1',
-          commentId: req.params.commentId,
-          likeDeslike: '0'
-        },
-      })
-      var test2 = get_available_data2;
-      console.log(test2)
-
-      let data = {
-        like_count: test1,
-        deslike_count: test2
-
-      }
-      let data3 = {
-        like: test1,
-        deslike: test2
-
-      }
-
-
-      //--------------------------------------
-      const updateEntry2 = await feedCommentTable.update(
-        data3,
-        {
-          where: {
-            commentId: req.params.commentId,
-
-          }
-        });
-
-
-
-
-
-
-
-      //----------------------------------------------------- 
-      const updateEntry1 = await commentLikedeslike.update(
-        data,
-        {
-          where: {
-            commentId: req.params.commentId,
-
-          }
-        });
-
-      const countdata = await commentLikedeslike.findOne({
-        attributes: ['id', 'commentId', 'userId', 'like_count', 'deslike_count'],
-        where: {
-          commentId: req.params.commentId,
-          userId: req.params.id,
-
-        },
-      })
-
-
-
-      if (updateEntry) {
-
-        return apiResponseHelper.post(res, true, 'New Like/Deslike Update', countdata);
+        // console.log(feed.appuser.deviceToken, '===============>user.deviceToken');
+        // console.log(upFeedlikedeslike, '===============>upFeedlikedeslike');
       } else {
-        return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
+        await helper.delete(models['comment_likedeslike'], alreadyLikedDisliked.id);
       }
 
-
-    }
-
-    catch (e) {
-      console.log(e);
-
-      return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
-
+      return helper.success(res, message, {});
+    } catch (err) {
+      return helper.error(res, err);
     }
 
   },
+  // comment_like_deslike: async (req, res) => {
+  //   try {
+  //     const id = req.params.id;
+  //     const commentId = req.params.commentId;
+
+
+  //     const likedeslike = await commentLikedeslike.findOne({
+
+  //       where: {
+  //         commentId: req.params.commentId,
+  //         userId: req.params.id,
+
+  //       },
+  //     })
+
+  //     //-------------------------------Firebase ------------------
+
+  //     const dataget = await feedCommentTable.findOne({
+
+  //       where: {
+  //         commentId: req.params.commentId,
+
+
+  //       },
+  //     })
+
+  //     // console.log(dataget.dataValues.userId)
+
+  //     const getdevice_token = await appUsersTable.findOne({
+
+  //       where: {
+  //         id: dataget.dataValues.userId,
+  //       },
+  //     })
+
+  //     const senderuser = await appUsersTable.findOne({
+
+  //       where: {
+  //         id: req.params.id,
+  //       },
+  //     })
+
+
+  //     if (!likedeslike) {
+  //       if (getdevice_token.dataValues.deviceToken && req.body.likeDeslike == 1) {
+  //         //----------------------------------------DataStore
+
+
+  //         recors_upate = await notificationData.create({
+  //           sender_id: req.params.id,
+  //           receiver_id: dataget.dataValues.userId,
+  //           senderName: senderuser.dataValues.name,
+  //           senderImage: senderuser.dataValues.image,
+  //           notification: 'liked your comment'
+  //         })
+
+
+  //         //---------------------------------
+
+  //         var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+  //         var fcm = new FCM(serverKey);
+  //         var device_token = getdevice_token.dataValues.deviceToken
+  //         var title = 'Future Robotics'
+  //         var get_message = senderuser.dataValues.name + " liked your comment"
+
+
+  //         var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+  //           to: device_token,
+  //           // collapse_key: 'your_collapse_key',
+
+  //           notification: {
+  //             title: title,
+  //             body: get_message
+  //           },
+
+  //           data: {  //you can send only notification or only data(or include both)
+  //             body: get_message,
+  //             // receiver_data: data_to_send,
+  //           }
+  //         };
+
+  //         fcm.send(message, function (err, response) {
+  //           if (err) {
+  //             console.log("Something has gone wrong!", message);
+  //           } else {
+  //             console.log("Successfully sent with response: ", response);
+  //           }
+  //         });
+
+  //         // return fcm;
+
+  //       }
+
+  //       if (getdevice_token.dataValues.deviceToken && req.body.likeDeslike == 0) {
+  //         //----------------------------Update data-------------------------
+  //         recors_upate = await notificationData.create({
+  //           sender_id: req.params.id,
+  //           receiver_id: dataget.dataValues.userId,
+  //           senderName: senderuser.dataValues.name,
+  //           senderImage: senderuser.dataValues.image,
+  //           notification: 'disliked your comment'
+  //         })
+
+
+
+
+
+
+  //         //-------------------------------------------------
+
+  //         var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+  //         var fcm = new FCM(serverKey);
+  //         var device_token = getdevice_token.dataValues.deviceToken
+  //         var title = 'Future Robotics'
+  //         var get_message = senderuser.dataValues.name + " dislike your comment"
+
+
+  //         var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+  //           to: device_token,
+  //           // collapse_key: 'your_collapse_key',
+
+  //           notification: {
+  //             title: title,
+  //             body: get_message
+  //           },
+
+  //           data: {  //you can send only notification or only data(or include both)
+  //             body: get_message,
+  //             // receiver_data: data_to_send,
+  //           }
+  //         };
+
+  //         fcm.send(message, function (err, response) {
+  //           if (err) {
+  //             console.log("Something has gone wrong!", message);
+  //           } else {
+  //             console.log("Successfully sent with response: ", response);
+  //           }
+  //         });
+
+  //         // return fcm;
+
+  //       }
+  //     }
+  //     else {
+  //       //-------------------------Update data information------------------------------------------
+
+  //       const information = await commentLikedeslike.findOne({
+
+  //         where: {
+  //           commentId: req.params.commentId,
+  //           userId: req.params.id,
+
+  //         },
+  //       })
+
+  //       var test = information.dataValues.likeDeslike;
+
+  //       if (req.body.likeDeslike !== test) {
+  //         if (getdevice_token.dataValues.deviceToken && req.body.likeDeslike == 1) {
+  //           //----------------------------------------DataStore
+
+
+  //           recors_upate = await notificationData.create({
+  //             sender_id: req.params.id,
+  //             receiver_id: dataget.dataValues.userId,
+  //             senderName: senderuser.dataValues.name,
+  //             senderImage: senderuser.dataValues.image,
+  //             notification: 'liked your comment'
+  //           })
+
+
+  //           //---------------------------------
+
+  //           var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+  //           var fcm = new FCM(serverKey);
+  //           var device_token = getdevice_token.dataValues.deviceToken
+  //           var title = 'Future Robotics'
+  //           var get_message = senderuser.dataValues.name + " liked your comment"
+
+
+  //           var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+  //             to: device_token,
+  //             // collapse_key: 'your_collapse_key',
+
+  //             notification: {
+  //               title: title,
+  //               body: get_message
+  //             },
+
+  //             data: {  //you can send only notification or only data(or include both)
+  //               body: get_message,
+  //               // receiver_data: data_to_send,
+  //             }
+  //           };
+
+  //           fcm.send(message, function (err, response) {
+  //             if (err) {
+  //               console.log("Something has gone wrong!", message);
+  //             } else {
+  //               console.log("Successfully sent with response: ", response);
+  //             }
+  //           });
+
+  //           // return fcm;
+
+  //         }
+
+  //         if (getdevice_token.dataValues.deviceToken && req.body.likeDeslike == 0) {
+  //           //----------------------------Update data-------------------------
+  //           recors_upate = await notificationData.create({
+  //             sender_id: req.params.id,
+  //             receiver_id: dataget.dataValues.userId,
+  //             senderName: senderuser.dataValues.name,
+  //             senderImage: senderuser.dataValues.image,
+  //             notification: 'disliked your comment'
+  //           })
+
+
+
+
+
+
+  //           //-------------------------------------------------
+
+  //           var serverKey = 'AAAAs4zBDdk:APA91bHK9lCR3q0EDhAqV66ftg08OU9Wtrgd-dVjl3T-1uVBwZaCRbkK145iMf8h8bmDVOy-IBhUM01-IiD80cfXB1d8WrCZBy50DuFq3NuO27SUj2NwBzBx2eSFI7yNHgooJ74IW4vx'; //put your server key here
+  //           var fcm = new FCM(serverKey);
+  //           var device_token = getdevice_token.dataValues.deviceToken
+  //           var title = 'Future Robotics'
+  //           var get_message = senderuser.dataValues.name + " dislike your comment"
+
+
+  //           var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+  //             to: device_token,
+  //             // collapse_key: 'your_collapse_key',
+
+  //             notification: {
+  //               title: title,
+  //               body: get_message
+  //             },
+
+  //             data: {  //you can send only notification or only data(or include both)
+  //               body: get_message,
+  //               // receiver_data: data_to_send,
+  //             }
+  //           };
+
+  //           fcm.send(message, function (err, response) {
+  //             if (err) {
+  //               console.log("Something has gone wrong!", message);
+  //             } else {
+  //               console.log("Successfully sent with response: ", response);
+  //             }
+  //           });
+
+  //           // return fcm;
+
+  //         }
+  //       }
+
+  //     }
+
+
+
+
+
+  //     //---------------------------------------------------------
+  //     // console.log(likedeslike)
+
+  //     if (!likedeslike) {
+  //       const data1 = req.body;
+  //       data1.commentId = req.params.commentId;
+  //       data1.userId = req.params.id;
+  //       data1.likeDeslike = req.body.likeDeslike;
+  //       data1.status = '1'
+
+  //       const itemAdded = await commentLikedeslike.create(data1);
+
+
+  //       const get_available_data1 = await commentLikedeslike.count({
+  //         where: {
+  //           status: '1',
+  //           commentId: req.params.commentId,
+  //           likeDeslike: '1'
+  //         },
+  //       })
+  //       var test1 = get_available_data1;
+  //       console.log(test1);
+  //       const get_available_data2 = await commentLikedeslike.count({
+  //         where: {
+  //           status: '1',
+  //           commentId: req.params.commentId,
+  //           likeDeslike: '0'
+  //         },
+  //       })
+  //       var test2 = get_available_data2;
+  //       console.log(test2)
+
+  //       let data = {
+  //         like_count: test1,
+  //         deslike_count: test2
+
+  //       }
+  //       //-----------------------------------------------------
+  //       let data2 = {
+  //         like: test1,
+  //         deslike: test2
+
+  //       }
+
+
+  //       const updateEntry2 = await feedCommentTable.update(
+  //         data2,
+  //         {
+  //           where: {
+  //             commentId: req.params.commentId,
+
+  //           }
+  //         });
+
+
+
+  //       //-------------------------------------------------------
+  //       const updateEntry = await commentLikedeslike.update(
+  //         data,
+  //         {
+  //           where: {
+  //             commentId: req.params.commentId,
+
+  //           }
+  //         });
+
+  //       const countdata = await commentLikedeslike.findOne({
+  //         attributes: ['id', 'commentId', 'userId', 'like_count', 'deslike_count'],
+  //         where: {
+  //           commentId: req.params.commentId,
+  //           userId: req.params.id,
+
+  //         },
+  //       })
+
+
+  //       if (itemAdded) {
+
+  //         return apiResponseHelper.post(res, true, 'New Like/Deslike Add', countdata);
+  //       } else {
+  //         return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
+  //       }
+
+
+  //     }
+
+  //     const data1 = req.body;
+  //     data1.commentId = req.params.commentId;
+  //     data1.userId = req.params.id;
+  //     data1.likeDeslike = req.body.likeDeslike;
+  //     const updateEntry = await commentLikedeslike.update(
+  //       data1,
+  //       {
+  //         where: {
+  //           id: likedeslike.id,
+
+  //         }
+  //       });
+
+  //     const get_available_data1 = await commentLikedeslike.count({
+  //       where: {
+  //         status: '1',
+  //         commentId: req.params.commentId,
+  //         likeDeslike: '1'
+  //       },
+  //     })
+  //     var test1 = get_available_data1;
+  //     console.log(test1);
+  //     const get_available_data2 = await commentLikedeslike.count({
+  //       where: {
+  //         status: '1',
+  //         commentId: req.params.commentId,
+  //         likeDeslike: '0'
+  //       },
+  //     })
+  //     var test2 = get_available_data2;
+  //     console.log(test2)
+
+  //     let data = {
+  //       like_count: test1,
+  //       deslike_count: test2
+
+  //     }
+  //     let data3 = {
+  //       like: test1,
+  //       deslike: test2
+
+  //     }
+
+
+  //     //--------------------------------------
+  //     const updateEntry2 = await feedCommentTable.update(
+  //       data3,
+  //       {
+  //         where: {
+  //           commentId: req.params.commentId,
+
+  //         }
+  //       });
+
+
+
+
+
+
+
+  //     //----------------------------------------------------- 
+  //     const updateEntry1 = await commentLikedeslike.update(
+  //       data,
+  //       {
+  //         where: {
+  //           commentId: req.params.commentId,
+
+  //         }
+  //       });
+
+  //     const countdata = await commentLikedeslike.findOne({
+  //       attributes: ['id', 'commentId', 'userId', 'like_count', 'deslike_count'],
+  //       where: {
+  //         commentId: req.params.commentId,
+  //         userId: req.params.id,
+
+  //       },
+  //     })
+
+
+
+  //     if (updateEntry) {
+
+  //       return apiResponseHelper.post(res, true, 'New Like/Deslike Update', countdata);
+  //     } else {
+  //       return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
+  //     }
+
+
+  //   }
+
+  //   catch (e) {
+  //     console.log(e);
+
+  //     return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
+
+  //   }
+
+  // },
 
 
   delete_post: async (req, res) => {

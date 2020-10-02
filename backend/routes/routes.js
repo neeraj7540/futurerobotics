@@ -273,7 +273,8 @@ routes.get('/community_feed_details/:feed_id',feedsCtrl.community_feed_details);
 //-----------------------------10-09-2020-------------------------------------
 routes.post('/feed_comment/:id/:feed_id',feedsCtrl.feed_comment_data);
 
-routes.post('/comment_like_deslike/:id/:commentId',feedsCtrl.comment_like_deslike);
+// routes.post('/comment_like_deslike/:id/:commentId',feedsCtrl.comment_like_deslike);
+routes.post('/comment_like_deslike/:id/:commentId',feedsCtrl.comment_like_deslike_new);
 
 
 //-----------------------------11-09-2020-------------------------------------------------search Community Feed Post 
