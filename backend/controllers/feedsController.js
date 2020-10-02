@@ -533,7 +533,15 @@ module.exports = {
           },
           {
             model: feedCommentTable,
-            attributes: ['id', 'commentId', 'feedId', 'userId', 'comment', 'comment_image', 'status', 'like', 'deslike', 'createdAt', 'updatedAt'],
+            // attributes: ['id', 'commentId', 'feedId', 'userId', 'comment', 'comment_image', 'status', 'like', 'deslike', 'createdAt', 'updatedAt'],
+            attributes: {
+              include: [
+                [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomment.id && f.likeDeslike='1')`), 'like_count'],
+                [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomment.id && f.likeDeslike='0')`), 'deslike_count'],
+                [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomment.id && f.likeDeslike='1' && f.userId=${requestData.id})`), 'isLiked'],
+                [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomment.id && f.likeDeslike='0' && f.userId=${requestData.id})`), 'isDisliked'],
+              ],
+            },
 
             where: {
               status: '1'
@@ -1273,7 +1281,15 @@ module.exports = {
       if (title !== 'All Post') {
         //console.log('Neeraj kumar')
         const itemList = await feedsTable.findAll({
-          attributes: ['id', 'feedCatId', 'userId', 'feed_id', 'title', 'Date', 'like', 'comment_count', 'deslike', 'description', 'image', 'status', 'createdAt', 'updatedAt'],
+          // attributes: ['id', 'feedCatId', 'userId', 'feed_id', 'title', 'Date', 'like', 'comment_count', 'deslike', 'description', 'image', 'status', 'createdAt', 'updatedAt'],
+          attributes: {
+            include: [
+              [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1')`), 'like_count'],
+              [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0')`), 'deslike_count'],
+              [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1' && f.userId=${requestData.id})`), 'isLiked'],
+              [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0' && f.userId=${requestData.id})`), 'isDisliked'],
+            ]
+          },
           where: {
             title: req.params.title,
             status: '1'
@@ -1296,7 +1312,15 @@ module.exports = {
 
             {
               model: feedCommentTable,
-              attributes: ['id', 'feedId', 'userId', 'comment', 'status', 'like', 'deslike', 'createdAt', 'updatedAt'],
+              // attributes: ['id', 'feedId', 'userId', 'comment', 'status', 'like', 'deslike', 'createdAt', 'updatedAt'],
+              attributes: {
+                include: [
+                  [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomments.id && f.likeDeslike='1')`), 'like_count'],
+                  [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomments.id && f.likeDeslike='0')`), 'deslike_count'],
+                  [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomments.id && f.likeDeslike='1' && f.userId=${requestData.id})`), 'isLiked'],
+                  [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomments.id && f.likeDeslike='0' && f.userId=${requestData.id})`), 'isDisliked'],
+                ],
+              },
               where: {
                 status: '1'
               },
@@ -1350,7 +1374,15 @@ module.exports = {
             },
             {
               model: feedCommentTable,
-              attributes: ['id', 'commentId', 'feedId', 'userId', 'comment', 'status', 'like', 'deslike', 'createdAt', 'updatedAt'],
+              // attributes: ['id', 'commentId', 'feedId', 'userId', 'comment', 'status', 'like', 'deslike', 'createdAt', 'updatedAt'],
+              attributes: {
+                include: [
+                  [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomments.id && f.likeDeslike='1')`), 'like_count'],
+                  [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomments.id && f.likeDeslike='0')`), 'deslike_count'],
+                  [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomments.id && f.likeDeslike='1' && f.userId=${requestData.id})`), 'isLiked'],
+                  [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomments.id && f.likeDeslike='0' && f.userId=${requestData.id})`), 'isDisliked'],
+                ],
+              },
               where: {
                 status: '1'
               },
@@ -1759,7 +1791,7 @@ module.exports = {
       };
 
       let requestData = await helper.vaildObject(required, nonRequired);
-      
+
       const feed_id = req.params.feed_id;
       const itemList = await feedsTable.findOne({
         // attributes: ['feedCatId', 'userId', 'feed_id', 'title', 'Date', 'like', 'comment_count', 'deslike', 'description', 'image', 'status', 'createdAt', 'updatedAt'],
@@ -1780,7 +1812,15 @@ module.exports = {
 
           {
             model: feedCommentTable,
-            attributes: ['commentId', 'feedId', 'userId', 'comment', 'comment_image', 'status', 'like', 'deslike', 'createdAt', 'updatedAt'],
+            // attributes: ['commentId', 'feedId', 'userId', 'comment', 'comment_image', 'status', 'like', 'deslike', 'createdAt', 'updatedAt'],
+            attributes: {
+              include: [
+                [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomments.id && f.likeDeslike='1')`), 'like_count'],
+                [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomments.id && f.likeDeslike='0')`), 'deslike_count'],
+                [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomments.id && f.likeDeslike='1' && f.userId=${requestData.id})`), 'isLiked'],
+                [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomments.id && f.likeDeslike='0' && f.userId=${requestData.id})`), 'isDisliked'],
+              ],
+            },
             where: {
               status: '1'
             },
@@ -2768,7 +2808,15 @@ module.exports = {
 
           {
             model: feedCommentTable,
-            attributes: ['id', 'commentId', 'feedId', 'userId', 'comment', 'comment_image', 'status', 'like', 'deslike', 'createdAt', 'updatedAt'],
+            // attributes: ['id', 'commentId', 'feedId', 'userId', 'comment', 'comment_image', 'status', 'like', 'deslike', 'createdAt', 'updatedAt'],
+            attributes: {
+              include: [
+                [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomment.id && f.likeDeslike='1')`), 'like_count'],
+                [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomment.id && f.likeDeslike='0')`), 'deslike_count'],
+                [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomment.id && f.likeDeslike='1' && f.userId=${req.body.id})`), 'isLiked'],
+                [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=feedcomment.id && f.likeDeslike='0' && f.userId=${req.body.id})`), 'isDisliked'],
+              ],
+            },
             where: {
               status: '1'
             },

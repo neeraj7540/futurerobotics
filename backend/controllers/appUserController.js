@@ -1,7 +1,9 @@
 const config = require('config');
 const db = require('../db/db');
+const { models } = db;
 const apiResponseHelper = require('../helpers/apiResponseHelper');
 const mail = require('../helpers/mailer');
+const helper = require('../helpers/helper');
 const appusers = db.models.appusers;
 const reportedTable = db.models.reportedfeed;
 const feedsTable = db.models.feed;
@@ -1446,7 +1448,27 @@ module.exports = {
 
       var finaldeslike1 = parseInt(finaldeslike)
 
-      var totallike = finallike1 - finaldeslike1
+      // var totallike = finallike1 - finaldeslike1
+
+
+      const likeDislikeData = await models['appusers'].findOne({
+        attributes: [
+          [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f INNER JOIN feedcomment AS fc ON fc.id=f.commentId WHERE fc.userId=${req.params.id} && f.likeDeslike='1')`), 'commentLikeCount'],
+          [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f INNER JOIN feedcomment AS fc ON fc.id=f.commentId WHERE fc.userId=${req.params.id} && f.likeDeslike='0')`), 'commentDislikeCount'],
+          [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f INNER JOIN feed AS fe ON fe.id=f.feedId WHERE fe.userId=${req.params.id} && f.likeDeslike='1')`), 'feedLikeCount'],
+          [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f INNER JOIN feed AS fe ON fe.id=f.feedId WHERE fe.userId=${req.params.id} && f.likeDeslike='0')`), 'feedDislikeCount'],
+        ],
+        raw: true,
+      });
+
+      let totallike = likeDislikeData.feedLikeCount + likeDislikeData.commentLikeCount - (likeDislikeData.feedDislikeCount + likeDislikeData.commentDislikeCount)
+
+      if (totallike < 0) totallike = 0;
+      
+      // console.log(likeDislikeData, '================>likeDislikeData');
+      // console.log(totallike, '================>totallike');
+      // return;
+
 
 
 
@@ -1462,7 +1484,7 @@ module.exports = {
       }
 
       if (totallike >= 1 && totallike <= 10) {
-        var ranking = 'Reular User'
+        var ranking = 'Regular User'
       }
 
       if (totallike >= 11 && totallike <= 25) {
@@ -1507,7 +1529,7 @@ module.exports = {
 
       if (totallike < 0) {
 
-        var totallike = 0
+        totallike = 0
       }
 
 
@@ -1621,12 +1643,14 @@ module.exports = {
 
       }
       else {
+        // return helper.error(res, err);
         return apiResponseHelper.onError(res, false, 'Users Not Exists', 'Something Went Wrong.Please Try Again');
 
 
       }
-    } catch (e) {
-      return apiResponseHelper.onError(res, false, 'Error', e);
+    } catch (err) {
+      return helper.error(res, err);
+      // return apiResponseHelper.onError(res, false, 'Error', e);
     }
   },
 
