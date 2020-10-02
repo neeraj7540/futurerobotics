@@ -496,13 +496,22 @@ module.exports = {
 
 
     try {
+      const required = {
+        id: req.params.id,
+      };
+      const nonRequired = {};
+
+      let requestData = await helper.vaildObject(required, nonRequired);
 
       const itemList = await feedsTable.findAll({
         // attributes: ['id', 'feedCatId', 'userId', 'feed_id', 'title', 'Date', 'like', 'comment_count', 'deslike', 'description', 'image', 'status', 'createdAt', 'updatedAt'],
 
         attributes: {
           include: [
-            // [sequelize.literal()]
+            [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1')`), 'like_count'],
+            [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0')`), 'deslike_count'],
+            [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1' && f.userId=${requestData.id})`), 'isLiked'],
+            [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0' && f.userId=${requestData.id})`), 'isDisliked'],
           ]
         },
         where: {
@@ -564,10 +573,9 @@ module.exports = {
 
 
     } catch (e) {
-
-
       console.log(e);
-      return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
+      // return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
+      return helper.error(res, err);
 
     }
 
@@ -1248,13 +1256,20 @@ module.exports = {
 
 
   get_cat_data: async (req, res) => {
-
-
     try {
+      const required = {
+        id: req.params.id,
+        title: req.params.title,
+      };
+      const nonRequired = {
 
+      };
 
+      let requestData = await helper.vaildObject(required, nonRequired);
       const title = req.params.title;
       console.log(title)
+
+
       if (title !== 'All Post') {
         //console.log('Neeraj kumar')
         const itemList = await feedsTable.findAll({
@@ -1311,7 +1326,15 @@ module.exports = {
       }
       else {
         const itemList = await feedsTable.findAll({
-          attributes: ['id', 'feedCatId', 'userId', 'feed_id', 'title', 'Date', 'like', 'comment_count', 'deslike', 'description', 'image', 'status', 'createdAt', 'updatedAt'],
+          // attributes: ['id', 'feedCatId', 'userId', 'feed_id', 'title', 'Date', 'like', 'comment_count', 'deslike', 'description', 'image', 'status', 'createdAt', 'updatedAt'],
+          attributes: {
+            include: [
+              [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1')`), 'like_count'],
+              [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0')`), 'deslike_count'],
+              [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1' && f.userId=${requestData.id})`), 'isLiked'],
+              [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0' && f.userId=${requestData.id})`), 'isDisliked'],
+            ]
+          },
           where: {
             status: '1'
           },
@@ -1364,11 +1387,12 @@ module.exports = {
 
 
 
-    } catch (e) {
+    } catch (err) {
 
 
-      console.log(e);
-      return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
+      return helper.error(res, err);
+      // console.log(e);
+      // return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
 
     }
 
@@ -1726,10 +1750,27 @@ module.exports = {
 
 
     try {
+      const required = {
+        id: req.params.id,
+        feed_id: req.params.feed_id,
+      };
+      const nonRequired = {
+
+      };
+
+      let requestData = await helper.vaildObject(required, nonRequired);
+      
       const feed_id = req.params.feed_id;
       const itemList = await feedsTable.findOne({
-        attributes: ['feedCatId', 'userId', 'feed_id', 'title', 'Date', 'like', 'comment_count', 'deslike', 'description', 'image', 'status', 'createdAt', 'updatedAt'],
-
+        // attributes: ['feedCatId', 'userId', 'feed_id', 'title', 'Date', 'like', 'comment_count', 'deslike', 'description', 'image', 'status', 'createdAt', 'updatedAt'],
+        attributes: {
+          include: [
+            [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1')`), 'like_count'],
+            [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0')`), 'deslike_count'],
+            [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1' && f.userId=${requestData.id})`), 'isLiked'],
+            [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0' && f.userId=${requestData.id})`), 'isDisliked'],
+          ]
+        },
         include: [
           {
             model: appUsersTable,
@@ -2677,6 +2718,7 @@ module.exports = {
   search_feed: async (req, res) => {
     try {
       req.checkBody('title', 'title is required in body').notEmpty();
+      req.checkBody('id', 'id is required in body').notEmpty();
 
 
       const error = req.validationErrors();
@@ -2693,6 +2735,14 @@ module.exports = {
       // const Op = sequelize.Op
 
       const itemList = await feedsTable.findAll({
+        attributes: {
+          include: [
+            [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1')`), 'like_count'],
+            [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0')`), 'deslike_count'],
+            [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1' && f.userId=${req.body.id})`), 'isLiked'],
+            [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0' && f.userId=${req.body.id})`), 'isDisliked'],
+          ]
+        },
         where: {
           title: {
             [Op.like]: '%' + req.body.title + '%'
