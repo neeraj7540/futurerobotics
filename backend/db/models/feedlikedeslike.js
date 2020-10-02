@@ -1,5 +1,5 @@
 const common = require('../../helpers/common');
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('feedlikedeslike', {
     id: {
       type: DataTypes.INTEGER(11),
@@ -7,38 +7,38 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-  
 
-    userId:{
-        type: DataTypes.INTEGER(11),
-        allowNull: false,
 
-    },
-
-    feedId:{
-        type: DataTypes.INTEGER(11),
-        allowNull: false,
+    userId: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
 
     },
 
-  
-    status : {
+    feedId: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+
+    },
+
+
+    status: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       default: 0
-      
-     }
+
+    }
     ,
-     likeDeslike:{
-     type: DataTypes.INTEGER(2),
+    likeDeslike: {
+      type: DataTypes.INTEGER(2),
       allowNull: false,
       default: 0
 
 
-     }
+    }
 
-      ,
-  createdAt: {
+    ,
+    createdAt: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: common.timestamp()
@@ -47,21 +47,21 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: common.timestamp()
-    },  
+    },
 
-    like_count:{
+    like_count: {
       type: DataTypes.INTEGER(11),
       allowNull: true,
 
-  },
-  deslike_count:{
-    type: DataTypes.INTEGER(11),
-    allowNull: true,
+    },
+    deslike_count: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
 
-},
+    },
 
-         
-}, {
+
+  }, {
     tableName: 'feedlikedeslike',
     timestamps: true
   });
