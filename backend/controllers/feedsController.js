@@ -2,6 +2,9 @@ const config = require('config');
 const db = require('../db/db');
 const { models } = db;
 
+const sequelize = require('sequelize');
+const { Op } = sequelize;
+
 const helper = require('../helpers/helper');
 const apiResponseHelper = require('../helpers/apiResponseHelper');
 const reportedFeedsTable = db.models.reportedfeed;
@@ -495,7 +498,13 @@ module.exports = {
     try {
 
       const itemList = await feedsTable.findAll({
-        attributes: ['id', 'feedCatId', 'userId', 'feed_id', 'title', 'Date', 'like', 'comment_count', 'deslike', 'description', 'image', 'status', 'createdAt', 'updatedAt'],
+        // attributes: ['id', 'feedCatId', 'userId', 'feed_id', 'title', 'Date', 'like', 'comment_count', 'deslike', 'description', 'image', 'status', 'createdAt', 'updatedAt'],
+
+        attributes: {
+          include: [
+            // [sequelize.literal()]
+          ]
+        },
         where: {
           status: '1'
         },
@@ -508,13 +517,11 @@ module.exports = {
             attributes: ['id', 'name', 'email', 'image', 'status']
 
           },
-
           {
             model: feeCatTable,
             attributes: ['id', 'name', 'description', 'status', 'createdAt', 'updatedAt']
 
           },
-
           {
             model: feedCommentTable,
             attributes: ['id', 'commentId', 'feedId', 'userId', 'comment', 'comment_image', 'status', 'like', 'deslike', 'createdAt', 'updatedAt'],
@@ -537,8 +544,6 @@ module.exports = {
               ['id', 'DESC']
             ]
           },
-
-
         ],
         //limit: 1,
 
@@ -1224,7 +1229,17 @@ module.exports = {
         await helper.delete(models['feedlikedeslike'], alreadyLikedDisliked.id);
       }
 
-      return helper.success(res, message, {});
+      const responseData = await models['appusers'].findOne({
+        attributes: [
+          [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=${requestData.feed_id} && f.likeDeslike='1')`), 'like_count'],
+          [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=${requestData.feed_id} && f.likeDeslike='0')`), 'deslike_count'],
+          [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=${requestData.feed_id} && f.likeDeslike='1' && f.userId=${requestData.id})`), 'isLiked'],
+          [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=${requestData.feed_id} && f.likeDeslike='0' && f.userId=${requestData.id})`), 'isDisliked'],
+        ],
+        raw: true,
+      });
+
+      return helper.success(res, message, responseData);
     } catch (err) {
       return helper.error(res, err);
     }
@@ -1861,7 +1876,7 @@ module.exports = {
       // console.log(alreadyLikedDisliked, '=========>alreadyLikedDisliked');
       // console.log(!alreadyLikedDisliked || alreadyLikedDisliked && alreadyLikedDisliked.hasOwnProperty('likeDeslike') == requestData.likeDeslike, '=========>alreadyLikedDisliked123123123');
       // return;
-      
+
       if (condition) {
         const upFeedlikedeslike = {
           ...(
@@ -1900,7 +1915,18 @@ module.exports = {
         await helper.delete(models['comment_likedeslike'], alreadyLikedDisliked.id);
       }
 
-      return helper.success(res, message, {});
+      const responseData = await models['appusers'].findOne({
+        attributes: [
+          [sequelize.literal(`${requestData.commentId}`), 'commentId'],
+          [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=${requestData.commentId} && f.likeDeslike='1')`), 'like_count'],
+          [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=${requestData.commentId} && f.likeDeslike='0')`), 'deslike_count'],
+          [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=${requestData.commentId} && f.likeDeslike='1' && f.userId=${requestData.id})`), 'isLiked'],
+          [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f WHERE f.commentId=${requestData.commentId} && f.likeDeslike='0' && f.userId=${requestData.id})`), 'isDisliked'],
+        ],
+        raw: true,
+      });
+
+      return helper.success(res, message, responseData);
     } catch (err) {
       return helper.error(res, err);
     }
@@ -2663,8 +2689,8 @@ module.exports = {
 
       }
 
-      var Sequelize = require('sequelize');
-      const Op = Sequelize.Op
+      // var sequelize = require('sequelize');
+      // const Op = sequelize.Op
 
       const itemList = await feedsTable.findAll({
         where: {
@@ -2828,8 +2854,8 @@ module.exports = {
 
       var data = testdata.map(user => user.groupId)
 
-      var Sequelize = require('sequelize');
-      var Op = Sequelize.Op;
+      // var sequelize = require('sequelize');
+      // var Op = sequelize.Op;
       var arrayofTaskId = data;
       const itemList1 = await updateMessages.findAll({
         where: {
@@ -2911,8 +2937,8 @@ module.exports = {
 
       var data = testdata.map(user => user.groupId)
 
-      var Sequelize = require('sequelize');
-      var Op = Sequelize.Op;
+      // var sequelize = require('sequelize');
+      // var Op = sequelize.Op;
       var arrayofTaskId = data;
       const Data1 = await socket_group.findAll({
         where: {
@@ -3006,8 +3032,8 @@ module.exports = {
 
       var data = testdata.map(user => user.groupId)
 
-      var Sequelize = require('sequelize');
-      var Op = Sequelize.Op;
+      // var sequelize = require('sequelize');
+      // var Op = sequelize.Op;
       var arrayofTaskId = data;
       const itemList1 = await updateMessages.findAll({
         where: {
@@ -3095,8 +3121,8 @@ module.exports = {
 
       var data = testdata.map(user => user.groupId)
 
-      var Sequelize = require('sequelize');
-      var Op = Sequelize.Op;
+      // var sequelize = require('sequelize');
+      // var Op = sequelize.Op;
       var arrayofTaskId = data;
       const itemList1 = await updateMessages.count({
         where: {
@@ -3245,8 +3271,6 @@ module.exports = {
 
       var data = testdata.map(user => user.groupId)
 
-      var Sequelize = require('sequelize');
-      var Op = Sequelize.Op;
       var arrayofTaskId = data;
       const itemList1 = await updateMessages.findAll({
         where: {
