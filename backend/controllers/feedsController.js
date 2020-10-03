@@ -1223,7 +1223,7 @@ module.exports = {
 
         const updatedFeedlikedeslikeId = await helper.save(models['feedlikedeslike'], upFeedlikedeslike)
 
-        recors_upate = await helper.save(models.notification_data, {
+        const saveNotification = await helper.save(models.notification_data, {
           sender_id: requestData.id,
           receiver_id: feed.appuser.id,
           senderName: user.name,

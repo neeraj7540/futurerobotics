@@ -273,23 +273,10 @@ module.exports = {
 
     error: function (res, err) {
         console.log(err, '===========================>error');
-        // console.log(JSON.stringify(ReferenceError));
-        // console.log(ReferenceError);
-        // return false;
-        // let code=(typeof err==='object') ? ((err.statusCode) ? err.statusCode : ((err.code) ? err.code : 403)) : 403;
+
         let code = (typeof err === 'object') ? (err.code) ? err.code : 403 : 403;
         let message = (typeof err === 'object') ? (err.message ? err.message : '') : err;
-        // console.log(code);
-        // console.log(message);
-        // return false;
-
-        // if (req) {
-        //     req.flash('flashMessage', { color: 'error', message });
-
-        //     const originalUrl = req.originalUrl.split('/')[1];
-        //     return res.redirect(`/${originalUrl}`);
-        // }
-
+   
         return res.status(code).json({
             'success': false,
             'message': message,

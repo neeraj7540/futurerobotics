@@ -1464,7 +1464,7 @@ module.exports = {
       let totallike = likeDislikeData.feedLikeCount + likeDislikeData.commentLikeCount - (likeDislikeData.feedDislikeCount + likeDislikeData.commentDislikeCount)
 
       if (totallike < 0) totallike = 0;
-      
+
       // console.log(likeDislikeData, '================>likeDislikeData');
       // console.log(totallike, '================>totallike');
       // return;
@@ -1586,6 +1586,18 @@ module.exports = {
       var select_robots1 = userDetails.select_robots
       if (select_robots1) {
         var select_robots2 = JSON.parse(select_robots1)
+        const allRobots = await groups.findAll({
+          attributes: ['id', 'name', 'isChecked'],
+          where: {
+            category: 'ROBOT',
+            status: '1'
+          }
+        });
+
+
+        // console.log(select_robots22, '======>select_robots22');
+        
+        // var select_robots2 = allRobots.filter((robot) => select_robots22.includes('ROBOT 2 GROUP 2'));
       }
       else {
         var select_robots2 = []
@@ -1595,6 +1607,7 @@ module.exports = {
       var select_plc1 = userDetails.select_plc
       if (select_plc1) {
         var select_plc2 = JSON.parse(select_plc1)
+
       }
       else {
         var select_plc2 = []
@@ -4449,7 +4462,8 @@ module.exports = {
       }
 
     }
-    catch (e) {
+    catch (e) {      
+      console.log(e, '================>error');
       return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!', {});
     }
 
