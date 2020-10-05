@@ -3332,80 +3332,90 @@ module.exports = {
   massageDataliist: async (req, res) => {
     try {
 
-      const itemList = await socket_group.findAll({
+      // const itemList = await socket_group.findAll({
 
-        where: {
-          userId: req.params.id
-        }
+      //   where: {
+      //     userId: req.params.id
+      //   }
+      // });
+
+      // const getsenderdata = await oneUpdateMessages.findAll({
+
+      //   where: {
+      //     receiverId: req.params.id
+      //   }
+      // });
+
+
+      // var get_messages_data = await database.query(`SELECT one_update_messages.id, appusers.id as senderId,one_update_messages.message,one_update_messages.created,appusers.name as senderName,appusers.image as senderProfileImage FROM one_update_messages INNER JOIN appusers ON one_update_messages.senderId=appusers.id WHERE one_update_messages.receiverId=${req.params.id}`, {
+
+      // });
+
+      // console.log(get_messages_data)
+
+
+
+
+
+
+
+      // if (!itemList) {
+
+      //   return apiResponseHelper.post(res, true, 'User List', {});
+      // }
+
+      // var testdata = itemList;
+
+
+      // var data = testdata.map(user => user.groupId)
+
+      // var arrayofTaskId = data;
+      // const itemList1 = await updateMessages.findAll({
+      //   where: {
+      //     groupId: {
+      //       [Op.in]: arrayofTaskId
+      //     },
+      //     senderId: {
+      //       [Op.not]: req.params.id
+      //     },
+
+
+
+      //   },
+      //   order: [
+      //     ['id', 'DESC']
+      //   ]
+      // })//.then(function(result) {
+      // //   return res.json(result)
+      // // })
+
+      // //console.log(itemList1)
+
+
+
+
+
+      
+
+
+
+      // if (itemList) {
+
+      //   return apiResponseHelper.post(res, true, 'User List', get_messages_data[0]);
+      // } else {
+      //   return apiResponseHelper.post(res, true, 'User List', {});
+      // }
+
+      // SELECT one_update_messages.id, appusers.id as senderId, one_update_messages.message, one_update_messages.created ,appusers.name as senderName, appusers.image as senderProfileImage FROM one_update_messages INNER JOIN appusers ON one_update_messages.senderId=appusers.id WHERE one_update_messages.receiverId=${req.params.id}
+
+
+      var get_messages_data = await database.query(`SELECT oum.id, sender.id as senderId, oum.message, oum.created ,sender.name as senderName, sender.image as senderProfileImage FROM one_update_messages AS oum INNER JOIN appusers AS sender ON (CASE WHEN oum.senderId=${req.params.id} THEN oum.receiverId ELSE oum.senderId END)=sender.id WHERE oum.receiverId=${req.params.id} || oum.senderId=${req.params.id}`, {
+        // model: messages,
+        mapToModel: true,
+        type: database.QueryTypes.SELECT
       });
 
-      const getsenderdata = await oneUpdateMessages.findAll({
-
-        where: {
-          receiverId: req.params.id
-        }
-      });
-
-
-      var get_messages_data = await database.query(`SELECT one_update_messages.id, appusers.id as senderId,one_update_messages.message,one_update_messages.created,appusers.name as senderName,appusers.image as senderProfileImage FROM one_update_messages INNER JOIN appusers ON one_update_messages.senderId=appusers.id WHERE one_update_messages.receiverId=${req.params.id}`, {
-
-      });
-
-      console.log(get_messages_data)
-
-
-
-
-
-
-
-      if (!itemList) {
-
-        return apiResponseHelper.post(res, true, 'User List', {});
-      }
-
-      var testdata = itemList;
-
-
-      var data = testdata.map(user => user.groupId)
-
-      var arrayofTaskId = data;
-      const itemList1 = await updateMessages.findAll({
-        where: {
-          groupId: {
-            [Op.in]: arrayofTaskId
-          },
-          senderId: {
-            [Op.not]: req.params.id
-          },
-
-
-
-        },
-        order: [
-          ['id', 'DESC']
-        ]
-      })//.then(function(result) {
-      //   return res.json(result)
-      // })
-
-      //console.log(itemList1)
-
-
-
-
-
-
-
-
-
-      if (itemList) {
-
-        return apiResponseHelper.post(res, true, 'User List', get_messages_data[0]);
-      } else {
-        return apiResponseHelper.post(res, true, 'User List', {});
-      }
-
+      return apiResponseHelper.post(res, true, 'User List', get_messages_data);
 
     } catch (e) {
 
