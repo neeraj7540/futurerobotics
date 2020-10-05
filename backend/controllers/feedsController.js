@@ -3409,7 +3409,7 @@ module.exports = {
       // SELECT one_update_messages.id, appusers.id as senderId, one_update_messages.message, one_update_messages.created ,appusers.name as senderName, appusers.image as senderProfileImage FROM one_update_messages INNER JOIN appusers ON one_update_messages.senderId=appusers.id WHERE one_update_messages.receiverId=${req.params.id}
 
 
-      var get_messages_data = await database.query(`SELECT oum.id, sender.id as senderId, oum.message, oum.created ,sender.name as senderName, sender.image as senderProfileImage FROM one_update_messages AS oum INNER JOIN appusers AS sender ON (CASE WHEN oum.senderId=${req.params.id} THEN oum.receiverId ELSE oum.senderId END)=sender.id WHERE oum.receiverId=${req.params.id} || oum.senderId=${req.params.id}`, {
+      var get_messages_data = await database.query(`SELECT oum.id, sender.id as senderId, oum.message, oum.created ,sender.name as senderName, sender.image as senderProfileImage FROM one_update_messages AS oum INNER JOIN appusers AS sender ON (CASE WHEN oum.senderId=${req.params.id} THEN oum.receiverId ELSE oum.senderId END)=sender.id WHERE oum.id IN (SELECT MAX(id) FROM one_update_messages AS ou WHERE ou.receiverId=sender.id && ou.senderId=${req.params.id} ||ou.receiverId=${req.params.id} && ou.senderId=sender.id) ORDER by oum.id DESC`, {
         // model: messages,
         mapToModel: true,
         type: database.QueryTypes.SELECT
