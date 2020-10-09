@@ -512,10 +512,11 @@ module.exports = {
             [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0')`), 'deslike_count'],
             [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1' && f.userId=${requestData.id})`), 'isLiked'],
             [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0' && f.userId=${requestData.id})`), 'isDisliked'],
+            [sequelize.literal(`IF (LOCATE("public/images/default/main.png", \`feed\`.\`image\`), '', \`feed\`.\`image\`)`), 'image'],
           ]
         },
         where: {
-          status: '1'
+          status: '1',
         },
         order: [
           ['id', 'DESC']
@@ -568,8 +569,8 @@ module.exports = {
 
       });
 
-      var testdata = itemList;
-      console.log(testdata);
+      // var testdata = itemList;
+      // console.log(testdata);
 
 
       if (itemList) {
@@ -1288,6 +1289,7 @@ module.exports = {
               [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0')`), 'deslike_count'],
               [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1' && f.userId=${requestData.id})`), 'isLiked'],
               [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0' && f.userId=${requestData.id})`), 'isDisliked'],
+              [sequelize.literal(`IF (LOCATE("public/images/default/main.png", \`feed\`.\`image\`), '', \`feed\`.\`image\`)`), 'image'],
             ]
           },
           where: {
@@ -1801,6 +1803,7 @@ module.exports = {
             [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0')`), 'deslike_count'],
             [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1' && f.userId=${requestData.id})`), 'isLiked'],
             [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0' && f.userId=${requestData.id})`), 'isDisliked'],
+            [sequelize.literal(`IF (LOCATE("public/images/default/main.png", \`feed\`.\`image\`), '', \`feed\`.\`image\`)`), 'image'],
           ]
         },
         include: [
@@ -1839,7 +1842,10 @@ module.exports = {
         ],
         where: {
           feed_id: req.params.feed_id,
-          status: '1'
+          status: '1',
+          image: {
+            [Op.ne]: 'http://34.232.2.249:4100/public/images/default/main.png'
+          }
         },
         order: [
           ['id', 'DESC']

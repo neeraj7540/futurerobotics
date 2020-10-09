@@ -10,7 +10,7 @@
     "apn": "^2.2.0",
     "async-waterfall": "^0.1.5",
     "base64-img": "^1.0.4",
-    "bcrypt": "^3.0.4",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "boom": "^7.2.2",
     "config": "^2.0.1",
