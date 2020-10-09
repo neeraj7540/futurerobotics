@@ -3000,23 +3000,21 @@ module.exports = {
   get_all_robots_admim_list: async (req, res) => {
     try {
       const itemList = await groups.findAll({
-
         where: {
           category: 'ROBOT',
           status: '1'
         }
-
       });
 
 
-      if (itemList) {
 
+      if (itemList) {
         return apiResponseHelper.post(res, true, 'Robots list', itemList);
       } else {
         return apiResponseHelper.post(res, true, 'Robots list', {});
       }
     } catch (e) {
-
+      console.log(e, '====================>error');
       return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
 
     }
@@ -3179,775 +3177,887 @@ module.exports = {
 
 
   //------------------------------------------User Robot List----------------------------------
+  // new get_user_robots api by rajat
   get_user_robots: async (req, res) => {
     try {
-      const id = req.params.id;
+      const required = {
+        id: req.params.id,
+      };
+      const nonRequired = {};
+
+      let requestData = await helper.vaildObject(required, nonRequired);
+
       const userrobotlist = await appusers.findOne({
         attributes: ['id', 'select_robots'],
         where: {
-          id: req.params.id
+          id: requestData.id
         }
 
       })
-      if (!userrobotlist) {
-        return apiResponseHelper.post(res, true, 'User Not Exits', {});
-
-      }
-      if (!userrobotlist.select_robots) {
-        const itemList1 = await groups.findAll({
-          attributes: ['id', 'name', 'isChecked'],
-
-          where: {
-            category: 'ROBOT',
-            status: '1'
-          }
-
-        });
-        if (itemList1) {
-
-          return apiResponseHelper.post(res, true, 'Robots list', itemList1);
-        } else {
-          return apiResponseHelper.post(res, true, 'Robots list', {});
-        }
-
-
-      }
-
-      else {
-        var test1 = userrobotlist.select_robots
-
-
-        //  var array= test1.map(function (el) {
-        //     return el.trim();
-        //   });
-        var myArrData = JSON.parse(test1)
-        //var myArrData = JSON.parse(test1)
-
-      }
-
+      if (!userrobotlist) return apiResponseHelper.post(res, true, 'User Not Exits', {});
 
       const itemList = await groups.findAll({
         attributes: ['id', 'name', 'isChecked'],
-
         where: {
           category: 'ROBOT',
           status: '1'
-
-        }
-
+        },
+        raw: true
       });
 
-      var output1 = itemList.map(user => user.name);
+      let responseData = [];
+
+      const select_robots = userrobotlist.select_robots.split(',');
 
 
-
-
-      //-------------------------Testing
-
-      function intersect1(a, b) {
-        var t;
-        if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
-        return a.filter(function (e) {
-          return b.indexOf(e) > -1;
-        });
+      if (select_robots.length == 0) {
+        responseData = itemList.map(item => ({
+          ...item,
+          isChecked: true,
+        }));
+        return apiResponseHelper.post(res, true, 'Robots list', responseData);
       }
+      
+      responseData = itemList.map(item => ({
+          ...item,
+          isChecked: select_robots.includes(String(item.id)) ? true : false,
+      }));
 
 
-      var neerajTest = intersect1(output1, myArrData);
-
-      //------------True Data---------------------------------
-      if (neerajTest[0]) {
-        var truedata1 = [{
-          "id": 11,
-          "name": neerajTest[0],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata1 = []
-      }
-
-      if (neerajTest[1]) {
-        var truedata2 = [{
-          "id": 12,
-          "name": neerajTest[1],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata2 = []
-      }
-
-      if (neerajTest[2]) {
-        var truedata3 = [{
-          "id": 13,
-          "name": neerajTest[2],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata3 = []
-      }
-
-      if (neerajTest[3]) {
-        var truedata4 = [{
-          "id": 14,
-          "name": neerajTest[3],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata4 = []
-      }
-      if (neerajTest[4]) {
-        var truedata5 = [{
-          "id": 15,
-          "name": neerajTest[4],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata5 = []
-      }
-
-      if (neerajTest[5]) {
-        var truedata6 = [{
-          "id": 16,
-          "name": neerajTest[5],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata6 = []
-      }
-
-      if (neerajTest[6]) {
-        var truedata7 = [{
-          "id": 17,
-          "name": neerajTest[6],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata7 = []
-      }
-
-      if (neerajTest[7]) {
-        var truedata8 = [{
-          "id": 18,
-          "name": neerajTest[7],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata8 = []
-      }
-
-      if (neerajTest[8]) {
-        var truedata9 = [{
-          "id": 19,
-          "name": neerajTest[8],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata9 = []
-      }
-
-      if (neerajTest[9]) {
-        var truedata10 = [{
-          "id": 20,
-          "name": neerajTest[9],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata10 = []
-      }
-
-
-
-
-
-      //--------------True Data--------------------------------
-      function arr_diff(a1, a2) {
-
-        var a = [], diff = [];
-
-        for (var i = 0; i < a1.length; i++) {
-          a[a1[i]] = true;
-        }
-
-        for (var i = 0; i < a2.length; i++) {
-          if (a[a2[i]]) {
-            delete a[a2[i]];
-          } else {
-            a[a2[i]] = true;
-          }
-        }
-
-        for (var k in a) {
-          diff.push(k);
-        }
-
-        return diff;
-      }
-
-      //var  myArr=arr_diff(output,myArrData)
-      //----------False Data------------------------------neerajTest
-      //var myArr=arr_diff(output1, myArrData);//correct
-      var myArr = arr_diff(output1, neerajTest);
-
-
-      console.log(myArr)
-      if (myArr[0]) {
-        var new1 = [{
-          "id": 1,
-          "name": myArr[0],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new1 = []
-      }
-
-      if (myArr[1]) {
-        var new2 = [{
-          "id": 2,
-          "name": myArr[1],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new2 = []
-      }
-
-      if (myArr[2]) {
-        var new3 = [{
-          "id": 3,
-          "name": myArr[2],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new3 = []
-      }
-
-      if (myArr[3]) {
-        var new4 = [{
-          "id": 4,
-          "name": myArr[3],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new4 = []
-      }
-      if (myArr[4]) {
-        var new5 = [{
-          "id": 5,
-          "name": myArr[4],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new5 = []
-      }
-
-      if (myArr[5]) {
-        var new6 = [{
-          "id": 6,
-          "name": myArr[5],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new6 = []
-      }
-
-      if (myArr[6]) {
-        var new7 = [{
-          "id": 7,
-          "name": myArr[6],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new7 = []
-      }
-
-      if (myArr[7]) {
-        var new8 = [{
-          "id": 8,
-          "name": myArr[7],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new8 = []
-      }
-
-      if (myArr[8]) {
-        var new9 = [{
-          "id": 9,
-          "name": myArr[8],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new9 = []
-      }
-
-      if (myArr[9]) {
-        var new10 = [{
-          "id": 10,
-          "name": myArr[9],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new10 = []
-      }
-
-      //---------------------------------
-      var alldata = new1.concat(new2, new3, new4, new5, new6, new7, new8, new9, new10, truedata1, truedata2, truedata3, truedata4, truedata5, truedata6, truedata7, truedata8, truedata9, truedata10);
-      console.log(alldata);
-      if (itemList) {
-
-        return apiResponseHelper.post(res, true, 'Robots list', alldata);
-      } else {
-        return apiResponseHelper.post(res, true, 'Robots list', {});
-      }
+      return apiResponseHelper.post(res, true, 'Robots list', responseData);
     } catch (e) {
-
-      return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
-
+      // return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+      return helper.error(res, e);
     }
   },
 
+  // old get_user_robots by neeraj
+  // get_user_robots: async (req, res) => {
+  //   try {
+  //     const id = req.params.id;
+  //     const userrobotlist = await appusers.findOne({
+  //       attributes: ['id', 'select_robots'],
+  //       where: {
+  //         id: req.params.id
+  //       }
+
+  //     })
+  //     if (!userrobotlist) {
+  //       return apiResponseHelper.post(res, true, 'User Not Exits', {});
+
+  //     }
+  //     if (!userrobotlist.select_robots) {
+  //       const itemList1 = await groups.findAll({
+  //         attributes: ['id', 'name', 'isChecked'],
+
+  //         where: {
+  //           category: 'ROBOT',
+  //           status: '1'
+  //         }
+
+  //       });
+  //       if (itemList1) {
+
+  //         return apiResponseHelper.post(res, true, 'Robots list', itemList1);
+  //       } else {
+  //         return apiResponseHelper.post(res, true, 'Robots list', {});
+  //       }
+
+
+  //     }
+
+  //     else {
+  //       var test1 = userrobotlist.select_robots
+
+
+  //       //  var array= test1.map(function (el) {
+  //       //     return el.trim();
+  //       //   });
+  //       var myArrData = JSON.parse(test1)
+  //       //var myArrData = JSON.parse(test1)
+
+  //     }
+
+
+  //     const itemList = await groups.findAll({
+  //       attributes: ['id', 'name', 'isChecked'],
+
+  //       where: {
+  //         category: 'ROBOT',
+  //         status: '1'
+
+  //       }
+
+  //     });
+
+  //     var output1 = itemList.map(user => user.name);
+
+
+
+
+  //     //-------------------------Testing
+
+  //     function intersect1(a, b) {
+  //       var t;
+  //       if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+  //       return a.filter(function (e) {
+  //         return b.indexOf(e) > -1;
+  //       });
+  //     }
+
+
+  //     var neerajTest = intersect1(output1, myArrData);
+
+  //     //------------True Data---------------------------------
+  //     if (neerajTest[0]) {
+  //       var truedata1 = [{
+  //         "id": 11,
+  //         "name": neerajTest[0],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata1 = []
+  //     }
+
+  //     if (neerajTest[1]) {
+  //       var truedata2 = [{
+  //         "id": 12,
+  //         "name": neerajTest[1],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata2 = []
+  //     }
+
+  //     if (neerajTest[2]) {
+  //       var truedata3 = [{
+  //         "id": 13,
+  //         "name": neerajTest[2],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata3 = []
+  //     }
+
+  //     if (neerajTest[3]) {
+  //       var truedata4 = [{
+  //         "id": 14,
+  //         "name": neerajTest[3],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata4 = []
+  //     }
+  //     if (neerajTest[4]) {
+  //       var truedata5 = [{
+  //         "id": 15,
+  //         "name": neerajTest[4],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata5 = []
+  //     }
+
+  //     if (neerajTest[5]) {
+  //       var truedata6 = [{
+  //         "id": 16,
+  //         "name": neerajTest[5],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata6 = []
+  //     }
+
+  //     if (neerajTest[6]) {
+  //       var truedata7 = [{
+  //         "id": 17,
+  //         "name": neerajTest[6],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata7 = []
+  //     }
+
+  //     if (neerajTest[7]) {
+  //       var truedata8 = [{
+  //         "id": 18,
+  //         "name": neerajTest[7],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata8 = []
+  //     }
+
+  //     if (neerajTest[8]) {
+  //       var truedata9 = [{
+  //         "id": 19,
+  //         "name": neerajTest[8],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata9 = []
+  //     }
+
+  //     if (neerajTest[9]) {
+  //       var truedata10 = [{
+  //         "id": 20,
+  //         "name": neerajTest[9],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata10 = []
+  //     }
+
+
+
+
+
+  //     //--------------True Data--------------------------------
+  //     function arr_diff(a1, a2) {
+
+  //       var a = [], diff = [];
+
+  //       for (var i = 0; i < a1.length; i++) {
+  //         a[a1[i]] = true;
+  //       }
+
+  //       for (var i = 0; i < a2.length; i++) {
+  //         if (a[a2[i]]) {
+  //           delete a[a2[i]];
+  //         } else {
+  //           a[a2[i]] = true;
+  //         }
+  //       }
+
+  //       for (var k in a) {
+  //         diff.push(k);
+  //       }
+
+  //       return diff;
+  //     }
+
+  //     //var  myArr=arr_diff(output,myArrData)
+  //     //----------False Data------------------------------neerajTest
+  //     //var myArr=arr_diff(output1, myArrData);//correct
+  //     var myArr = arr_diff(output1, neerajTest);
+
+
+  //     console.log(myArr)
+  //     if (myArr[0]) {
+  //       var new1 = [{
+  //         "id": 1,
+  //         "name": myArr[0],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new1 = []
+  //     }
+
+  //     if (myArr[1]) {
+  //       var new2 = [{
+  //         "id": 2,
+  //         "name": myArr[1],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new2 = []
+  //     }
+
+  //     if (myArr[2]) {
+  //       var new3 = [{
+  //         "id": 3,
+  //         "name": myArr[2],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new3 = []
+  //     }
+
+  //     if (myArr[3]) {
+  //       var new4 = [{
+  //         "id": 4,
+  //         "name": myArr[3],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new4 = []
+  //     }
+  //     if (myArr[4]) {
+  //       var new5 = [{
+  //         "id": 5,
+  //         "name": myArr[4],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new5 = []
+  //     }
+
+  //     if (myArr[5]) {
+  //       var new6 = [{
+  //         "id": 6,
+  //         "name": myArr[5],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new6 = []
+  //     }
+
+  //     if (myArr[6]) {
+  //       var new7 = [{
+  //         "id": 7,
+  //         "name": myArr[6],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new7 = []
+  //     }
+
+  //     if (myArr[7]) {
+  //       var new8 = [{
+  //         "id": 8,
+  //         "name": myArr[7],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new8 = []
+  //     }
+
+  //     if (myArr[8]) {
+  //       var new9 = [{
+  //         "id": 9,
+  //         "name": myArr[8],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new9 = []
+  //     }
+
+  //     if (myArr[9]) {
+  //       var new10 = [{
+  //         "id": 10,
+  //         "name": myArr[9],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new10 = []
+  //     }
+
+  //     //---------------------------------
+  //     var alldata = new1.concat(new2, new3, new4, new5, new6, new7, new8, new9, new10, truedata1, truedata2, truedata3, truedata4, truedata5, truedata6, truedata7, truedata8, truedata9, truedata10);
+  //     console.log(alldata);
+  //     if (itemList) {
+
+  //       return apiResponseHelper.post(res, true, 'Robots list', alldata);
+  //     } else {
+  //       return apiResponseHelper.post(res, true, 'Robots list', {});
+  //     }
+  //   } catch (e) {
+
+  //     return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+
+  //   }
+  // },
+
+  // new get_user_plc by rajat
   get_user_plc: async (req, res) => {
     try {
-      const id = req.params.id;
+      const required = {
+        id: req.params.id,
+      };
+      const nonRequired = {};
+
+      let requestData = await helper.vaildObject(required, nonRequired);
+
       const userrobotlist = await appusers.findOne({
         attributes: ['id', 'select_plc'],
         where: {
-          id: req.params.id
+          id: requestData.id
         }
 
       })
-
-      if (!userrobotlist) {
-        return apiResponseHelper.post(res, true, 'User Not Exits', {});
-
-      }
-
-      if (!userrobotlist.select_plc) {
-        const itemList1 = await groups.findAll({
-          attributes: ['id', 'name', 'isChecked'],
-
-          where: {
-            category: 'PLS5',
-            status: '1'
-          }
-
-        });
-        if (itemList1) {
-
-          return apiResponseHelper.post(res, true, 'PLC list', itemList1);
-        } else {
-          return apiResponseHelper.post(res, true, 'PLC list', {});
-        }
-
-
-      }
-
-      else {
-        var test1 = userrobotlist.select_plc
-        //   var array= test1.map(function (el) {
-        //     return el.trim();
-        //   });
-
-        // console.log(array)
-        var myArrData = JSON.parse(test1)
-
-      }
-
+      if (!userrobotlist) return apiResponseHelper.post(res, true, 'User Not Exits', {});
 
       const itemList = await groups.findAll({
         attributes: ['id', 'name', 'isChecked'],
-
         where: {
           category: 'PLS5',
           status: '1'
-        }
-
+        },
+        raw: true
       });
 
-      var output1 = itemList.map(user => user.name);
+      let responseData = [];
+
+      const select_plc = userrobotlist.select_plc.split(',').filter(item => item != '');
+      // const select_plc = userrobotlist.select_plc.split(',');
 
 
-
-
-      //-------------------------Testing
-
-      function intersect1(a, b) {
-        var t;
-        if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
-        return a.filter(function (e) {
-          return b.indexOf(e) > -1;
-        });
+      if (select_plc.length == 0) {
+        responseData = itemList.map(item => ({
+          ...item,
+          isChecked: true,
+        }));
+        return apiResponseHelper.post(res, true, 'PLC list', responseData);
       }
+      
+      responseData = itemList.map(item => ({
+          ...item,
+          isChecked: select_plc.includes(String(item.id)) ? true : false,
+      }));
 
 
-      var neerajTest = intersect1(output1, myArrData);
-
-      //------------True Data---------------------------------
-      if (neerajTest[0]) {
-        var truedata1 = [{
-          "id": 11,
-          "name": neerajTest[0],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata1 = []
-      }
-
-      if (neerajTest[1]) {
-        var truedata2 = [{
-          "id": 12,
-          "name": neerajTest[1],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata2 = []
-      }
-
-      if (neerajTest[2]) {
-        var truedata3 = [{
-          "id": 13,
-          "name": neerajTest[2],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata3 = []
-      }
-
-      if (neerajTest[3]) {
-        var truedata4 = [{
-          "id": 14,
-          "name": neerajTest[3],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata4 = []
-      }
-      if (neerajTest[4]) {
-        var truedata5 = [{
-          "id": 15,
-          "name": neerajTest[4],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata5 = []
-      }
-
-      if (neerajTest[5]) {
-        var truedata6 = [{
-          "id": 16,
-          "name": neerajTest[5],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata6 = []
-      }
-
-      if (neerajTest[6]) {
-        var truedata7 = [{
-          "id": 17,
-          "name": neerajTest[6],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata7 = []
-      }
-
-      if (neerajTest[7]) {
-        var truedata8 = [{
-          "id": 18,
-          "name": neerajTest[7],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata8 = []
-      }
-
-      if (neerajTest[8]) {
-        var truedata9 = [{
-          "id": 19,
-          "name": neerajTest[8],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata9 = []
-      }
-
-      if (neerajTest[9]) {
-        var truedata10 = [{
-          "id": 20,
-          "name": neerajTest[9],
-          "isChecked": true
-        }
-
-        ]
-      }
-      else {
-        var truedata10 = []
-      }
-
-
-
-
-
-      //--------------True Data--------------------------------
-      function arr_diff(a1, a2) {
-
-        var a = [], diff = [];
-
-        for (var i = 0; i < a1.length; i++) {
-          a[a1[i]] = true;
-        }
-
-        for (var i = 0; i < a2.length; i++) {
-          if (a[a2[i]]) {
-            delete a[a2[i]];
-          } else {
-            a[a2[i]] = true;
-          }
-        }
-
-        for (var k in a) {
-          diff.push(k);
-        }
-
-        return diff;
-      }
-
-      //var  myArr=arr_diff(output,myArrData)
-      //----------False Data------------------------------neerajTest
-      //var myArr=arr_diff(output1, myArrData);//correct
-      var myArr = arr_diff(output1, neerajTest);
-
-      if (myArr[0]) {
-        var new1 = [{
-          "id": 1,
-          "name": myArr[0],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new1 = []
-      }
-
-      if (myArr[1]) {
-        var new2 = [{
-          "id": 2,
-          "name": myArr[1],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new2 = []
-      }
-
-      if (myArr[2]) {
-        var new3 = [{
-          "id": 3,
-          "name": myArr[2],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new3 = []
-      }
-
-      if (myArr[3]) {
-        var new4 = [{
-          "id": 4,
-          "name": myArr[3],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new4 = []
-      }
-      if (myArr[4]) {
-        var new5 = [{
-          "id": 5,
-          "name": myArr[4],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new5 = []
-      }
-
-      if (myArr[5]) {
-        var new6 = [{
-          "id": 6,
-          "name": myArr[5],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new6 = []
-      }
-
-      if (myArr[6]) {
-        var new7 = [{
-          "id": 7,
-          "name": myArr[6],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new7 = []
-      }
-
-      if (myArr[7]) {
-        var new8 = [{
-          "id": 8,
-          "name": myArr[7],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new8 = []
-      }
-
-      if (myArr[8]) {
-        var new9 = [{
-          "id": 9,
-          "name": myArr[8],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new9 = []
-      }
-
-      if (myArr[9]) {
-        var new10 = [{
-          "id": 10,
-          "name": myArr[9],
-          "isChecked": false
-        }
-
-        ]
-      }
-      else {
-        var new10 = []
-      }
-
-      //---------------------------------
-      var alldata = new1.concat(new2, new3, new4, new5, new6, new7, new8, new9, new10, truedata1, truedata2, truedata3, truedata4, truedata5, truedata6, truedata7, truedata8, truedata9, truedata10);
-      console.log(alldata);
-      if (itemList) {
-
-        return apiResponseHelper.post(res, true, 'PLC list', alldata);
-      } else {
-        return apiResponseHelper.post(res, true, 'PLC list', {});
-      }
+      return apiResponseHelper.post(res, true, 'PLC list', responseData);
     } catch (e) {
-
-      return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
-
+      // return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+      return helper.error(res, e);
     }
   },
+
+
+  // old get_user_plc by neeraj
+  // get_user_plc: async (req, res) => {
+  //   try {
+  //     const id = req.params.id;
+  //     const userrobotlist = await appusers.findOne({
+  //       attributes: ['id', 'select_plc'],
+  //       where: {
+  //         id: req.params.id
+  //       }
+
+  //     })
+
+  //     if (!userrobotlist) {
+  //       return apiResponseHelper.post(res, true, 'User Not Exits', {});
+
+  //     }
+
+  //     if (!userrobotlist.select_plc) {
+  //       const itemList1 = await groups.findAll({
+  //         attributes: ['id', 'name', 'isChecked'],
+
+  //         where: {
+  //           category: 'PLS5',
+  //           status: '1'
+  //         }
+
+  //       });
+  //       if (itemList1) {
+
+  //         return apiResponseHelper.post(res, true, 'PLC list', itemList1);
+  //       } else {
+  //         return apiResponseHelper.post(res, true, 'PLC list', {});
+  //       }
+
+
+  //     }
+
+  //     else {
+  //       var test1 = userrobotlist.select_plc
+  //       //   var array= test1.map(function (el) {
+  //       //     return el.trim();
+  //       //   });
+
+  //       // console.log(array)
+  //       var myArrData = JSON.parse(test1)
+
+  //     }
+
+
+  //     const itemList = await groups.findAll({
+  //       attributes: ['id', 'name', 'isChecked'],
+
+  //       where: {
+  //         category: 'PLS5',
+  //         status: '1'
+  //       }
+
+  //     });
+
+  //     var output1 = itemList.map(user => user.name);
+
+
+
+
+  //     //-------------------------Testing
+
+  //     function intersect1(a, b) {
+  //       var t;
+  //       if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+  //       return a.filter(function (e) {
+  //         return b.indexOf(e) > -1;
+  //       });
+  //     }
+
+
+  //     var neerajTest = intersect1(output1, myArrData);
+
+  //     //------------True Data---------------------------------
+  //     if (neerajTest[0]) {
+  //       var truedata1 = [{
+  //         "id": 11,
+  //         "name": neerajTest[0],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata1 = []
+  //     }
+
+  //     if (neerajTest[1]) {
+  //       var truedata2 = [{
+  //         "id": 12,
+  //         "name": neerajTest[1],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata2 = []
+  //     }
+
+  //     if (neerajTest[2]) {
+  //       var truedata3 = [{
+  //         "id": 13,
+  //         "name": neerajTest[2],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata3 = []
+  //     }
+
+  //     if (neerajTest[3]) {
+  //       var truedata4 = [{
+  //         "id": 14,
+  //         "name": neerajTest[3],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata4 = []
+  //     }
+  //     if (neerajTest[4]) {
+  //       var truedata5 = [{
+  //         "id": 15,
+  //         "name": neerajTest[4],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata5 = []
+  //     }
+
+  //     if (neerajTest[5]) {
+  //       var truedata6 = [{
+  //         "id": 16,
+  //         "name": neerajTest[5],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata6 = []
+  //     }
+
+  //     if (neerajTest[6]) {
+  //       var truedata7 = [{
+  //         "id": 17,
+  //         "name": neerajTest[6],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata7 = []
+  //     }
+
+  //     if (neerajTest[7]) {
+  //       var truedata8 = [{
+  //         "id": 18,
+  //         "name": neerajTest[7],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata8 = []
+  //     }
+
+  //     if (neerajTest[8]) {
+  //       var truedata9 = [{
+  //         "id": 19,
+  //         "name": neerajTest[8],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata9 = []
+  //     }
+
+  //     if (neerajTest[9]) {
+  //       var truedata10 = [{
+  //         "id": 20,
+  //         "name": neerajTest[9],
+  //         "isChecked": true
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var truedata10 = []
+  //     }
+
+
+
+
+
+  //     //--------------True Data--------------------------------
+  //     function arr_diff(a1, a2) {
+
+  //       var a = [], diff = [];
+
+  //       for (var i = 0; i < a1.length; i++) {
+  //         a[a1[i]] = true;
+  //       }
+
+  //       for (var i = 0; i < a2.length; i++) {
+  //         if (a[a2[i]]) {
+  //           delete a[a2[i]];
+  //         } else {
+  //           a[a2[i]] = true;
+  //         }
+  //       }
+
+  //       for (var k in a) {
+  //         diff.push(k);
+  //       }
+
+  //       return diff;
+  //     }
+
+  //     //var  myArr=arr_diff(output,myArrData)
+  //     //----------False Data------------------------------neerajTest
+  //     //var myArr=arr_diff(output1, myArrData);//correct
+  //     var myArr = arr_diff(output1, neerajTest);
+
+  //     if (myArr[0]) {
+  //       var new1 = [{
+  //         "id": 1,
+  //         "name": myArr[0],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new1 = []
+  //     }
+
+  //     if (myArr[1]) {
+  //       var new2 = [{
+  //         "id": 2,
+  //         "name": myArr[1],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new2 = []
+  //     }
+
+  //     if (myArr[2]) {
+  //       var new3 = [{
+  //         "id": 3,
+  //         "name": myArr[2],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new3 = []
+  //     }
+
+  //     if (myArr[3]) {
+  //       var new4 = [{
+  //         "id": 4,
+  //         "name": myArr[3],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new4 = []
+  //     }
+  //     if (myArr[4]) {
+  //       var new5 = [{
+  //         "id": 5,
+  //         "name": myArr[4],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new5 = []
+  //     }
+
+  //     if (myArr[5]) {
+  //       var new6 = [{
+  //         "id": 6,
+  //         "name": myArr[5],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new6 = []
+  //     }
+
+  //     if (myArr[6]) {
+  //       var new7 = [{
+  //         "id": 7,
+  //         "name": myArr[6],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new7 = []
+  //     }
+
+  //     if (myArr[7]) {
+  //       var new8 = [{
+  //         "id": 8,
+  //         "name": myArr[7],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new8 = []
+  //     }
+
+  //     if (myArr[8]) {
+  //       var new9 = [{
+  //         "id": 9,
+  //         "name": myArr[8],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new9 = []
+  //     }
+
+  //     if (myArr[9]) {
+  //       var new10 = [{
+  //         "id": 10,
+  //         "name": myArr[9],
+  //         "isChecked": false
+  //       }
+
+  //       ]
+  //     }
+  //     else {
+  //       var new10 = []
+  //     }
+
+  //     //---------------------------------
+  //     var alldata = new1.concat(new2, new3, new4, new5, new6, new7, new8, new9, new10, truedata1, truedata2, truedata3, truedata4, truedata5, truedata6, truedata7, truedata8, truedata9, truedata10);
+  //     console.log(alldata);
+  //     if (itemList) {
+
+  //       return apiResponseHelper.post(res, true, 'PLC list', alldata);
+  //     } else {
+  //       return apiResponseHelper.post(res, true, 'PLC list', {});
+  //     }
+  //   } catch (e) {
+
+  //     return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
+
+  //   }
+  // },
 
 
 
@@ -4306,168 +4416,245 @@ module.exports = {
 
 
   //-------------------------------------------
+// new work_porfile api 
   Work_profile: async (req, res) => {
 
     try {
+      const required = {
+        id: req.params.id,
+      };
+      const nonRequired = {
+        name: req.body.name,
+        biodesc: req.body.biodesc,
+        occupation: req.body.occupation,
+        company: req.body.company,
+        experience: req.body.experience,
+        hireAvailable: req.body.hireAvailable,
+        select_robots: req.body.select_robots, // comma separated ids
+        select_plc: req.body.select_plc, // comma separated ids
+        image: req.files && req.files.image,
+      };
+
+      let requestData = await helper.vaildObject(required, nonRequired);
+
+      console.log(requestData, '==============>requestData');
+      // return;
 
       const user = await appusers.findOne({
         attributes: ['id', 'name', 'biodesc', 'image', 'age', 'dob', 'location', 'country', 'joined_date', 'occupation', 'company', 'experience', 'hireAvailable', 'select_robots', 'select_plc', 'about_me', 'facebook_url', 'linkedin_url', 'instagram_url'],
 
         where: {
           id: req.params.id
-
         },
         raw: true
       });
-      const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
-      const data = req.body;
-      data.image = uploadFile[0].imageName;
-      var data1 = data.image
-      console.log(data1)
 
-      if (req.body.name == "") {
-        var name = user.name;
-      }
-      else {
-        var name = req.body.name;
-      }
-      var userimage = user.image
+      if (!user) return apiResponseHelper.onError(res, false, 'Users Not Exists', {});
 
+      if (requestData.image) {
+        const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+        const data = req.body;
+        data.image = uploadFile[0].imageName;
+        var data1 = data.image;
 
-      if (req.body.biodesc == "") {
-        var biodesc = user.biodesc;
-      }
-      else {
-        var biodesc = req.body.biodesc;
-      }
-      var userimage = user.image
+        var userimage = user.image;
 
-
-
-      if (req.body.image == "") {
-        var image = user.image;
-      }
-
-      else if (data1 == "public/images/default/main.png") {
-        var image = user.image
-      }
-      else {
-
-        var image = 'http://34.232.2.249:4100/' + data1;
-      }
-
-      if (req.body.occupation == "") {
-        var occupation = user.occupation;
-      }
-      else {
-        var occupation = req.body.occupation;
-      }
-      if (req.body.company == "") {
-        var company = user.company;
-      }
-      else {
-        var company = req.body.company;
-      }
-      if (req.body.experience == "") {
-        var experience = user.experience;
-      }
-      else {
-        var experience = req.body.experience;
-      } if (req.body.hireAvailable == "") {
-        var hireAvailable = user.hireAvailable;
-      }
-      else {
-        var hireAvailable = req.body.hireAvailable;
-      }
-
-      var test12 = req.body.select_robots.split(',');
-      console.log(test12);
-
-      var array = test12.map(function (el) {
-        return el.trim();
-      });
-
-      console.log(array);
-
-      var test123 = JSON.stringify(array);
-
-
-      console.log(test123)
-
-      if (req.body.select_robots == "") {
-        var select_robots = user.select_robots;
-        //  var select_robots=test123;
-
-      }
-      else {
-        var select_robots = test123;
-      }
-
-      var test123 = req.body.select_plc.split(',');
-
-      var array = test123.map(function (el) {
-        return el.trim();
-      });
-
-      console.log(array);
-
-
-      var test1234 = JSON.stringify(array);
-
-
-      if (req.body.select_plc == "") {
-        var select_plc = user.select_plc;
-      }
-      else {
-        var select_plc = test1234;
-      }
-      console.log(user.id);
-      if (user) {
-        const updateEntry = await appusers.update(
-          {
-            name: name,
-            biodesc: biodesc,
-            occupation: occupation,
-            company: company,
-            experience: experience,
-            hireAvailable: hireAvailable,
-            select_robots: select_robots,
-            select_plc: select_plc,
-          },
-          {
-            where: {
-              id: user.id,
-
-            }
-          });
-        const userdata1 = await appusers.findOne({
-          attributes: ['id', 'name', 'biodesc', 'image', 'age', 'dob', 'location', 'country', 'joined_date', 'occupation', 'company', 'experience', 'hireAvailable', 'select_robots', 'select_plc', 'about_me', 'facebook_url', 'linkedin_url', 'instagram_url'],
-
-          where: {
-            id: user.id
-
-          },
-          // raw:true
-        });
-
-
-        if (updateEntry) {
-          return apiResponseHelper.post(res, true, 'Profile updated Successfully!', userdata1);
+        if (req.body.image == "") {
+          var image = user.image;
+        } else if (data1 == "public/images/default/main.png") {
+          var image = user.image
         } else {
-
-          return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!', {});
+          var image = 'http://34.232.2.249:4100/' + data1;
         }
-      } else {
-        return apiResponseHelper.onError(res, false, 'Users Not Exists', {});
+        requestData.image = image; // saving image as previously being used
       }
 
+
+      await helper.save(appusers, requestData); // updating data
+
+      const userdata1 = await appusers.findOne({
+        attributes: ['id', 'name', 'biodesc', 'image', 'age', 'dob', 'location', 'country', 'joined_date', 'occupation', 'company', 'experience', 'hireAvailable', 'select_robots', 'select_plc', 'about_me', 'facebook_url', 'linkedin_url', 'instagram_url'],
+        where: {
+          id: user.id,
+        },
+        // raw:true
+      });
+
+      return apiResponseHelper.post(res, true, 'Profile updated Successfully!', userdata1);
     }
     catch (e) {      
-      console.log(e, '================>error');
-      return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!', {});
+      // console.log(e, '================>error');
+      // return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!', {});
+      return helper.error(res, e);
     }
 
   },
+
+
+
+// old api
+  // Work_profile: async (req, res) => {
+
+  //   try {
+
+  //     const user = await appusers.findOne({
+  //       attributes: ['id', 'name', 'biodesc', 'image', 'age', 'dob', 'location', 'country', 'joined_date', 'occupation', 'company', 'experience', 'hireAvailable', 'select_robots', 'select_plc', 'about_me', 'facebook_url', 'linkedin_url', 'instagram_url'],
+
+  //       where: {
+  //         id: req.params.id
+
+  //       },
+  //       raw: true
+  //     });
+  //     const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+  //     const data = req.body;
+  //     data.image = uploadFile[0].imageName;
+  //     var data1 = data.image
+  //     console.log(data1)
+
+  //     if (req.body.name == "") {
+  //       var name = user.name;
+  //     }
+  //     else {
+  //       var name = req.body.name;
+  //     }
+  //     var userimage = user.image
+
+
+  //     if (req.body.biodesc == "") {
+  //       var biodesc = user.biodesc;
+  //     }
+  //     else {
+  //       var biodesc = req.body.biodesc;
+  //     }
+  //     var userimage = user.image
+
+
+
+  //     if (req.body.image == "") {
+  //       var image = user.image;
+  //     }
+
+  //     else if (data1 == "public/images/default/main.png") {
+  //       var image = user.image
+  //     }
+  //     else {
+
+  //       var image = 'http://34.232.2.249:4100/' + data1;
+  //     }
+
+  //     if (req.body.occupation == "") {
+  //       var occupation = user.occupation;
+  //     }
+  //     else {
+  //       var occupation = req.body.occupation;
+  //     }
+  //     if (req.body.company == "") {
+  //       var company = user.company;
+  //     }
+  //     else {
+  //       var company = req.body.company;
+  //     }
+  //     if (req.body.experience == "") {
+  //       var experience = user.experience;
+  //     }
+  //     else {
+  //       var experience = req.body.experience;
+  //     } if (req.body.hireAvailable == "") {
+  //       var hireAvailable = user.hireAvailable;
+  //     }
+  //     else {
+  //       var hireAvailable = req.body.hireAvailable;
+  //     }
+
+  //     var test12 = req.body.select_robots.split(',');
+  //     console.log(test12);
+
+  //     var array = test12.map(function (el) {
+  //       return el.trim();
+  //     });
+
+  //     console.log(array);
+
+  //     var test123 = JSON.stringify(array);
+
+
+  //     console.log(test123)
+
+  //     if (req.body.select_robots == "") {
+  //       var select_robots = user.select_robots;
+  //       //  var select_robots=test123;
+
+  //     }
+  //     else {
+  //       var select_robots = test123;
+  //     }
+
+  //     var test123 = req.body.select_plc.split(',');
+
+  //     var array = test123.map(function (el) {
+  //       return el.trim();
+  //     });
+
+  //     console.log(array);
+
+
+  //     var test1234 = JSON.stringify(array);
+
+
+  //     if (req.body.select_plc == "") {
+  //       var select_plc = user.select_plc;
+  //     }
+  //     else {
+  //       var select_plc = test1234;
+  //     }
+  //     console.log(user.id);
+  //     if (user) {
+  //       const updateEntry = await appusers.update(
+  //         {
+  //           name: name,
+  //           biodesc: biodesc,
+  //           occupation: occupation,
+  //           company: company,
+  //           experience: experience,
+  //           hireAvailable: hireAvailable,
+  //           select_robots: select_robots,
+  //           select_plc: select_plc,
+  //         },
+  //         {
+  //           where: {
+  //             id: user.id,
+
+  //           }
+  //         });
+  //       const userdata1 = await appusers.findOne({
+  //         attributes: ['id', 'name', 'biodesc', 'image', 'age', 'dob', 'location', 'country', 'joined_date', 'occupation', 'company', 'experience', 'hireAvailable', 'select_robots', 'select_plc', 'about_me', 'facebook_url', 'linkedin_url', 'instagram_url'],
+
+  //         where: {
+  //           id: user.id
+
+  //         },
+  //         // raw:true
+  //       });
+
+
+  //       if (updateEntry) {
+  //         return apiResponseHelper.post(res, true, 'Profile updated Successfully!', userdata1);
+  //       } else {
+
+  //         return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!', {});
+  //       }
+  //     } else {
+  //       return apiResponseHelper.onError(res, false, 'Users Not Exists', {});
+  //     }
+
+  //   }
+  //   catch (e) {      
+  //     console.log(e, '================>error');
+  //     return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!', {});
+  //   }
+
+  // },
 
   additional_profile: async (req, res) => {
 
