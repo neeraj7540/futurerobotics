@@ -2787,6 +2787,7 @@ module.exports = {
             [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0')`), 'deslike_count'],
             [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='1' && f.userId=${req.body.id})`), 'isLiked'],
             [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f WHERE f.feedId=feed.id && f.likeDeslike='0' && f.userId=${req.body.id})`), 'isDisliked'],
+            [sequelize.literal(`IF (LOCATE("public/images/default/main.png", \`feed\`.\`image\`), '', \`feed\`.\`image\`)`), 'image'],
           ]
         },
         where: {
