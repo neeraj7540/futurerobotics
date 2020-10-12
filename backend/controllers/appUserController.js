@@ -4884,6 +4884,20 @@ module.exports = {
       const required = {
         id: req.params.id,
       };
+
+
+// if (requestData.image) {
+        const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+        const data = req.body;
+        data.image = uploadFile[0].imageName;
+        var data1 = data.image;
+
+      // }
+      // console.log(req.body, '=====>req.body');
+      // return;
+
+
+
       const nonRequired = {
         name: req.body.name,
         biodesc: req.body.biodesc,
@@ -4912,12 +4926,7 @@ module.exports = {
 
       if (!user) return apiResponseHelper.onError(res, false, 'Users Not Exists', {});
 
-      if (requestData.image) {
-        const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
-        const data = req.body;
-        data.image = uploadFile[0].imageName;
-        var data1 = data.image;
-
+      
         var userimage = user.image;
 
         if (req.body.image == "") {
@@ -4928,7 +4937,6 @@ module.exports = {
           var image = 'http://34.232.2.249:4100/' + data1;
         }
         requestData.image = image; // saving image as previously being used
-      }
 
 
       await helper.save(appusers, requestData); // updating data
