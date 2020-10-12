@@ -1254,7 +1254,7 @@ module.exports = {
 
     }
   },
-
+  // new api
 
   profile: async (req, res) => {
     try {
@@ -1583,36 +1583,86 @@ module.exports = {
 
       // var sonu=isJson(userDetails.select_robots);
 
-      var select_robots1 = userDetails.select_robots
-      if (select_robots1) {
-        var select_robots2 = JSON.parse(select_robots1)
-        const allRobots = await groups.findAll({
-          attributes: ['id', 'name', 'isChecked'],
-          where: {
-            category: 'ROBOT',
-            status: '1'
-          }
-        });
+      // var select_robots1 = userDetails.select_robots
+      // if (select_robots1) {
+      //   var select_robots2 = JSON.parse(select_robots1)
+      //   const allRobots = await groups.findAll({
+      //     attributes: ['id', 'name', 'isChecked'],
+      //     where: {
+      //       category: 'ROBOT',
+      //       status: '1'
+      //     }
+      //   });
 
 
         // console.log(select_robots22, '======>select_robots22');
         
         // var select_robots2 = allRobots.filter((robot) => select_robots22.includes('ROBOT 2 GROUP 2'));
-      }
-      else {
-        var select_robots2 = []
-      }
+      // }
+      // else {
+      //   var select_robots2 = []
+      // }
       // console.log(test12345)
 
-      var select_plc1 = userDetails.select_plc
-      if (select_plc1) {
-        var select_plc2 = JSON.parse(select_plc1)
+      // var select_plc1 = userDetails.select_plc
+      // if (select_plc1) {
+      //   var select_plc2 = JSON.parse(select_plc1)
 
-      }
-      else {
-        var select_plc2 = []
-      }
+      // }
+      // else {
+      //   var select_plc2 = []
+      // }
       // console.log(test12345)
+
+      const robotList = await groups.findAll({
+        attributes: ['id', 'name', 'isChecked'],
+        where: {
+          category: 'ROBOT',
+          status: '1'
+        },
+        raw: true
+      });
+
+      const plcList = await groups.findAll({
+        attributes: ['id', 'name', 'isChecked'],
+        where: {
+          category: 'PLS5',
+          status: '1'
+        },
+        raw: true
+      });
+
+      let responseData = [];
+
+      const select_robots = userDetails.select_robots.split(',').filter(data => data != '');
+      const select_plc = userDetails.select_plc.split(',').filter(data => data != '');
+
+        let selectRobotsData = [];
+        let selectPlcData = [];
+
+      if (select_robots.length == 0) {
+        selectRobotsData = robotList.map(item => ({
+          ...item,
+          isChecked: true,
+        }));
+      } else {            
+        selectRobotsData = robotList.map(item => ({
+            ...item,
+            isChecked: select_robots.includes(String(item.id)) ? true : false,
+        }));
+      }
+
+      if (select_plc.length == 0) {
+        selectPlcData = plcList.map(item => ({
+          ...item,
+          isChecked: true,
+        }));
+      } else {            
+        selectPlcData = plcList.map(item => ({
+            ...item,
+            isChecked: select_plc.includes(String(item.id)) ? true : false,
+        }));
+      }
 
       var userdatas = {
         "id": userDetails.id,
@@ -1627,8 +1677,8 @@ module.exports = {
         "company": userDetails.company,
         "experience": userDetails.experience,
         "hireAvailable": userDetails.hireAvailable,
-        "select_robots": select_robots2,
-        "select_plc": select_plc2,
+        "select_robots": selectRobotsData,
+        "select_plc": selectPlcData,
         "about_me": userDetails.about_me,
         "facebook_url": userDetails.facebook_url,
         "linkedin_url": userDetails.linkedin_url,
@@ -1666,6 +1716,417 @@ module.exports = {
       // return apiResponseHelper.onError(res, false, 'Error', e);
     }
   },
+  // old api
+  // profile: async (req, res) => {
+  //   try {
+  //     const id = req.params.id;
+
+
+  //     const userDetails11 = await feedsTable.findAll({
+  //       where: {
+  //         userId: req.params.id,
+
+  //       }
+  //     })
+
+
+
+  //     var sequelize = require('sequelize');
+  //     const userDetails1 = await feedsTable.findAll({
+  //       attributes: [[sequelize.fn('sum', sequelize.col('like')), 'total']],
+  //       where: {
+  //         userId: req.params.id,
+  //         status: '1'
+  //       }
+  //     })
+
+
+  //     if (userDetails1[0].dataValues.total !== null) {
+
+  //       var feedcount1 = userDetails1[0].dataValues.total
+
+  //       var feedcount2 = parseInt(feedcount1)
+  //     }
+  //     else {
+  //       var feedcount2 = 0
+  //     }
+
+
+
+  //     const allfeedid = await feedsTable.findAll({
+  //       attributes: ['id'],
+  //       where: {
+  //         userId: req.params.id,
+  //         status: '1'
+
+
+  //       }
+  //     })
+  //     console.log(allfeedid.length)
+  //     if (allfeedid.length > 0) {
+
+  //       var datamap = allfeedid.map(item => item.id)
+  //       var Sequelize = require('sequelize');
+  //       var Op = Sequelize.Op;
+
+
+
+  //       const commentlikecount = await feedCommentTable.findAll({
+  //         attributes: [[sequelize.fn('sum', sequelize.col('like')), 'total']],
+  //         where: {
+  //           feedId: {
+  //             [Op.in]: datamap
+  //           },
+  //           status: '1'
+
+  //         }
+  //       })
+
+  //       var totellike1 = commentlikecount[0].dataValues.total;
+
+  //     }
+  //     else {
+
+  //       console.log("---------------------------------------------------------Mod off")
+  //       var totellike1 = null
+  //     }
+
+
+
+  //     if (totellike1 !== null) {
+  //       var coumentcount1 = totellike1
+  //       var coumentcount2 = parseInt(coumentcount1)
+
+
+  //     }
+  //     else {
+  //       var coumentcount1 = totellike1
+  //       var coumentcount2 = 0
+  //     }
+
+
+  //     //--------------Total Like count 
+  //     var total_like_count = feedcount2 + coumentcount2
+
+  //     //console.log(total_like_count)
+
+
+  //     const feeddeslike = await feedsTable.findAll({
+  //       attributes: [[sequelize.fn('sum', sequelize.col('deslike')), 'total']],
+  //       where: {
+  //         userId: req.params.id,
+  //         status: '1'
+
+  //       }
+  //     })
+  //     if (feeddeslike[0].dataValues.total !== null) {
+  //       var feeddeslike1 = feeddeslike[0].dataValues.total
+
+  //       var feeddesdeslike2 = parseInt(feeddeslike1)
+  //     }
+  //     else {
+  //       var feeddesdeslike2 = 0
+  //     }
+  //     //----------------------Testing Mode---------------------
+
+  //     const allfeedid1 = await feedsTable.findAll({
+  //       attributes: ['id'],
+  //       where: {
+  //         userId: req.params.id,
+  //         status: '1'
+
+
+  //       }
+  //     })
+  //     if (allfeedid1.length > 0) {
+
+  //       var datamap1 = allfeedid1.map(item => item.id)
+
+  //       //console.log(datamap)
+
+
+  //       var Sequelize = require('sequelize');
+  //       var Op = Sequelize.Op;
+
+  //       //var nee=[1234]
+
+  //       const feedcoment_deslike = await feedCommentTable.findAll({
+  //         attributes: [[sequelize.fn('sum', sequelize.col('deslike')), 'total']],
+  //         where: {
+  //           feedId: {
+  //             [Op.in]: datamap1
+  //           },
+  //           status: '1'
+
+  //         }
+  //       })
+
+  //       var totaldes1 = feedcoment_deslike[0].dataValues.total
+  //     }
+
+  //     else {
+  //       var totaldes1 = null
+
+  //     }
+
+
+  //     if (totaldes1 !== null) {
+  //       var feedcoment_deslike1 = totaldes1
+  //       var feedcoment_deslike23 = parseInt(feedcoment_deslike1)
+
+  //     }
+  //     else {
+  //       var feedcoment_deslike23 = 0
+  //     }
+
+  //     console.log("------------------------------------" + feedcoment_deslike23)
+
+  //     var total_des_like = feeddesdeslike2 + feedcoment_deslike23
+
+  //     console.log(total_des_like)
+  //     console.log(total_like_count)
+
+  //     const userDataUpdate = await appusers.update({
+  //       like: total_like_count,
+  //       deslike: total_des_like
+  //     }, {
+  //       where: {
+  //         id: req.params.id
+  //       }
+  //     }
+  //     )
+
+  //     const testdata = await appusers.findOne({
+  //       where: {
+  //         id: req.params.id,
+  //       }
+  //     });
+
+  //     var finallike = testdata.dataValues.like
+  //     var finallike1 = parseInt(finallike)
+
+  //     var finaldeslike = testdata.dataValues.deslike
+
+  //     var finaldeslike1 = parseInt(finaldeslike)
+
+  //     // var totallike = finallike1 - finaldeslike1
+
+
+  //     const likeDislikeData = await models['appusers'].findOne({
+  //       attributes: [
+  //         [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f INNER JOIN feedcomment AS fc ON fc.id=f.commentId WHERE fc.userId=${req.params.id} && f.likeDeslike='1')`), 'commentLikeCount'],
+  //         [sequelize.literal(`(SELECT COUNT(*) FROM comment_likedeslike AS f INNER JOIN feedcomment AS fc ON fc.id=f.commentId WHERE fc.userId=${req.params.id} && f.likeDeslike='0')`), 'commentDislikeCount'],
+  //         [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f INNER JOIN feed AS fe ON fe.id=f.feedId WHERE fe.userId=${req.params.id} && f.likeDeslike='1')`), 'feedLikeCount'],
+  //         [sequelize.literal(`(SELECT COUNT(*) FROM feedlikedeslike AS f INNER JOIN feed AS fe ON fe.id=f.feedId WHERE fe.userId=${req.params.id} && f.likeDeslike='0')`), 'feedDislikeCount'],
+  //       ],
+  //       raw: true,
+  //     });
+
+  //     let totallike = likeDislikeData.feedLikeCount + likeDislikeData.commentLikeCount - (likeDislikeData.feedDislikeCount + likeDislikeData.commentDislikeCount)
+
+  //     if (totallike < 0) totallike = 0;
+
+  //     // console.log(likeDislikeData, '================>likeDislikeData');
+  //     // console.log(totallike, '================>totallike');
+  //     // return;
+
+
+
+
+  //     if (totallike < 0) {
+
+  //       var ranking = 'New User'
+  //     }
+
+  //     //console.log(ranking)
+  //     if (totallike == 0) {
+
+  //       var ranking = 'New User'
+  //     }
+
+  //     if (totallike >= 1 && totallike <= 10) {
+  //       var ranking = 'Regular User'
+  //     }
+
+  //     if (totallike >= 11 && totallike <= 25) {
+  //       var ranking = 'Junior member'
+  //     }
+
+  //     if (totallike >= 26 && totallike <= 50) {
+  //       var ranking = 'Helping hand'
+  //     }
+
+  //     if (totallike >= 50 && totallike <= 100) {
+  //       var ranking = 'Senior Member'
+  //     }
+
+  //     if (totallike >= 101 && totallike <= 200) {
+  //       var ranking = 'Programmer'
+  //     }
+
+  //     if (totallike >= 201 && totallike <= 500) {
+  //       var ranking = 'Senior Programmer'
+  //     }
+
+  //     if (totallike >= 501 && totallike <= 1000) {
+  //       var ranking = 'PRO Programmer'
+  //     }
+
+  //     if (totallike >= 1001 && totallike <= 2500) {
+  //       var ranking = 'Programming Expert'
+  //     }
+
+  //     if (totallike >= 2501 && totallike <= 5000) {
+  //       var ranking = 'Programming Freak'
+  //     }
+
+  //     if (totallike >= 5001 && totallike <= 7500) {
+  //       var ranking = 'Programming Veteran'
+  //     }
+
+  //     if (totallike >= 7501 && totallike <= 7500000000) {
+  //       var ranking = 'Programming Master'
+  //     }
+
+  //     if (totallike < 0) {
+
+  //       totallike = 0
+  //     }
+
+
+  //     const rankingupdate = await appusers.update({
+
+  //       ranking_name: ranking,
+  //       ranking: totallike
+  //       //deslike:total_des_like
+  //     }, {
+  //       where: {
+  //         id: req.params.id
+  //       }
+  //     });
+
+
+  //     //console.log(ranking)
+
+
+
+
+
+  //     console.log(userDataUpdate)
+
+
+
+  //     const userDetails = await appusers.findOne({
+  //       attributes: ['id', 'name', 'biodesc', 'image', 'age', 'location', 'country', 'joined_date', 'occupation', 'company', 'experience', 'hireAvailable', 'select_robots', 'select_plc', 'about_me', 'facebook_url', 'linkedin_url', 'instagram_url', 'ranking_name', 'ranking'],
+  //       where: {
+  //         id: req.params.id,
+  //       }
+  //     });
+
+
+
+  //     //-----------Test-----------------------------------------------
+  //     // function  isJson(item) {
+  //     //   item = typeof item !== "string" ? JSON.stringify(item) : item;
+
+  //     //   try {
+  //     //     item = JSON.parse(item);
+  //     //   } catch (e) {
+  //     //     return false;
+  //     //   }
+
+  //     //   if (typeof item === "object" && item !== null) {
+  //     //     return true;
+  //     //   }
+
+  //     //   return false;
+  //     // }
+
+  //     // var sonu=isJson(userDetails.select_robots);
+
+  //     var select_robots1 = userDetails.select_robots
+  //     if (select_robots1) {
+  //       var select_robots2 = JSON.parse(select_robots1)
+  //       const allRobots = await groups.findAll({
+  //         attributes: ['id', 'name', 'isChecked'],
+  //         where: {
+  //           category: 'ROBOT',
+  //           status: '1'
+  //         }
+  //       });
+
+
+  //       // console.log(select_robots22, '======>select_robots22');
+        
+  //       // var select_robots2 = allRobots.filter((robot) => select_robots22.includes('ROBOT 2 GROUP 2'));
+  //     }
+  //     else {
+  //       var select_robots2 = []
+  //     }
+  //     // console.log(test12345)
+
+  //     var select_plc1 = userDetails.select_plc
+  //     if (select_plc1) {
+  //       var select_plc2 = JSON.parse(select_plc1)
+
+  //     }
+  //     else {
+  //       var select_plc2 = []
+  //     }
+  //     // console.log(test12345)
+
+  //     var userdatas = {
+  //       "id": userDetails.id,
+  //       "name": userDetails.name,
+  //       "biodesc": userDetails.biodesc,
+  //       "image": userDetails.image,
+  //       "age": userDetails.age,
+  //       "location": userDetails.location,
+  //       "country": userDetails.country,
+  //       "joined_date": userDetails.joined_date,
+  //       "occupation": userDetails.occupation,
+  //       "company": userDetails.company,
+  //       "experience": userDetails.experience,
+  //       "hireAvailable": userDetails.hireAvailable,
+  //       "select_robots": select_robots2,
+  //       "select_plc": select_plc2,
+  //       "about_me": userDetails.about_me,
+  //       "facebook_url": userDetails.facebook_url,
+  //       "linkedin_url": userDetails.linkedin_url,
+  //       "instagram_url": userDetails.instagram_url,
+  //       "ranking_name": userDetails.ranking_name,
+  //       "ranking": userDetails.ranking
+
+
+
+
+
+  //     }
+
+
+
+
+
+
+
+
+
+  //     if (userDetails) {
+
+  //       return apiResponseHelper.post(res, true, 'User Details', userdatas);
+
+  //     }
+  //     else {
+  //       // return helper.error(res, err);
+  //       return apiResponseHelper.onError(res, false, 'Users Not Exists', 'Something Went Wrong.Please Try Again');
+
+
+  //     }
+  //   } catch (err) {
+  //     return helper.error(res, err);
+  //     // return apiResponseHelper.onError(res, false, 'Error', e);
+  //   }
+  // },
 
   logout: async (req, res) => {
     try {
@@ -3207,7 +3668,7 @@ module.exports = {
 
       let responseData = [];
 
-      const select_robots = userrobotlist.select_robots.split(',');
+      const select_robots = userrobotlist.select_robots.split(',').filter(data => data != '');;
 
 
       if (select_robots.length == 0) {
