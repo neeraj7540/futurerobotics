@@ -303,6 +303,9 @@ routes.post('/additional_profile/:id', appUsersCtrl.additional_profile);
 //-----------------------------------21-09-2020------------------------------------------------------------
 
 routes.get('/notification_list/:id', feedsCtrl.userlist);
+routes.post('/readSingleNotification', feedsCtrl.readSingleNotification);
+routes.post('/readAllNotifications', feedsCtrl.readAllNotifications);
+routes.post('/clearAllNotifications', feedsCtrl.clearAllNotifications);
 
 //routes.get('/massagelist/:id',feedsCtrl.massagelist2);
 

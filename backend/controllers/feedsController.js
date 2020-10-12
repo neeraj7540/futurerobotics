@@ -2924,16 +2924,124 @@ module.exports = {
       return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
 
     }
+  },
 
+  readSingleNotification: async (req, res) => {
+    try {
+       const required = {
+        notificationId: req.body.notificationId,
+        userId: req.body.userId,
+      };
+      const nonRequired = {};
 
+      let requestData = await helper.vaildObject(required, nonRequired);
 
+      const user = await models.appusers.findOne({
+        where: {
+          id: requestData.userId,
+        },
+      });
+      if (!user) throw "Invalid userId.";
 
+      const notification = await models.notification_data.findOne({
+        where: {
+          id: requestData.notificationId,
+          receiver_id: requestData.userId,
+        },
+      });
+      if (!notification) throw "Invalid notificationId.";
 
+      await helper.save(models.notification_data, {
+        id: requestData.notificationId,
+        isRead: 1,
+      });
 
+      const updatedNotification = await models.notification_data.findOne({
+        where: {
+          id: requestData.notificationId
+        }
+      })
 
+      return helper.success(res, 'Notification read successfully.', updatedNotification);
+    } catch (e) {
+      return helper.error(res, e);
+    }
+  },
 
+  readAllNotifications: async (req, res) => {
+    try {
+       const required = {
+        userId: req.body.userId,
+      };
+      const nonRequired = {};
 
+      let requestData = await helper.vaildObject(required, nonRequired);
 
+      const user = await models.appusers.findOne({
+        where: {
+          id: requestData.userId,
+        },
+      });
+      if (!user) throw "Invalid userId.";
+
+      await models.notification_data.update(
+        {
+          isRead: 1
+        },
+        {
+          where: {
+            receiver_id: requestData.userId,
+          }
+        }
+      );
+
+      const updatedNotifications = await models.notification_data.findAll({
+        where: {
+          receiver_id: requestData.userId
+        },
+        order: [['id', 'DESC']],
+      })
+
+      return helper.success(res, 'All Notifications read successfully.', updatedNotifications);
+    } catch (e) {
+      return helper.error(res, e);
+    }
+  },
+  clearAllNotifications: async (req, res) => {
+    try {
+       const required = {
+        userId: req.body.userId,
+      };
+      const nonRequired = {};
+
+      let requestData = await helper.vaildObject(required, nonRequired);
+
+      const user = await models.appusers.findOne({
+        where: {
+          id: requestData.userId,
+        },
+      });
+      if (!user) throw "Invalid userId.";
+
+      await models.notification_data.destroy(
+        {
+          where: {
+            receiver_id: requestData.userId,
+          }
+        }
+      );
+
+      const updatedNotifications = await models.notification_data.findAll({
+        where: {
+          receiver_id: requestData.userId
+        },
+        order: [['id', 'DESC']],
+      })
+
+      return helper.success(res, 'All Notifications cleared successfully.', updatedNotifications);
+    } catch (e) {
+      return helper.error(res, e);
+    }
   },
 
 

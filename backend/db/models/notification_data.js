@@ -49,7 +49,13 @@ createdAt: {
       allowNull: true,
       default: 1
       
-     }
+     }, 
+    isRead : {
+      type: DataTypes.INTEGER(4),
+      allowNull: true,
+      default: 0
+      
+     },
          
 }, {
     tableName: 'notification_data',
