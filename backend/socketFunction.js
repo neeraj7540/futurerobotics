@@ -477,13 +477,10 @@ module.exports = {
       where: {
         userId: get_msg_data.senderId,
         receiverId: get_msg_data.receiverId,
-
-
       }
+    });
 
-    })
-
-    console.log(get_user_status.dataValues.msg_status)
+    // console.log(get_user_status.dataValues.msg_status)
 
 
     if (get_user_status.dataValues.msg_status == 0) {

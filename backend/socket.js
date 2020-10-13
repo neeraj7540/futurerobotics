@@ -133,20 +133,21 @@ module.exports = function (io) {
       try {
         // console.log(get_msg_data,"from socket");
 
-        let get_message = await my_function.get_message(get_msg_data);
-
-
-        await models.one_update_messages.findAll(
+        await models.one_update_messages.update(
           {
             readStatus: 1
           },
           {
             where: {
               senderId: get_msg_data.receiverId,
-              receiverId: get_msg_data.senderid,
+              receiverId: get_msg_data.senderId,
             }
           }
         );
+
+        let get_message = await my_function.get_message(get_msg_data);
+
+
 
         console.log(get_message, "from sockjet========");
 
@@ -164,6 +165,7 @@ module.exports = function (io) {
         }
 
       } catch (error) {
+        console.log(error, '=========>error');
         throw error
       }
     });

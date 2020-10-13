@@ -3653,7 +3653,6 @@ module.exports = {
         where: {
           id: requestData.id
         }
-
       })
       if (!userrobotlist) return apiResponseHelper.post(res, true, 'User Not Exits', {});
 
