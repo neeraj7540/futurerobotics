@@ -160,7 +160,6 @@ module.exports = function (io) {
         if (get_chat_listing.length > 0) {
           socket.emit('chat_message', get_chat_listing);
         } else {
-
           success_message = [];
           /* success_message = {
             'success_message': 'Data Not Available'

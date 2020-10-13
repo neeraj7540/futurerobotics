@@ -3313,24 +3313,18 @@ module.exports = {
 
 
   massagelist_count: async (req, res) => {
-
-
     try {
-
       const itemList = await socket_group.findAll({
-
         where: {
           userId: req.body.id
         }
       });
 
       if (!itemList) {
-
         return apiResponseHelper.post(res, true, 'User List', {});
       }
 
       var testdata = itemList;
-
 
       var data = testdata.map(user => user.groupId)
 
@@ -3345,32 +3339,68 @@ module.exports = {
           senderId: {
             [Op.not]: req.body.id
           }
-
-
         }
-      })
-
-
-
-
-
-
-
+      });
 
       if (itemList) {
-
         return apiResponseHelper.post(res, true, 'Massage List Count', itemList1);
       } else {
         return apiResponseHelper.post(res, true, 'Massage List Count', {});
       }
-
-
     } catch (e) {
-
-
       console.log(e);
       return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
+    }
 
+
+
+
+
+
+
+
+
+
+  },
+
+
+  massageCountUser: async (req, res) => {
+    try {
+      const required = {
+        id: req.body.id, // id of auth user
+      };
+      const nonRequired = {};
+
+      let requestData = await helper.vaildObject(required, nonRequired);
+      
+      // var chatConstant = await chatConstants.findOne({
+      //   where: {
+      //     [Op.or]: [
+      //       { senderId: requestData.id },
+      //       { receiverId: requestData.id }
+      //     ]
+      //   },
+      // });
+      var unreadMessages = await models.one_update_messages.findAll({
+        where: {
+          receiverId: requestData.id,
+          readStatus: 0
+        },
+        attributes: [
+          'id',
+          'senderId',
+          'receiverId',
+          'readStatus'
+        ],
+        order: [['id', 'DESC']],
+        group: ['senderId'],
+      });
+
+      return helper.success(res, 'unread count', unreadMessages.length);
+    } catch (e) {
+      return helper.error(res, e);
+      // console.log(e);
+      // return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again', {});
     }
 
 

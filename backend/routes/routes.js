@@ -315,6 +315,7 @@ routes.get('/massagelist/:id', feedsCtrl.massageDataliist);
 //--------------------------------29-09-2020--------------------------------------------------
 
 routes.post('/massage_count_user', feedsCtrl.massagelist_count);
+routes.post('/massageCountUser', feedsCtrl.massageCountUser);
 
 
 routes.post('/notification_count_user', feedsCtrl.notificationcountdata);
