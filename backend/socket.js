@@ -4,6 +4,8 @@ const Sequelize = require('sequelize');
 const db = require('./db/db');
 var base64Img = require('base64-img');
 
+const { models } = db;
+
 const socket_user = db.models.socket_user;
 const apiResponseHelper = require('./helpers/apiResponseHelper');
 //const socket_user = db.models.socket_user
@@ -132,6 +134,20 @@ module.exports = function (io) {
         // console.log(get_msg_data,"from socket");
 
         let get_message = await my_function.get_message(get_msg_data);
+
+
+        await models.one_update_messages.findAll(
+          {
+            readStatus: 1
+          },
+          {
+            where: {
+              senderId: get_msg_data.receiverId,
+              receiverId: get_msg_data.senderid,
+            }
+          }
+        );
+
         console.log(get_message, "from sockjet========");
 
         if (get_message.length > 0) {
