@@ -3656,8 +3656,12 @@ module.exports = {
       })
       if (!userrobotlist) return apiResponseHelper.post(res, true, 'User Not Exits', {});
 
+      var sequelize = require('sequelize');
       const itemList = await groups.findAll({
-        attributes: ['id', 'name', 'isChecked'],
+        attributes: [
+          'id', 'name', 'isChecked',
+          [sequelize.literal(`(SELECT COUNT(*) FROM group_messages AS gm WHERE gm.groupId=groups.id && gm.id>(SELECT gr.lastReadId FROM group_message_read as gr WHERE gr.userId=${requestData.id} && gr.groupId=groups.id))`), 'count']
+        ],
         where: {
           category: 'ROBOT',
           status: '1'

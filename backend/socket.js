@@ -7,6 +7,7 @@ var base64Img = require('base64-img');
 const { models } = db;
 
 const socket_user = db.models.socket_user;
+const helper = require('./helpers/helper');
 const apiResponseHelper = require('./helpers/apiResponseHelper');
 //const socket_user = db.models.socket_user
 console.log(socket_user)
@@ -324,7 +325,40 @@ module.exports = function (io) {
     socket.on('get_group_message', async function (get_msg_data) {
       try {
         // console.log(get_msg_data,"from socket");
+        // groupId: get_msg_data.groupId,
+        // category: get_msg_data.category,
+        // userId: get_msg_data.userId
+        const getLastGroupMessageId = await models.group_messages.findOne({
+          where: {
+            groupId: get_msg_data.groupId,
+          },
+          order: [['id', 'DESC']],
+          limit: 1,
+          raw: true,
+        });
 
+
+        // console.log(models.group_message_read, '=====>models');
+        // return;
+        
+        const checkReadEntry = await models.group_message_read.findOne({
+          where: {
+            userId: get_msg_data.userId,
+            groupId: get_msg_data.groupId,
+          },
+          raw: true,
+        });
+
+        const addReadEntry = {
+          userId: get_msg_data.userId,
+          groupId: get_msg_data.groupId,
+          lastReadId: getLastGroupMessageId ? getLastGroupMessageId.id : 0
+        };
+
+        if (checkReadEntry) addReadEntry.id = checkReadEntry.id;
+        await helper.save(models.group_message_read, addReadEntry);
+
+        
         let get_message = await my_function.get_message2(get_msg_data);
         console.log(get_message, "from sockjet========");
 

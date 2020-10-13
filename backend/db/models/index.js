@@ -51,7 +51,8 @@ let modules = [
   require('./socket_group.js'),
   require('./update_messages.js'),
   require('./notification_data.js'),
-  require('./one_update_messages.js')
+  require('./one_update_messages.js'),
+  require('./group_message_read.js'),
   
    
 ];
