@@ -1,7 +1,7 @@
 module.exports = {
   development: {
-    username: 'root',
-    password: '',
+    username: 'dbuser',
+    password: 'cqlsys123',
     database: 'futurerobotics',
     host: 'localhost',
     dialect: 'mysql',

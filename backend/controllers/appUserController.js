@@ -3477,10 +3477,8 @@ module.exports = {
     } catch (e) {
       console.log(e, '====================>error');
       return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
-
     }
   },
-
   get_all_robots_admim_list1: async (req, res) => {
     try {
       const itemList = await appusers.findAll({
@@ -3488,15 +3486,25 @@ module.exports = {
         where: {
           id: req.params.id
         }
-
       });
+      console.log(itemList[0].select_robots,"==============itemList");
       if (!itemList[0].select_robots) {
 
-        return apiResponseHelper.post(res, true, 'Robots list', []);
+        const itemList = await groups.findAll({
+          where: {
+            category: 'ROBOT',
+            status: '1'
+          }
+        });
+        let finaldata= itemList.map(itemList=>{return itemList.toJSON()});
+
+        return apiResponseHelper.post(res, true, 'Robots list',finaldata);
       }
 
-      var listdata1 = itemList[0].select_robots
-      var listdata2 = JSON.parse(listdata1)
+      var listdata1 = itemList[0].select_robots;
+      //var listdata2 = JSON.parse(listdata1);
+      var listdata2 = listdata1.split(",");
+      //console.log(listdata2,"=============>>");return;
 
       console.log(listdata2)
       var Sequelize = require('sequelize');
@@ -3504,18 +3512,13 @@ module.exports = {
       var arrayofTaskId = listdata2;
       const itemList1 = await groups.findAll({
         where: {
-          name: {
+          id: {
             [Op.in]: arrayofTaskId
           },
           status: '1'
-
-
         }
       })
-
       console.log(itemList1)
-
-
       if (itemList) {
 
         return apiResponseHelper.post(res, true, 'Robots list', itemList1);
@@ -4097,7 +4100,6 @@ module.exports = {
         where: {
           id: requestData.id
         }
-
       })
       if (!userrobotlist) return apiResponseHelper.post(res, true, 'User Not Exits', {});
 
