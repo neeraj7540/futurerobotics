@@ -3467,8 +3467,6 @@ module.exports = {
         }
       });
 
-
-
       if (itemList) {
         return apiResponseHelper.post(res, true, 'Robots list', itemList);
       } else {
@@ -3542,14 +3540,23 @@ module.exports = {
         }
 
       });
+      console.log(!itemList[0].select_plc,"===================>>");
       if (!itemList[0].select_plc) {
-
-        return apiResponseHelper.post(res, true, 'PLC list', []);
+        const itemList = await groups.findAll({
+          where: {
+            category: 'PLS5',
+            status: '1'
+          }
+        });
+        console.log(itemList,"=======itemList");
+        let finaldata= itemList.map(itemList=> {return itemList.toJSON()});
+        return apiResponseHelper.post(res, true, 'PLC list',finaldata);
       }
 
 
       var listdata1 = itemList[0].select_plc
-      var listdata2 = JSON.parse(listdata1)
+
+      var listdata2 = listdata1.split(",");
 
       console.log(listdata2)
       var Sequelize = require('sequelize');
@@ -3557,7 +3564,7 @@ module.exports = {
       var arrayofTaskId = listdata2;
       const itemList1 = await groups.findAll({
         where: {
-          name: {
+          id: {
             [Op.in]: arrayofTaskId
           },
           status: '1'
@@ -3643,6 +3650,7 @@ module.exports = {
   //------------------------------------------User Robot List----------------------------------
   // new get_user_robots api by rajat
   get_user_robots: async (req, res) => {
+    console.log("=====i came")
     try {
       const required = {
         id: req.params.id,
@@ -3656,7 +3664,8 @@ module.exports = {
         where: {
           id: requestData.id
         }
-      })
+      });
+      console.log(userrobotlist,"============userdd");
       if (!userrobotlist) return apiResponseHelper.post(res, true, 'User Not Exits', {});
 
       var sequelize = require('sequelize');
