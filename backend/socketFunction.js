@@ -267,9 +267,6 @@ module.exports = {
           id: get_data.senderId,
         }
       });
-
-
-
     } else {
 
       console.log("//----------------------Test1-------------------------")
@@ -308,21 +305,10 @@ module.exports = {
             senderId: get_data.senderId,
             receiverId: get_data.receiverId
           }
-
         }
-
-
         );
 
       }
-
-
-
-
-
-
-
-
       //-----------------------------------------------------
       let create_last_message = await chatConstants.create({
         senderId: get_data.senderId,
@@ -352,9 +338,6 @@ module.exports = {
           }
         }
       );
-
-
-
 
       return create_message;
     }

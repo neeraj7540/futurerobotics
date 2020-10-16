@@ -1156,7 +1156,7 @@ module.exports = {
       };
 
       let requestData = await helper.vaildObject(required, nonRequired);
-
+      
       if (![0, 1].includes(parseInt(requestData.likeDeslike))) throw "Invalid value in param likeDeslike.";
 
       const user = await appUsersTable.findOne({
@@ -1195,7 +1195,7 @@ module.exports = {
         },
         raw: true,
       });
-
+      console.log(alreadyLikedDisliked,"=======================>>");
       console.log({
         feedId: requestData.feed_id,
         userId: requestData.id,
@@ -1205,7 +1205,7 @@ module.exports = {
 
       // let message = `${user.name}${!alreadyLikedDisliked ? `${requestData.likeDeslike == 1 ? ' liked' : ' disliked'} your` : `'s ${requestData.likeDeslike == 1 ? 'like' : 'dislike'} removed from`} post`;
       const condition = !alreadyLikedDisliked || alreadyLikedDisliked && alreadyLikedDisliked.likeDeslike != requestData.likeDeslike;
-
+      console.log(condition,"====================condition");
       let message = `${user.name}${condition ? `${requestData.likeDeslike == 1 ? ' liked' : ' disliked'} your` : `'s ${requestData.likeDeslike == 1 ? 'like' : 'dislike'} removed from`} post`;
 
       if (condition) {
@@ -1229,6 +1229,7 @@ module.exports = {
           receiver_id: feed.appuser.id,
           senderName: user.name,
           senderImage: user.image,
+          status:'1',
           notification: `${requestData.likeDeslike == 1 ? 'liked' : 'disliked'} your post`,
         });
 
@@ -2885,10 +2886,7 @@ module.exports = {
 
 
   userlist: async (req, res) => {
-
-
     try {
-
       const itemList = await notificationData.findAll({
 
         where: {
