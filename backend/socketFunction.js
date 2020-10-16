@@ -710,22 +710,22 @@ module.exports = {
     /* console.log(get_block_status_data,"get_block_status_data"); */
     return get_block_status_data;
   },
-  get_read_unread_status: async function (get_read_status) {
+  // get_read_unread_status: async function (get_read_status) {
 
-    update_read_status = await messages.update({
-      readStatus: 1
-    },
-      {
-        where: {
-          senderId: get_read_status.user2Id,
-          receiverId: get_read_status.userId
-        }
-      }
-    );
+  //   update_read_status = await messages.update({
+  //     readStatus: 1
+  //   },
+  //     {
+  //       where: {
+  //         senderId: get_read_status.user2Id,
+  //         receiverId: get_read_status.userId
+  //       }
+  //     }
+  //   );
 
-    return update_read_status;
+  //   return update_read_status;
 
-  },
+  // },
   get_blocked_user_status: async function (get_data) {
 
     //---------------------Testing-------------Dump
