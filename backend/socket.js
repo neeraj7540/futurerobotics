@@ -131,8 +131,8 @@ module.exports = function (io) {
 
     socket.on('get_message', async function (get_msg_data) {
       try {
-         console.log(get_msg_data,"from socket");
-
+        
+        console.log("--------------------------------------------------------i am coming");
         let updatemsg=  await models.one_update_messages.update({
           readStatus:1
           },
