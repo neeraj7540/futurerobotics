@@ -3417,26 +3417,17 @@ module.exports = {
   //----------------------------------------------------------------
 
   notificationcountdata: async (req, res) => {
-
-
     try {
-
       const itemList = await notificationData.count({
-
         where: {
           receiver_id: req.body.id,
-          status: '1'
+          status: '1',
+          isRead:0
         },
-
         order: [
           ['id', 'DESC']
         ]
-
-
-
-
       });
-
       var testdata = itemList;
       console.log(testdata);
 
