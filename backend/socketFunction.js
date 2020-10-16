@@ -480,8 +480,7 @@ module.exports = {
       }
     });
 
-    // console.log(get_user_status.dataValues.msg_status)
-
+    
 
     if (get_user_status.dataValues.msg_status == 0) {
 

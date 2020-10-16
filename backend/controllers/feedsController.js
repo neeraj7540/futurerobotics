@@ -3431,7 +3431,6 @@ module.exports = {
       var testdata = itemList;
       console.log(testdata);
 
-
       if (itemList) {
 
         return apiResponseHelper.post(res, true, 'Notification Count', itemList);

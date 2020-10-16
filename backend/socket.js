@@ -3,9 +3,8 @@ const Sequelize = require('sequelize');
 
 const db = require('./db/db');
 var base64Img = require('base64-img');
-
 const { models } = db;
-
+//console.log(models,"================models");
 const socket_user = db.models.socket_user;
 const helper = require('./helpers/helper');
 const apiResponseHelper = require('./helpers/apiResponseHelper');
@@ -132,25 +131,21 @@ module.exports = function (io) {
 
     socket.on('get_message', async function (get_msg_data) {
       try {
-        // console.log(get_msg_data,"from socket");
+         console.log(get_msg_data,"from socket");
 
-        await models.one_update_messages.update(
-          {
-            readStatus: 1
+        let updatemsg=  await models.one_update_messages.update({
+          readStatus:1
           },
           {
             where: {
-              senderId: get_msg_data.receiverId,
-              receiverId: get_msg_data.senderId,
+              senderId: get_msg_data.senderId,
+              receiverId: get_msg_data.receiverId,
             }
           }
         );
-
+        // console.log(updatemsg,"=================updatemsg");
         let get_message = await my_function.get_message(get_msg_data);
-
-
-
-        console.log(get_message, "from sockjet========");
+       // console.log(get_message, "from sockjet========");
 
         if (get_message.length > 0) {
 
