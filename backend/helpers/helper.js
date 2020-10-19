@@ -114,7 +114,7 @@ module.exports = {
             if (!(typeof data == 'object' && !Array.isArray(data))) {
                 throw 'Please send valid object in second argument of save function.';
             }
-            console.log(model, '===================>model');
+           // console.log(model, '===================>model');return;
             const tableColumns = model.rawAttributes
             // console.log(tableColumns, '==============>tableColumns');
             const defaultValues = {
@@ -127,10 +127,11 @@ module.exports = {
 
             data = { ...data };
             let rawData = { ...data };
-
+            console.log(rawData,"===================rawData");
             for (let key in data) {
+                console.log(data[key],"=================>>data[k]")
                 if (!tableColumns.hasOwnProperty(key)) {
-                    delete data[key];
+                  //  delete data[key];
                 } else {
                     const tableColumn = tableColumns[key];
                     const tableDataType = tableColumn.type.key;
@@ -160,8 +161,6 @@ module.exports = {
             }
 
             let id;
-            // console.log(data, '===========================>data');
-            // return;
 
             if (data.hasOwnProperty('id')) {
                 const updatedEntry = await model.update(

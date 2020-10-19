@@ -4756,9 +4756,7 @@ module.exports = {
 
 
   general_profile_edit: async (req, res) => {
-
     try {
-
       const user = await appusers.findOne({
         attributes: ['id', 'name', 'biodesc', 'image', 'age', 'dob', 'location', 'country', 'joined_date', 'occupation', 'company', 'experience', 'hireAvailable', 'select_robots', 'select_plc', 'about_me', 'facebook_url', 'linkedin_url', 'instagram_url'],
 
@@ -4768,6 +4766,7 @@ module.exports = {
         },
         raw: true
       });
+     
       const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
       const data = req.body;
       data.image = uploadFile[0].imageName;
@@ -4791,7 +4790,7 @@ module.exports = {
       var userimage = user.image
 
 
-
+      console.log(req.body.age,"====================req.body.imagereq.body.image")
       if (req.body.image == "") {
         var image = user.image;
       }
@@ -4806,8 +4805,8 @@ module.exports = {
 
 
 
-      if (req.body.age == "") {
-        var age = user.age;
+      if (req.body.age == undefined) {
+        var age = '';
       }
       else {
         var age = req.body.age;
@@ -4818,8 +4817,8 @@ module.exports = {
       else {
         var dob = req.body.dob;
       }
-      if (req.body.location == "") {
-        var location = user.location;
+      if (req.body.location == undefined) {
+        var location = '';
       }
       else {
         var location = req.body.location;
@@ -4841,14 +4840,15 @@ module.exports = {
 
 
       // console.log(user.id);
+      console.log(req.body,"====================req.body");
       if (user) {
         const updateEntry = await appusers.update(
           {
             name: name,
             biodesc: biodesc,
             image: image,
-            age: age,
-            dob: dob,
+            age:age,
+            dob:dob,
             location: location,
             joined_date: joined_date,
             country: country
@@ -4884,6 +4884,7 @@ module.exports = {
 
     }
     catch (e) {
+      console.log(e,"=============e");
       return apiResponseHelper.onError(res, false, 'Something Went Wrong.Please Try Again!', {});
     }
 
@@ -4899,7 +4900,7 @@ module.exports = {
         id: req.params.id,
       };
 
-
+    
 // if (requestData.image) {
         const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
         const data = req.body;
@@ -4926,7 +4927,7 @@ module.exports = {
 
       let requestData = await helper.vaildObject(required, nonRequired);
 
-      console.log(requestData, '==============>requestData');
+      //console.log(requestData, '==============>requestData');return;
       // return;
 
       const user = await appusers.findOne({
