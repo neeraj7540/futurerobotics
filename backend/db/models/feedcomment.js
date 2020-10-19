@@ -58,17 +58,20 @@ userId:{
     default: 0
     
    },
+
   createdAt: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      defaultValue: ""
+      defaultValue: sequelize.fn('current_timestamp'),
     },
     updatedAt: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      defaultValue:""
+      defaultValue: sequelize.fn('current_timestamp'),
       
-    },    
+    },  
+
+         
 }, {
     tableName: 'feedcomment',
     timestamps: true,
