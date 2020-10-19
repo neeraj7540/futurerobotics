@@ -129,11 +129,14 @@ module.exports = {
                     id: data.id,
                 }
             });
+
             getpreviousDatas = getpreviousDatas.toJSON();
-            if(data.select_robots=='""'){
+            console.log(getpreviousDatas,"================data.select_robots");
+            console.log(data.select_robots=="","=================data.select_robots==");
+            if(data.select_robots==""){
                 data.select_robots=getpreviousDatas.select_robots;
             }
-            if(data.select_plc=='""'){
+            if(data.select_plc==""){
                 data.select_plc=getpreviousDatas.select_plc;
             }
             //console.log(data.select_robots=='""',"====================data",data.select_robots);return;

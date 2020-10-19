@@ -1267,9 +1267,6 @@ module.exports = {
 
         }
       })
-
-
-
       var sequelize = require('sequelize');
       const userDetails1 = await feedsTable.findAll({
         attributes: [[sequelize.fn('sum', sequelize.col('like')), 'total']],
