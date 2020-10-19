@@ -124,7 +124,13 @@ module.exports = {
                 'FLOAT': 0,
                 'DECIMAL': 0,
             }
-
+            if(data.select_robots=='""'){
+                data.select_robots='';
+            }
+            if(data.select_plc=='""'){
+                data.select_plc='';
+            }
+            //console.log(data.select_robots=='""',"====================data",data.select_robots);return;
             data = { ...data };
             let rawData = { ...data };
             console.log(rawData,"===================rawData");
