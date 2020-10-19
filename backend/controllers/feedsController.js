@@ -13,7 +13,6 @@ const appUsersTable = db.models.appusers;
 const feeCatTable = db.models.feedscategory;
 const groupsTable = db.models.groups;
 const reportedTable = db.models.reportedfeed;
-
 const postTable = db.models.post;
 const FCM = require('fcm-node');
 

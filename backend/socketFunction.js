@@ -221,6 +221,7 @@ module.exports = {
           receiverId: get_data.receiverId,
           messageType: get_data.messageType,
           message: get_data.message,
+          readStatus:0,
           chatConstantId: 1,
           created: await this.create_time_stamp(),
           updated: await this.create_time_stamp(),

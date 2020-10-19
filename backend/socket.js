@@ -132,7 +132,7 @@ module.exports = function (io) {
     socket.on('get_message', async function (get_msg_data) {
       try {
         
-        console.log("--------------------------------------------------------i am coming");
+        console.log(get_msg_data,"--------------------------------------------------------i am coming");
         let updatemsg=  await models.one_update_messages.update({
           readStatus:1
           },
@@ -143,7 +143,7 @@ module.exports = function (io) {
             }
           }
         );
-        // console.log(updatemsg,"=================updatemsg");
+         console.log(updatemsg,"=================updatemsg");
         let get_message = await my_function.get_message(get_msg_data);
        // console.log(get_message, "from sockjet========");
 
