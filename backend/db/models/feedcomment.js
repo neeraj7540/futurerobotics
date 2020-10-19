@@ -58,17 +58,17 @@ userId:{
     default: 0
     
    },
-
   createdAt: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
+      defaultValue: ""
     },
     updatedAt: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-    },  
-
-         
+      defaultValue:""
+      
+    },    
 }, {
     tableName: 'feedcomment',
     timestamps: true,

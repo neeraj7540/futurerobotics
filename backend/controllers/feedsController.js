@@ -1901,7 +1901,7 @@ module.exports = {
       };
 
       let requestData = await helper.vaildObject(required, nonRequired);
-
+      console.log(requestData,"==============>>");
       if (![0, 1].includes(parseInt(requestData.likeDeslike))) throw "Invalid value in param likeDeslike.";
 
       const user = await appUsersTable.findOne({
@@ -1961,8 +1961,8 @@ module.exports = {
       console.log(alreadyLikedDisliked, '===============>alreadyLikedDisliked');
       // return;
       const condition = !alreadyLikedDisliked || alreadyLikedDisliked && alreadyLikedDisliked.likeDeslike != requestData.likeDeslike;
-
-      let message = `${user.name}${condition ? `${requestData.likeDeslike == 1 ? ' liked' : ' disliked'} your` : `'s ${requestData.likeDeslike == 1 ? 'like' : 'dislike'} removed from`} comment`;
+      console.log(condition,"=============condition");
+      // let message = `${user.name}${condition ? `${requestData.likeDeslike == 1 ? ' liked' : ' disliked'} your` : `'s ${requestData.likeDeslike == 1 ? 'like' : 'dislike'} removed from`} comment`;
 
       // console.log(alreadyLikedDisliked, '=========>alreadyLikedDisliked');
       // console.log(!alreadyLikedDisliked || alreadyLikedDisliked && alreadyLikedDisliked.hasOwnProperty('likeDeslike') == requestData.likeDeslike, '=========>alreadyLikedDisliked123123123');

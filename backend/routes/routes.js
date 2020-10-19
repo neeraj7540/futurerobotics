@@ -242,8 +242,6 @@ routes.get('/all_plc_list/:id', appUsersCtrl.get_user_plc);
 
 routes.get('/all_adds', appUsersCtrl.all_add_list);
 
-
-
 //----------------------------Feed Module----------------------------------------------------------  
 routes.post('/add_feed/:id', postCtrl.add_feed);
 routes.get('/all_feed_catg', appUsersCtrl.all_feed_cat_list);

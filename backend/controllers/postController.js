@@ -435,7 +435,7 @@ postEditAdmin : async (req, res) => {
 
       if (item) {
                 var datedata=moment().format('MMMM Do YYYY');
-            
+                
             var test=uploadFile[0].imageName;
             var test1='http://34.232.2.249:4100/'+test
                 const data = req.body;
@@ -443,7 +443,7 @@ postEditAdmin : async (req, res) => {
                 data.feedCatId=feeddata.id;
                 data.title=req.body.title;
                 data.description=req.body.description;
-               data.image=test1;
+                data.image=test1;
                 data.status = '1'
                 data.Date=datedata;
                 const itemAdded = await feedsTable.create(data);
