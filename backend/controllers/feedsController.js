@@ -1209,6 +1209,7 @@ module.exports = {
       let message = `${user.name}${condition ? `${requestData.likeDeslike == 1 ? ' liked' : ' disliked'} your` : `'s ${requestData.likeDeslike == 1 ? 'like' : 'dislike'} removed from`} post`;
 
       if (condition) {
+        let times=Math.round(new Date().getTime()/1000);
         const upFeedlikedeslike = {
           ...(
             alreadyLikedDisliked
@@ -1219,6 +1220,8 @@ module.exports = {
           userId: requestData.id,
           feedId: requestData.feed_id,
           status: '1',
+          createdAt:times,
+          updatedAt:times,
           likeDeslike: requestData.likeDeslike,
         };
 
@@ -1909,7 +1912,7 @@ module.exports = {
         raw: true,
       });
       if (!user) throw "Invalid id.";
-
+      console.log(requestData.commentId,"================>>requestData.commentId");
       let feedComment = await feedCommentTable.findOne({
         where: {
           commentId: requestData.commentId,
@@ -1943,6 +1946,7 @@ module.exports = {
           },
         ]
       });
+      console.log(feedComment,"===============>>feedcomment");
       if (!feedComment) throw "Invalid commentId.";
       feedComment = feedComment.toJSON();
       console.log(feedComment, '=========>feedComment');
@@ -1966,6 +1970,7 @@ module.exports = {
       // return;
 
       if (condition) {
+        let times=Math.round(new Date().getTime()/1000);
         const upFeedlikedeslike = {
           ...(
             alreadyLikedDisliked
@@ -1976,6 +1981,8 @@ module.exports = {
           userId: requestData.id,
           commentId: requestData.commentId,
           status: '1',
+          createdAt:times,
+          updatedAt:times,
           likeDeslike: requestData.likeDeslike,
         };
 
@@ -2980,6 +2987,7 @@ module.exports = {
           id: requestData.userId,
         },
       });
+      console.log(user,"======================user");
       if (!user) throw "Invalid userId.";
 
       await models.notification_data.update(

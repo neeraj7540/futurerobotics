@@ -20,8 +20,6 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false,
 
     },
-
-
     status: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -36,7 +34,6 @@ module.exports = function (sequelize, DataTypes) {
 
 
     }
-
     ,
     createdAt: {
       type: DataTypes.INTEGER(11),
