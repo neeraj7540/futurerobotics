@@ -124,11 +124,17 @@ module.exports = {
                 'FLOAT': 0,
                 'DECIMAL': 0,
             }
+            let getpreviousDatas = await model.findOne({
+                where: {
+                    id: data.id,
+                }
+            });
+            getpreviousDatas = getpreviousDatas.toJSON();
             if(data.select_robots=='""'){
-                data.select_robots='';
+                data.select_robots=getpreviousDatas.select_robots;
             }
             if(data.select_plc=='""'){
-                data.select_plc='';
+                data.select_plc=getpreviousDatas.select_plc;
             }
             //console.log(data.select_robots=='""',"====================data",data.select_robots);return;
             data = { ...data };
