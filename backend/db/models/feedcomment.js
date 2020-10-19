@@ -48,9 +48,7 @@ userId:{
         allowNull: true,
         default: 0
         
-       }
-
-   ,
+      },
 
    deslike : {
     type: DataTypes.INTEGER(11),
@@ -58,16 +56,15 @@ userId:{
     default: 0
     
    },
-
   createdAt: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      defaultValue: sequelize.fn('current_timestamp'),
+      defaultValue: common.timestamp(),
     },
     updatedAt: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      defaultValue: sequelize.fn('current_timestamp'),
+      defaultValue: common.timestamp(),
       
     },  
 
