@@ -1893,8 +1893,8 @@ module.exports = {
     try {
       const required = {
         id: req.params.id,
-        commentId: req.params.commentId,
-        likeDeslike: req.body.likeDeslike, // 0 => dislike, 1 => like
+        commentId:req.params.commentId,
+        likeDeslike:req.body.likeDeslike // 0 => dislike, 1 => like
       };
       const nonRequired = {
 
@@ -1970,6 +1970,7 @@ module.exports = {
 
       if (condition) {
         let times=Math.round(new Date().getTime()/1000);
+        console.log(times,"=======================>>time");
         const upFeedlikedeslike = {
           ...(
             alreadyLikedDisliked
@@ -1984,9 +1985,9 @@ module.exports = {
           updatedAt:times,
           likeDeslike: requestData.likeDeslike,
         };
-
+        console.log(requestData.id,"-------here", feedComment.appuser.id);
         const updatedFeedlikedeslikeId = await helper.save(models['comment_likedeslike'], upFeedlikedeslike)
-
+        
         recors_upate = await helper.save(models.notification_data, {
           sender_id: requestData.id,
           receiver_id: feedComment.appuser.id,
