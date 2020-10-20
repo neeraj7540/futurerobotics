@@ -154,7 +154,6 @@ module.exports = {
                     }
                 }
             }
-
             for (let column in tableColumns) {
                 if (column != 'createdAt' && column != 'updatedAt' && column != 'id' && !data.hasOwnProperty('id')) {
                     const tableColumn = tableColumns[column];
