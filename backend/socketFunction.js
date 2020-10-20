@@ -564,6 +564,7 @@ module.exports = {
       //   mapToModel: true,
       //   type: database.QueryTypes.SELECT
       // })
+
       var chat_data = await database.query(`select *,(select Count(*) from messages where (receiverId=${get_chat_data.userId} and senderId=user_id) and (readStatus=0) ) as unreadcount  from (SELECT *,CASE WHEN senderId = ${get_chat_data.userId} THEN receiverId WHEN receiverId = ${get_chat_data.userId} THEN senderId  END AS user_id,(SELECT message FROM messages where id=lastMessageId ) as lastMessage ,(SELECT name FROM appusers where id=user_id) as userName, ifnull((SELECT image FROM appusers where id=user_id),'') as userImage,(SELECT  created  FROM messages where id=lastMessageId) as created_at ,(SELECT  messageType  FROM messages where id=lastMessageId) as messageType, ifnull((SELECT  isOnline  FROM socket_user where userId=user_id),0) as onlineStatus, ifnull((SELECT  status  FROM userblocks where (userId=user_id and blockUserId=${get_chat_data.userId}) or (blockUserId=user_id and userId=${get_chat_data.userId})),0) as block_status from chat_constants where (senderId=${get_chat_data.userId} or receiverId=${get_chat_data.userId}))tt where deletedId!=${get_chat_data.userId} order by created_at desc`, {
 
         model: messages,
@@ -1465,9 +1466,9 @@ module.exports = {
         userId: get_msg_data.userId
 
       }
+    });
 
-    })
-    console.log(get_user_status.dataValues.msg_status)
+    console.log(get_user_status.dataValues.msg_status,"============ here",get_msg_data.groupName);
     if (get_user_status.dataValues.msg_status == 0) {
       get_user_status = await groupMessages.findOne({
         where: {
@@ -1475,7 +1476,7 @@ module.exports = {
           groupName: get_msg_data.groupName
         }
       });
-      // console.log(get_user_status);
+    
       if (get_user_status) {
         var get_messages_data = await database.query(`SELECT senderId,groupId,groupName,message,appusers.name as senderName,appusers.image as senderProfileImage,messageType,category,group_messages.created FROM group_messages INNER JOIN appusers ON group_messages.senderId=appusers.id WHERE groupId=${get_msg_data.groupId} and groupName="${get_msg_data.groupName}"`, {
 
@@ -1483,9 +1484,26 @@ module.exports = {
           //mapToModel: true,
           type: database.QueryTypes.SELECT
         });
+        let updateupdateread= await groupMessages.update({
+        readStatus:1,
+        },{
+        where:{
+          groupId: get_msg_data.groupId,
+          groupName: get_msg_data.groupName
+        }
+        });
 
+        //decrese unread count in group
 
-
+        let getnewcount= await groups.update({
+          count:0,
+        },
+        {
+        where:{
+          id:get_msg_data.groupId
+        }
+        });
+        console.log(get_messages_data,"=====================get_user_status");
         return get_messages_data;
       }
       return get_user_status
@@ -1514,9 +1532,6 @@ module.exports = {
           //mapToModel: true,
           type: database.QueryTypes.SELECT
         });
-
-
-
         return get_messages_data;
       }
       return get_user_status

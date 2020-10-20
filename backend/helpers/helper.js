@@ -131,8 +131,8 @@ module.exports = {
             });
 
             getpreviousDatas = getpreviousDatas.toJSON();
-            console.log(getpreviousDatas,"================data.select_robots");
-            console.log(data.select_robots=="","=================data.select_robots==");
+            //console.log(getpreviousDatas,"================data.select_robots");
+            //console.log(data.select_robots=="","=================data.select_robots==");
             if(data.select_robots==""){
                 data.select_robots=getpreviousDatas.select_robots;
             }

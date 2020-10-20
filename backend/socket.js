@@ -317,7 +317,7 @@ module.exports = function (io) {
     });
     socket.on('get_group_message', async function (get_msg_data) {
       try {
-        // console.log(get_msg_data,"from socket");
+        //console.log(get_msg_data,"from socket");return;
         // groupId: get_msg_data.groupId,
         // category: get_msg_data.category,
         // userId: get_msg_data.userId
@@ -329,8 +329,6 @@ module.exports = function (io) {
           limit: 1,
           raw: true,
         });
-
-
         // console.log(models.group_message_read, '=====>models');
         // return;
         
@@ -341,7 +339,7 @@ module.exports = function (io) {
           },
           raw: true,
         });
-
+        //console.log(checkReadEntry,"=================checkReadEntry");return;
         const addReadEntry = {
           userId: get_msg_data.userId,
           groupId: get_msg_data.groupId,
@@ -351,9 +349,9 @@ module.exports = function (io) {
         if (checkReadEntry) addReadEntry.id = checkReadEntry.id;
         await helper.save(models.group_message_read, addReadEntry);
 
-        
+        console.log("===================came here ======================")
         let get_message = await my_function.get_message2(get_msg_data);
-        console.log(get_message, "from sockjet========");
+      //  console.log(get_message, "from sockjet========");
 
         if (get_message) {
 

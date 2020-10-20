@@ -3623,7 +3623,6 @@ module.exports = {
           category: 'GENERAL',
           status: '1'
         }
-
       });
        console.log(itemList);
 
