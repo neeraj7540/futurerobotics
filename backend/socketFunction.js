@@ -1008,6 +1008,7 @@ module.exports = {
 
       console.log("HFHVFDVDFBVDFBDF" + datacheck)
       if (!datacheck) {
+        let times=Math.round(new Date().getTime()/1000);
         create_message = await updateMessages.create({
           senderId: get_data.senderId,
           //receiverId: get_data.receiverId,
@@ -1016,15 +1017,12 @@ module.exports = {
           groupId: get_data.groupId,
           category: get_data.category,
           groupName: get_data.groupName,
-
           chatConstantId: user_data.dataValues.id,
-          created: await this.create_time_stamp(),
-          updated: await this.create_time_stamp(),
+          created: times,
+          updated: times,
           senderName: get_data.senderName,
           senderProfileImage: get_data.senderProfileImage
-
         });
-
       }
       else {
         create_message = await updateMessages.update({
@@ -1067,12 +1065,10 @@ module.exports = {
         groupId: get_data.groupId,
         category: get_data.category,
         groupName: get_data.groupName,
-
         chatConstantId: user_data.dataValues.id,
         created: await this.create_time_stamp(),
         updated: await this.create_time_stamp(),
       });
-
       let countget = await groups.findOne({
         where: {
           category: get_data.category,
@@ -1080,8 +1076,8 @@ module.exports = {
 
         }
 
-      })
-
+      });
+      console.log(countget,"=====================countget");
       var count = countget.dataValues.count
 
       var count1 = ++count
@@ -1476,7 +1472,7 @@ module.exports = {
           groupName: get_msg_data.groupName
         }
       });
-    
+      console.log("=============gregeg",get_user_status);
       if (get_user_status) {
         var get_messages_data = await database.query(`SELECT senderId,groupId,groupName,message,appusers.name as senderName,appusers.image as senderProfileImage,messageType,category,group_messages.created FROM group_messages INNER JOIN appusers ON group_messages.senderId=appusers.id WHERE groupId=${get_msg_data.groupId} and groupName="${get_msg_data.groupName}"`, {
 
@@ -1492,7 +1488,7 @@ module.exports = {
           groupName: get_msg_data.groupName
         }
         });
-
+        console.log("=========================wwwww",updateupdateread);
         //decrese unread count in group
 
         let getnewcount= await groups.update({

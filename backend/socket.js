@@ -250,7 +250,7 @@ module.exports = function (io) {
 
 
         let get_block_status_data_user = await my_function.get_blocked_user_status1(get_data)
-
+        //console.log(get_block_status_data_user,"=============>>");return;
         if (get_block_status_data_user != null) {
           if (get_block_status_data_user.dataValues.userTo == get_data.senderId) {
             success_message = [];
@@ -329,7 +329,7 @@ module.exports = function (io) {
           limit: 1,
           raw: true,
         });
-        // console.log(models.group_message_read, '=====>models');
+        console.log(getLastGroupMessageId, '=====>models=================');
         // return;
         
         const checkReadEntry = await models.group_message_read.findOne({
@@ -345,8 +345,9 @@ module.exports = function (io) {
           groupId: get_msg_data.groupId,
           lastReadId: getLastGroupMessageId ? getLastGroupMessageId.id : 0
         };
-
+        console.log("======================",addReadEntry);
         if (checkReadEntry) addReadEntry.id = checkReadEntry.id;
+        console.log("==========================coming here")
         await helper.save(models.group_message_read, addReadEntry);
 
         console.log("===================came here ======================")
