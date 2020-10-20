@@ -1447,12 +1447,7 @@ module.exports = {
   feed_comment_data: async (req, res) => {
     try {
 
-
-      const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
-      const data = req.body;
-      data.image = uploadFile[0].imageName;
-      var data2 = data.image
-
+      console.log(req.body,"==========");
       if (req.body.image == "") {
         var image = "";
       }
@@ -1461,17 +1456,21 @@ module.exports = {
         var image = ""
       }
       else {
-
+        const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+        const data = req.body;
+        data.image = uploadFile[0].imageName;
+        var data2 = data.image
         var image = 'http://34.232.2.249:4100/' + data2;
       }
-
-
-
+      let times=Math.round(new Date().getTime()/1000);
 
       const data1 = req.body;
       data1.feedId = req.params.feed_id;
       data1.userId = req.params.id;
       data1.comment_image = image;
+      data1.createdAt=times;
+      data1.updatedAt=times,
+
       // data1.comment_image = 'http://34.232.2.249:4100/'+uploadFile[0].imageName;
       data1.comment = req.body.comment;
       data1.status = '1'
@@ -1497,10 +1496,6 @@ module.exports = {
         }
       }
       )
-
-
-
-
       //----------------------------------------------------------------------------------------------
       const upadete = await feedCommentTable.update(
         {
