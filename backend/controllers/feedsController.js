@@ -1447,7 +1447,11 @@ module.exports = {
   feed_comment_data: async (req, res) => {
     try {
 
-      console.log(req.body,"==========");
+      const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
+        const data = req.body;
+        data.image = uploadFile[0].imageName;
+        var data2 = data.image
+        
       if (req.body.image == "") {
         var image = "";
       }
@@ -1456,10 +1460,7 @@ module.exports = {
         var image = ""
       }
       else {
-        const uploadFile = await filesUpload(req, res, [{ name: 'image' }], config.userFilePath);
-        const data = req.body;
-        data.image = uploadFile[0].imageName;
-        var data2 = data.image
+       
         var image = 'http://34.232.2.249:4100/' + data2;
       }
       let times=Math.round(new Date().getTime()/1000);

@@ -3609,9 +3609,7 @@ module.exports = {
         return apiResponseHelper.post(res, true, 'PLC list', {});
       }
     } catch (e) {
-
       return apiResponseHelper.onError(res, false, 'Error', 'Something Went Wrong.Please Try Again');
-
     }
   },
 
@@ -3627,7 +3625,7 @@ module.exports = {
         }
 
       });
-      // console.log(itemList);
+       console.log(itemList);
 
       if (itemList) {
 

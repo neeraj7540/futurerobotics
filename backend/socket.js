@@ -315,8 +315,6 @@ module.exports = function (io) {
         throw error
       }
     });
-
-
     socket.on('get_group_message', async function (get_msg_data) {
       try {
         // console.log(get_msg_data,"from socket");
